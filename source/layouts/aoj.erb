@@ -1,0 +1,15 @@
+<% problem = current_page.data.problem %>
+<% url = problem.url || "http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=" + problem.id.to_s %>
+<% current_page.add_metadata(
+    title: "AOJ " + problem.id.to_s + " " + problem.name
+) %>
+<% current_page.add_metadata(
+    header: (javascript_include_tag 'fold')
+) %>
+
+<% wrap_layout :outer do %>
+    <h2> <%= current_page.metadata[:title] %> </h2>
+<%= link_to "問題文", url %>
+<%= yield %>
+<%= link_to 'download source code', current_page.data.source %>
+<% end %>

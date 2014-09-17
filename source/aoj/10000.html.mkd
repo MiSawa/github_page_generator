@@ -1,0 +1,35 @@
+---
+
+problem:
+    id: 10000
+    name: Hello World
+    url: http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=10000
+date: 2014/04/18
+tags: [やるだけ]
+source: ./10000.cc
+
+---
+
+### 概要
+
+``Hello World`` と出力せよ.
+
+### 解法
+
+やるだけ. $O(1)$.
+
+### ソースコード
+
+~~~ ruby
+puts "Hello World"
+~~~
+
+``` cpp
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+    cout << "Hello World" << endl;
+    return 0;
+}
+```
+

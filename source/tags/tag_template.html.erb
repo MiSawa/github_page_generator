@@ -1,0 +1,11 @@
+<h1>Pages tagged '<%= tagname %>'</h1>
+
+<ul>
+  <% pages.each_with_index do |page, i| %>
+    <% title = page.metadata[:title] %>
+    <% title ||= page.data.title %>
+    <% title ||= page.url %>
+    <li><%= link_to title, page %> </li>
+  <% end %>
+</ul>
+

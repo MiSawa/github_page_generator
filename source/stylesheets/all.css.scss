@@ -1,0 +1,40 @@
+@import "all_bck";
+@import "compass/utilities";
+@import "compass/css3";
+@import "zurui-sass";
+
+html {
+    height: 100%;
+}
+body {
+    #menu {
+        float: left;
+        width: 150px;
+        min-height: 100%;
+        @include zurui-line-right;
+    };
+    #main {
+        margin-left: 165px;
+        max-width: 95%;
+    };
+    margin: 0.25%;
+    height: 95%;
+}
+div.tag {
+    a {
+        color: #222;
+    };
+    //@include zurui-gradient-top-lighten;
+    @include zurui-box-deboss;
+    background-color: #BBB;
+    margin: 3px;
+    padding: 3px;
+    max-width: 100%;
+    display: inline-block;
+}
+div.highlight {
+    @include zurui-box-deboss;
+    margin: 10px;
+}
+
+
