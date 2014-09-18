@@ -18,7 +18,13 @@ gem 'addressable', '2.3.5'
 gem 'therubyracer', '0.12.1'
 gem 'middleman-syntax', '2.0.0'
 gem 'middleman-blog', '3.5.1'
-gem 'kramdown', '1.3.3'
+#gem 'kramdown', '1.3.3'
 gem 'redcarpet', '3.1.1'
 gem 'zurui-sass-middleman', '0.0.2'
+
+
+# gem 'middleman-navtree', '0.1.8'
+# tree_to_html の
+#   this_resource = sitemap.find_resource_by_path(sitemap.extensionless_path(value))
+# あたりが悪さをして, 良くない. (タグ情報が消えて死ぬっぽい)
 

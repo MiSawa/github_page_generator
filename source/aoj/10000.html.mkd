@@ -6,7 +6,7 @@ problem:
     url: http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=10000
 date: 2014/04/18
 tags: [やるだけ]
-source: ./10000.cc
+source: ./src/10000.cc
 
 ---
 

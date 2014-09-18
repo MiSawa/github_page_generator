@@ -83,8 +83,10 @@ set :strip_index_file, false
 
 require 'lib/fix_url'
 require 'lib/tags'
-activate :tags do |tags|
-  tags.tagpage_template = 'tags/tag_template.html'
-end
+require 'lib/secret'
+
+activate :tags, :tagpage_template => 'tags/tag_template.html'
+activate :secret
 
 page '/aoj/*', :layout => 'aoj'
+

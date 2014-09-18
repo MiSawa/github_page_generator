@@ -6,7 +6,7 @@ class TagExtension < Middleman::Extension
 
   module TaggedPage
     def tags
-      ts = data["tags"]
+      ts = data['tags']
       if ts.is_a? String
         ts.split(',').map(&:strip)
       else
@@ -113,5 +113,4 @@ class TagExtension < Middleman::Extension
 end
 
 ::Middleman::Extensions.register(:tags, TagExtension)
-
 
