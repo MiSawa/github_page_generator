@@ -24,12 +24,26 @@ source: ./src/10000.cc
 puts "Hello World"
 ~~~
 
-``` cpp
+~~~ cpp
 #include <bits/stdc++.h>
 using namespace std;
 int main(){
     cout << "Hello World" << endl;
     return 0;
 }
-```
+~~~
+
+> ### hoge
+>
+> foo
+
+<div class="fold" style="display: none;">
+fizz buzz
+
+~~~ cpp
+#include<bits/stdc++.h>
+using namespace std;
+int main(){ return 0; }
+~~~
+</div>
 

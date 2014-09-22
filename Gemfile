@@ -22,6 +22,8 @@ gem 'middleman-blog', '3.5.1'
 gem 'redcarpet', '3.1.1'
 gem 'zurui-sass-middleman', '0.0.2'
 
+# redcarpet より kramdown のがいいっぽい???
+# http://jumble-note.blogspot.jp/2014/06/rubymiddleman.html
 
 # gem 'middleman-navtree', '0.1.8'
 # tree_to_html の
