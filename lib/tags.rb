@@ -17,7 +17,7 @@ class TagExtension < Middleman::Extension
 
   class Tag
     attr_reader :tagname, :url
-    attr_reader :page
+    attr_reader :page, :pages
     def initialize(tagname)
       @manager = Manager.instance
       @tagname = tagname
@@ -85,7 +85,7 @@ class TagExtension < Middleman::Extension
 
   helpers do
     def tags
-      Manager.instance.tags.sort
+      Manager.instance.tags
     end
     def tagpage_resource(tag)
       Manager.instance.tags[tag.strip].page

@@ -1,0 +1,16 @@
+---
+
+title: AOJ
+tags: [AOJ]
+
+---
+
+<h2>AOJ</h2>
+<ul>
+    <% tags["AOJ"].pages.sort_by{|page| page.metadata[:id] }.each_with_index do |page, i| %>
+        <% title = page.metadata[:title] %>
+        <% title ||= page.data.title %>
+        <% title ||= page.url %>
+        <li><%= link_to title, page.url %> </li>
+    <% end %>
+</ul>

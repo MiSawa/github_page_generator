@@ -94,4 +94,8 @@ activate :tags, :tagpage_template => 'tags/tag_template.html'
 activate :secret
 
 page '/aoj/*', :layout => 'aoj'
+page '/aoj/index.html', :layout => 'layout'
+
+page '/topcoder/*', :layout => 'topcoder'
+page '/topcoder/index.html', :layout => 'layout'
 

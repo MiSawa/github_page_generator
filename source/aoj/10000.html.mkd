@@ -5,8 +5,8 @@ problem:
     name: Hello World
     url: http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=10000
 date: 2014/04/18
-tags: [やるだけ]
-source: ./src/10000.cc
+tags: [AOJ, やるだけ]
+source_code: ./src/10000.cc
 
 ---
 
