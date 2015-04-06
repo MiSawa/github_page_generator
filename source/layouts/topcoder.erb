@@ -1,17 +1,29 @@
-<% problem = current_page.data.problem %>
-<% url = problem.url || "http://community.topcoder.com/stat?c=problem_statement&rd=" + problem.rd.to_s + "&pm=" + problem.pm.to_s %>
-<% current_page.add_metadata(
-    title: "TopCoder " + problem.round + " " + (problem.level * ",") + " " + problem.name
-) %>
-<% current_page.add_metadata(
-    header: (javascript_include_tag 'fold')
-) %>
+<% if current_page.data.problem %>
+    <% problem = current_page.data.problem %>
+    <% url = problem.url || "http://community.topcoder.com/stat?c=problem_statement&rd=" + problem.rd.to_s + "&pm=" + problem.pm.to_s %>
+    <% current_page.add_metadata(
+        title: "TopCoder " + problem.round + " " + (problem.level * ",") + " " + problem.name
+    ) %>
+    <% current_page.add_metadata(
+        header: (javascript_include_tag 'fold')
+    ) %>
 
-<% wrap_layout :outer do %>
-    <h2> <%= current_page.metadata[:title] %> </h2>
-    <%= link_to "問題文", url %>
-    <%= yield %>
-    <% if current_page.data.source_code %>
-        <%= link_to 'download source code', current_page.data.source %>
+    <% wrap_layout :outer do %>
+        <h2> <%= current_page.metadata[:title] %> </h2>
+        <%= link_to "問題文", url %>
+        <%= yield %>
+        <% if current_page.data.source_code %>
+            <%= link_to 'download source code', current_page.data.source_code %>
+        <% end %>
+    <% end %>
+<% else %>
+    <% contest = current_page.data.contest %>
+    <% url = contest.url || "http://community.topcoder.com/stat?c=problem_statement&rd=" + contest.rd.to_s %>
+    <% current_page.add_metadata(title: "TopCoder " + contest.round) %>
+    <% current_page.add_metadata(header: (javascript_include_tag 'fold')) %>
+
+    <% wrap_layout :outer do %>
+        <h2> <%= current_page.metadata[:title] %> </h2>
+        <%= yield %>
     <% end %>
 <% end %>

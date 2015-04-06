@@ -12,6 +12,6 @@
     <%= link_to "問題文", url %>
     <%= yield %>
     <% if current_page.data.source_code %>
-        <%= link_to 'download source code', current_page.data.source %>
+        <%= link_to 'download source code', current_page.data.source_code %>
     <% end %>
 <% end %>
