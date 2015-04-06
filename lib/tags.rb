@@ -30,6 +30,7 @@ class TagExtension < Middleman::Extension
       @tagname <=> other.tagname
     end
     def <<(page)
+      @pages.delete_if{|p| p.url == page.url }
       @pages << page
       self
     end
