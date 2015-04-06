@@ -1,0 +1,69 @@
+---
+
+problem:
+    id: "0019"
+    name: ステージの選択
+    url: http://yukicoder.me/problems/62
+date: 2015/04/05
+tags: [yukicoder, グラフ, 木, 強連結成分分解]
+source_code: ./src/0019.cc
+
+---
+
+### 概要
+
+$N$ 個のステージがあるゲームがある.
+ステージ $i$ をクリアするには, 基本的には $L_i$ だけ時間がかかるが,
+特定のステージ $S_i$ を既にクリアしている時だけ, $L_i/2$ の時間でクリア出来る.
+
+全ステージをクリアするのにかかる最短時間を求めよ.
+
+#### 制約
+
+$1 \le N \le 100$
+
+### 解法
+
+$i \to S_i$ で有向グラフを書く.
+すると, 各連結成分は, 内向き木の根から一本辺が伸びたような形になっている.
+つまり, 有向閉路が一つあり, その閉路を縮約すると, 縮約した頂点を根とする内向き木になっている.
+
+閉路内は少なくとも一箇所は $L_i$ だけ時間をかけなければならないが,
+それ以外の閉路内の頂点は $L_i/2$ でよく,
+更に, グラフの形から, 同じ連結成分内の他の頂点も $L_i/2$ でよい.
+
+よって, 全部の和/2 + 各閉路の最小コストの頂点の和/2 が答えになる.
+
+$N \le 100$ なので, だいぶサボって実装した.
+閉路の特定は Warshall-Floyd, 最小コストの特定は union-find を使った.
+
+ホントは強連結成分分解とかするべき.
+$O(n^3)$ くらいで実装したけど, $O(n)$ に出来る.
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    int n;
+    cin >> n;
+    vector<int> l(n), s(n);
+    rep(i, n) cin >> l[i] >> s[i];
+    rep(i, n) --s[i];
+
+    vector<vector<int>> g(n, vector<int>(n, numeric_limits<int>::max()/3));
+    rep(u, n) g[u][u] = 0;
+    rep(u, n) g[u][s[u]] = -1;
+    rep(k, n) rep(i, n) rep(j, n) chmin(g[i][j], g[i][k] + g[k][j]);
+
+    UnionFind uf(n);
+    rep(u, n) if(g[u][u] < 0) rep(v, n) if(g[u][v] < 0) uf.unite(u, v);
+
+    vector<int> mn(n, numeric_limits<int>::max()/2);
+    rep(u, n) if(g[u][u] < 0) chmin(mn[uf.find(u)], l[u]);
+
+    int res = accumulate(all(l), 0);
+    rep(u, n) if(g[u][u] < 0 and uf.find(u) == u) res += mn[u];
+    cout << res / 2.0 << endl;
+    return true;
+}
+~~~
+

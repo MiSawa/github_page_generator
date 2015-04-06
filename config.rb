@@ -99,3 +99,5 @@ page '/aoj/index.html', :layout => 'layout'
 page '/topcoder/*', :layout => 'topcoder'
 page '/topcoder/index.html', :layout => 'layout'
 
+page '/yukicoder/*', :layout => 'yukicoder'
+page '/yukicoder/index.html', :layout => 'layout'

@@ -1,0 +1,55 @@
+---
+
+problem:
+    id: "0002"
+    name: 素因数ゲーム
+    url: http://yukicoder.me/problems/18
+date: 2015/04/05
+tags: [yukicoder, Nim, 素因数分解]
+source_code: ./src/0002.cc
+
+---
+
+### 概要
+
+$2$人対戦ゲームをする.
+$N$ が与えられる.
+プレイヤーには交互にターンが回ってきて, 自分のターンになった時に,
+$p^e | N$ なる 素数 $p$ と正整数 $e$ を選び, $N$ を $N / (p^e)$ で更新する.
+$1$ にしたら勝ち.
+
+先手後手のどちらが勝つか判定せよ.
+
+#### 制約
+
+$1 \le N \le 10^8$.
+
+### 解法
+
+$N = \prod_{i=1}^{n} p_i ^ {e_i}$ と素因数分解すると, $\{e_1, \dots, e_n\}$ を山とする Nim をしている事になる.
+
+### ソースコード
+
+~~~ cpp
+vector<int> factorization(int n){
+    vector<int> res;
+    for(int p = 2; p * p <= n; ++p) if(n % p == 0){
+        int e = 0;
+        for(; n % p == 0; ++e, n /= p);
+        res.emplace_back(e);
+    }
+    if(n != 1) res.emplace_back(1);
+    return res;
+}
+
+bool solve(){
+    int n;
+    cin >> n;
+    int nim = 0;
+    for(auto &x : factorization(n)) nim ^= x;
+    cout << (nim ? "Alice" : "Bob") << endl;
+    return true;
+}
+~~~
+
+

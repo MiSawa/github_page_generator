@@ -1,0 +1,55 @@
+---
+
+problem:
+    id: "0007"
+    name: プライムナンバーゲーム
+    url: http://yukicoder.me/problems/25
+date: 2015/04/05
+tags: [yukicoder, ゲーム, DP, メモ化再帰]
+source_code: ./src/0007.cc
+
+---
+
+### 概要
+
+$2$人対戦ゲームをする.
+$N$ が与えられる.
+プレイヤーには交互にターンが回ってきて, 自分のターンになった時に,
+$p \le N$ なる 素数 $p$ を選び, $N$ を $N - p$ で更新する.
+$0$ か $1$ になってしまったら負け.
+
+先手後手のどちらが勝つか判定せよ.
+
+#### 制約
+
+$2 \le N \le 10^4$.
+
+### 解法
+
+ゲーム木をメモ化再帰で探索.
+
+### ソースコード
+~~~ cpp
+vector<int> ps;
+vector<int> memo;
+bool dfs(int n){
+    int &res = memo[n];
+    if(res >= 0) return res;
+    if(n == 0 or n == 1) return res = true;
+    for(aur p : ps){
+        if(p > n) break;
+        if(!dfs(n-p)) return res = true;
+    }
+    return res = false;
+}
+
+bool solve(){
+    int n;
+    cin >> n;
+    memo.assign(n+10, -1);
+    ps = sieve(n);
+    cout << (dfs(n) ? "Win" : "Lose") << endl;
+    return true;
+}
+~~~
+

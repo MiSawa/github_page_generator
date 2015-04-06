@@ -1,0 +1,59 @@
+---
+
+problem:
+    id: "0012"
+    name: 限定された素数
+    url: http://yukicoder.me/problems/34
+date: 2015/04/05
+tags: [yukicoder, 尺取り]
+source_code: ./src/0012.cc
+
+---
+
+### 概要
+
+数字 '0' から '9' を使うか否かが与えられる.
+
+$1 \le L \le R \le 5 * 10^6$ なる $L, R$ のうち,
+$L$ 以上 $R$ 以下の素数に現れる数字が, ちょうど与えられた "使うか否かリスト" に一致するようなものを求め, $R-L$ の最大値を答えよ.
+
+無ければ $-1$.
+
+#### 制約
+
+特になし
+
+### 解法
+
+尺取りのようにがんばる.
+素数列挙に加えて, $O(R {\rm が取りうる最大値})$.
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    static auto is_prime = sieve();
+    static array<int, N> t = {};
+    rep(n, N) if(is_prime[n]) for(int m = n; m; m /= D) t[n] |= 1<<(m%D);
+
+    int a = 0;
+    {
+        int n; cin >> n;
+        rep(i, n){ int x; cin >> x; a |= 1<<x; }
+    }
+
+    int res = -1;
+    for(int l = 1, r = 1; true; ){
+        while(l < N and (t[l] & ~a)) ++l;
+        if(l >= N) break;
+        r = l;
+        while(r < N-1 and (t[r+1] & ~a) == 0) ++r;
+        int c = 0;
+        REP(i, l, r+1) c |= t[i];
+        if(c == a) chmax(res, r-l);
+        l = r+1;
+    }
+    cout << res << endl;
+    return true;
+}
+~~~
+

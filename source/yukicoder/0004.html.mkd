@@ -1,0 +1,42 @@
+---
+
+problem:
+    id: "0004"
+    name: おもりと天秤
+    url: http://yukicoder.me/problems/19
+date: 2015/04/05
+tags: [yukicoder, DP]
+source_code: ./src/0004.cc
+
+---
+
+### 概要
+
+$w_1, \dots, w_n$ が与えられる.
+このなかからいくつか選び, 和を $(\sum_i w_i) / 2$ に出来るか.
+
+#### 制約
+
+$2 \le n \le 10^2$, $1 \le w_i \le 100$.
+
+### 解法
+
+ナップサックのような DP をする.
+
+### ソースコード
+
+~~~ cpp
+bool solve(){
+    int n;
+    cin >> n;
+    vector<int> w(n);
+    for(aur x : w) cin >> x;
+    const int m = accumulate(all(w), 0);
+    vector<int> dp(m*3, 0);
+    dp[0] = 1;
+    for(aur x : w) for(int i = m; i >= 0; --i) dp[i+x] |= dp[i];
+    cout << (m % 2 == 0 and dp[m/2] ? "possible" : "impossible") << endl;
+    return true;
+}
+~~~
+

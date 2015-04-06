@@ -1,0 +1,39 @@
+---
+
+problem:
+    id: "0018"
+    name: うーさー暗号
+    url: http://yukicoder.me/problems/59
+date: 2015/04/05
+tags: [yukicoder]
+source_code: ./src/0018.cc
+
+---
+
+### 概要
+
+シーザー暗号的なやつで, $i$ 文字目は $i$ 回シフトしたやつが与えられるので複合しろ.
+
+#### 制約
+
+全部大文字アルファベット, $1024$ 文字以内.
+
+### 解法
+
+引き算.
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    string s; cin >> s;
+    repsz(i, s){
+        int c = s[i] - 'A';
+        c -= i+1;
+        c = (c % 26 + 26) % 26;
+        cout << (char)(c + 'A');
+    }
+    cout << endl;
+    return true;
+}
+~~~
+

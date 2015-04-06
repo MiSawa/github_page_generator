@@ -1,0 +1,55 @@
+---
+
+problem:
+    id: "0017"
+    name: 2つの地点に泊まりたい
+    url: http://yukicoder.me/problems/61
+date: 2015/04/05
+tags: [yukicoder, 最短路]
+source_code: ./src/0017.cc
+
+---
+
+### 概要
+
+辺と頂点に重みの付いたグラフと, 二頂点 $s$, $t$ が与えられる.
+
+ $s$, $t$ 以外の二頂点 $u$, $v$ を選んだとき,
+$u$, $v$ を通る $s{\rm -}t$ path に対するコストを
+path 上の全ての辺重みと, $u$, $v$ の頂点重みの和で定める.
+
+$u$, $v$ をうまくえらび, コストを最小化しろ.
+
+#### 制約
+
+$4 \le n \le 50$, 解がある.
+
+### 解法
+
+とりあえず Warshall-Floyd しておいて,
+滞在する $2$ 点を固定した時の最小コストで更新を繰り返す.
+$O(n^3)$.
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    int n; cin >> n;
+    vector<int> s(n); for(aur x : s) cin >> x;
+    vector<vector<int>> g(n, vector<int>(n, numeric_limits<int>::max()/4));
+    rep(u, n) g[u][u] = 0;
+    {
+        int m; cin >> m;
+        rep(_, m){
+            int a, b, c; cin >> a >> b >> c;
+            g[a][b] = g[b][a] = min(g[a][b], c);
+        }
+    }
+    rep(k, n) rep(i, n) rep(j, n) chmin(g[i][j], g[i][k] + g[k][j]);
+    int res = numeric_limits<int>::max();
+    rep(i, n) if(i != 0 and i != n-1) rep(j, n) if(j != 0 and j != n-1 and i != j)
+        chmin(res, s[0] + g[0][i] + s[i] + g[i][j] + s[j] + g[j][n-1] + s[n-1]);
+    cout << res << endl;
+    return true;
+}
+~~~
+

@@ -1,0 +1,51 @@
+---
+
+problem:
+    id: "0003"
+    name: ビットすごろく
+    url: http://yukicoder.me/problems/11
+date: 2015/04/05
+tags: [yukicoder, bfs]
+source_code: ./src/0003.cc
+
+---
+
+### 概要
+
+$1, \dots, N$ が書いてあるマスが, 順に, 直線上にならんでいる.
+この上ですごろく的なことをする.
+マス $i$ では, $i$ を $2$ 進表記した時の $1$ の数ちょうど, 進むか戻ることが出来る.
+但し, 盤外に移動する事は出来ない.
+
+何回の移動で $1$ から $N$ まで行けるだろうか.
+
+#### 制約
+
+$1 \le N \le 10^4$.
+
+### 解法
+
+bfs する.
+
+### ソースコード
+
+~~~ cpp
+bool solve(){
+    int n;
+    cin >> n;
+    vector<int> d(n+1, bit(30));
+    queue<int> q;
+    q.emplace(1); d[1] = 1;
+    while(!q.empty()){
+        int u = q.front(); q.pop();
+        int t = __builtin_popcount(u);
+        if(u-t >  0) if(chmin(d[u-t], d[u]+1)) q.emplace(u-t);
+        if(u+t <= n) if(chmin(d[u+t], d[u]+1)) q.emplace(u+t);
+    }
+    if(d[n] == bit(30)) d[n] = -1;
+    cout << d[n] << endl;
+    return true;
+}
+~~~
+
+

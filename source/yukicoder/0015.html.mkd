@@ -1,0 +1,58 @@
+---
+
+problem:
+    id: "0015"
+    name: カタログショッピング
+    url: http://yukicoder.me/problems/39
+date: 2015/04/05
+tags: [yukicoder, 半分全列挙]
+source_code: ./src/0015.cc
+
+---
+
+### 概要
+
+数列 $a_1, \dots, a_n$ が与えられる.
+
+部分列で, 和が $S$ のものを全て列挙せよ.
+
+#### 制約
+
+$1 \le N \le 30$.
+
+### 解法
+
+半分全列挙する.
+答えの数がバウンドされているので, $O(2^{N/2})$.
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    int n, S;
+    cin >> n >> S;
+    vector<int> p(n); for(aur x : p) cin >> x;
+    unordered_map<int, vector<int>> H, L;
+    int h = n/2, l = n-h;
+    rep(A, bit(h)){
+        int s = 0;
+        rep(i, h) if(A>>i&1) s += p[i];
+        H[s].emplace_back(A);
+    }
+    rep(A, bit(l)){
+        int s = 0;
+        rep(i, l) if(A>>i&1) s += p[i+h];
+        L[s].emplace_back(A<<h);
+    }
+    vector<vector<int>> res;
+    for(aur x : H) for(aur a : x.snd) for(aur b : L[S - x.fst]){
+        vector<int> v;
+        rep(i, n) if((a|b)>>i&1) v.emplace_back(i+1);
+        res.emplace_back(v);
+    }
+    sort(all(res));
+    for(aur x : res) repsz(i, x) cout << x[i] << (i == x.size()-1 ? "\n" : " ");
+    return true;
+}
+~~~
+
+

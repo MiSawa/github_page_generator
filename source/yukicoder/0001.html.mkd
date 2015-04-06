@@ -1,0 +1,63 @@
+---
+
+problem:
+    id: "0001"
+    name: 道のショートカット
+    url: http://yukicoder.me/problems/17
+date: 2015/04/05
+tags: [yukicoder, DP]
+source_code: ./src/0001.cc
+
+---
+
+### 概要
+
+$(u, v) \in E(G) \implies u < v$ なる DAG $G = (V, E)$ と,
+その辺に付随する「かかる金」, 「かかる時間」のパラメータが与えられる.
+
+$1$ から $n$ に行くのにかかる金が $C$ 以下な経路のうち, かかる時間が最も少ないものを探し,
+その時間を答えよ.
+経路がなければ $-1$.
+
+#### 制約
+
+$1 \le N \le 50$, $0 \le C \le 300$, $1 \le \abs{E} \le 1500$.
+
+### 解法
+
+``dp[頂点][金] = かかる時間の最小値`` で DP.
+
+### ソースコード
+
+~~~ cpp
+template<class T>bool chmin(T&a,const T&b){if(a<=b)return false;a=b;return true;}
+
+struct E{
+    int to, cost, time;
+    E(int to, int cost, int time) : to(to), cost(cost), time(time){}
+};
+using G = vector<vector<E>>;
+
+bool solve(){
+    int n, c, e;
+    cin >> n >> c >> e;
+    G g(n);
+    vector<int> s(e), t(e), y(e), m(e);
+    for(auto &x : s) cin >> x;
+    for(auto &x : t) cin >> x;
+    for(auto &x : y) cin >> x;
+    for(auto &x : m) cin >> x;
+    rep(i, e) g[--s[i]].eb(--t[i], y[i], m[i]);
+
+    vector<vector<int>> dp(n, vector<int>(c*3, 1<<30));
+    dp[0][0] = 0;
+    rep(u, n) rep(i, c+1) for(auto &e : g[u])
+        chmin(dp[e.to][i+e.cost], dp[u][i] + e.time);
+    int res = *min_element(begin(dp[n-1]), begin(dp[n-1])+c+1);
+    if(res == (1<<30)) res = -1;
+    cout << res << endl;
+    return true;
+}
+~~~
+
+

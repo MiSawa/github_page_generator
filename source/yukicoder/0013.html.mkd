@@ -1,0 +1,51 @@
+---
+
+problem:
+    id: "0013"
+    name: 囲みたい！
+    url: http://yukicoder.me/problems/37
+date: 2015/04/05
+tags: [yukicoder, アドホック, UnionFind]
+source_code: ./src/0013.cc
+
+---
+
+### 概要
+
+$H \times W$ のフィールドが与えられる.
+各マスには整数 $M _ {i,j}$が書かれている.
+
+四近傍のうち, 同じ整数が書かれた所に辺があるグラフと思った時, 閉路があるか.
+
+#### 制約
+
+$H, W \le 100$, $1 \le M _ {i, j} \le 10^3$
+
+### 解法
+
+概要に書いたところまで問題を落としてしまえばすぐ見えるけど,
+こういうのは Union Find に丸投げすると楽.
+
+unite する時に, 既に同じ成分に属していたら, 閉路が出来る.
+$O(HW * \alpha(HW))$.
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    int w, h; cin >> w >> h;
+    UnionFind2D uf(h, w);
+    vector<vector<int>> in(h, vector<int>(w));
+    rep(i, h) rep(j, w) cin >> in[i][j];
+    constexpr int dxy[2] = {0, 1};
+    rep(i, h) rep(j, w) rep(dir, 2){
+        int x = i + dxy[dir], y = j + dxy[1-dir];
+        if(x < 0 or x >= h) continue;
+        if(y < 0 or y >= w) continue;
+        if(in[i][j] != in[x][y]) continue;
+        if(!uf.unite(i, j, x, y)){ cout << "possible" << endl; return true; }
+    }
+    cout << "impossible" << endl;
+    return true;
+}
+~~~
+

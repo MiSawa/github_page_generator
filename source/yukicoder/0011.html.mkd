@@ -1,0 +1,44 @@
+---
+
+problem:
+    id: "0011"
+    name: カードマッチ
+    url: http://yukicoder.me/problems/30
+date: 2015/04/05
+tags: [yukicoder]
+source_code: ./src/0011.cc
+
+---
+
+### 概要
+
+$H, W$ と, $1 \le x_i \le H$, $1 \le y_i \le W$ なる $(x_1, y_1), \dots, (x_n, y_n)$ が与えられる.
+
+$\{1, \dots, H\} \times \{1, \dots, W\}$ の元 $(x, y)$ のうち,
+$x = x_i$ または $y = y_i$ なる $i$ が存在するものは,
+$(x_i, y_i)$ を除いていくつあるか.
+
+#### 制約
+
+$1 \le H, W \le 10^6$, $N \le 100$.
+
+### 解法
+
+使われた $x_i$ や $y_i$ の種類を数えておくと, 普通に式が立つ.
+$O(n)$.
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    ll w, h; cin >> w >> h;
+    int n; cin >> n;
+    unordered_set<int> x, y;
+    rep(_, n){
+        int a, b; cin >> a >> b;
+        x.emplace(a); y.emplace(b);
+    }
+    cout << size(x)*h + w*size(y) - (ll)(size(x))*size(y) - n << endl;
+    return true;
+}
+~~~
+

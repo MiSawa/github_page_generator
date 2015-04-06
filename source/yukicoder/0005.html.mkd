@@ -1,0 +1,40 @@
+---
+
+problem:
+    id: "0005"
+    name: 数字のブロック
+    url: http://yukicoder.me/problems/14
+date: 2015/04/05
+tags: [yukicoder, 貪欲]
+source_code: ./src/0005.cc
+
+---
+
+### 概要
+
+$w_1, \dots, w_n$ が与えられる.
+この中から和が $L$ を超えないようにいくつか選ぶ方法のうち, 選んだ個数が最大のものを調べ, その個数を答えよ.
+
+#### 制約
+
+$1 \le n \le 10^4$, $1 \le L \le 10^4$, $1 \le w_i \le L$.
+
+### 解法
+
+$w_i$ の小さいものから貪欲に.
+
+### ソースコード
+
+~~~ cpp
+bool solve(){
+    int l, n;
+    cin >> l >> n;
+    vector<int> w(n+1);
+    rep(i, n) cin >> w[i+1];
+    sort(all(w));
+    partial_sum(all(w), begin(w));
+    cout << distance(begin(w), --upper_bound(all(w), l)) << endl;
+    return true;
+}
+~~~
+

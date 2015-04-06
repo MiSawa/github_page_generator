@@ -1,0 +1,51 @@
+---
+
+problem:
+    id: "0009"
+    name: モンスターのレベル上げ
+    url: http://yukicoder.me/problems/28
+date: 2015/04/05
+tags: [yukicoder, ヒープ]
+source_code: ./src/0009.cc
+
+---
+
+### 概要
+
+問題文読んで.
+
+#### 制約
+
+$1 \le N \le 1500$.
+
+### 解法
+
+「次に戦う相手」は順序付きキューに (レベル, 戦った回数) を突っ込んでおくことでわかる.
+あとの部分は愚直にやって, $O(n^2 \log n)$.
+
+円環状の時は二周分持つテクが有効.
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    int n; cin >> n;
+    auto a = get_vec<int>(n), b = get_vec<int>(n);
+    b.insert(end(b), all(b));
+    int res = numeric_limits<int>::max();
+    rep(p, n){
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+        for(aur x : a) pq.emplace(x, 0);
+        int top = 0;
+        rep(i, n){
+            int level, battle;
+            tie(level, battle) = pq.top(); pq.pop();
+            pq.emplace(level + b[p+i]/2, ++battle);
+            chmax(top, battle);
+        }
+        chmin(res, top);
+    }
+    cout << res << endl;
+    return true;
+}
+~~~
+

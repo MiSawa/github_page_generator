@@ -1,0 +1,44 @@
+---
+
+problem:
+    id: "0008"
+    name: N言っちゃダメゲーム
+    url: http://yukicoder.me/problems/26
+date: 2015/04/05
+tags: [yukicoder, ゲーム]
+source_code: ./src/0008.cc
+
+---
+
+### 概要
+
+$2$人対戦ゲームをする.
+$N, K$ が与えられる.
+プレイヤーには交互にターンが回ってきて, 自分のターンになった時に,
+$K$ 以下の正整数 $t$ を選び, $N$ を $N - t$ で更新する.
+$0$ になってしまったら負け.
+
+$N$ と $K$ が沢山与えられるので, それぞれについて先手後手のどちらが勝つか判定せよ.
+
+#### 制約
+
+$1 \le P \le 100$, $2 \le N, K \le 12 * 10^4$.
+
+### 解法
+
+よくやる手で, $(N-1) \equiv 0 \mod K+1$ かで判定できる.
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    int p;
+    cin >> p;
+    rep(_, p){
+        int n, k;
+        cin >> n >> k;
+        cout << (--n % (k+1) ? "Win" : "Lose") << endl;
+    }
+    return true;
+}
+~~~
+

@@ -1,0 +1,89 @@
+---
+
+problem:
+    id: "0014"
+    name: 最小公倍数ソート
+    url: http://yukicoder.me/problems/38
+date: 2015/04/05
+tags: [yukicoder, 数論]
+source_code: ./src/0014.cc
+
+---
+
+### 概要
+
+数列 $a_1, \dots, a_n$ が与えられる.
+$i = 1, \dots, n-1$ に対し, 次の操作を順に行う.
+
+- $a_i$ を今の値で固定し, $a _ {i+1}, \dots, a_n$ を,
+  $f _ {a_i}(x) = (\mathop{LCM}(a_i, x), x)$ の辞書順でソートし, 小さい順に番号を付け直す.
+
+最終的な $a_1, \dots, a_n$ を答えよ.
+
+#### 制約
+
+$1 \le N \le 10^4$, $1 \le a_i \le 10^4$.
+
+### 解法
+
+
+どうせ次の数以降はまた別の基準でソートされるので, 一々ソートする必要はなくて, min だけとれればよい.
+従って, 次の操作に対応する何かがあればよい:
+
+- multiset 的なものを, $a_1, \dots, a_n$ で初期化.
+
+- t が与えられるので, $f_t(x)$ の最も小さいものを一つ取り除き, 返す.
+
+これを, 値の範囲が小さい事を利用して, 次のようにして作る.
+
+- 各 $a_i$ に対してその約数を列挙しておく. (下のソースでいう `fac`)
+
+- $d$ が与えられた時, $d$ の倍数であるような $a_i$ を小さい順に返す構造を作っておく. (下のソースでいう `rev`)
+
+- $t$ が与えられた時, $t$ の各約数 $d$ について, `rev[d]` に入っている最小値を持ってきて, それを候補し, $d$ に渡る min を取って次の数を決める.
+
+- あとは削除に対応すればよいが, set を使いたくはないので, 遅延しておく. (下のソースでいう `c` を使っている所)
+
+計算量は, $D$ を $A$ 以下の数の約数の個数の最大値として $O(N \sqrt{A} + N D).
+
+ここで $\sqrt{A}$ の部分は約数列挙の所で, これは前処理 $O(N)$ で $O(D)$ に落とせるので, $O(ND)$ でも行ける.
+
+$D$ は $o(A^\epsilon), \forall \epsilon > 0$ とかだったハズで, ちっちゃい.
+この辺, 解析的整数論のにおいがしてヤバいですね.
+
+### ソースコード
+~~~ cpp
+constexpr int N = 11000;
+bool solve(){
+    int n; cin >> n;
+    vector<int> a(n); for(aur x : a) cin >> x;
+    array<int, N> c = {};
+    for(aur x : a) ++c[x];
+    int last = a[0]; --c[last];
+
+    array<vector<int>, N> fac;
+    array<vector<int>, N> rev;
+    for(aur x : a) if(fac[x].empty()){
+        fac[x] = factors(x);
+        for(auto &f : fac[x]) rev[f].emplace_back(x);
+    }
+    for(aur x : rev) sort(rall(x));
+
+    vector<int> res;
+    res.eb(last);
+    rep(_, n-1){
+        pair<int, int> nex = make_pair(numeric_limits<int>::max(), 0);
+        for(aur f : fac[last]){
+            while(!rev[f].empty() and !c[rev[f].back()]) rev[f].pop_back();
+            if(rev[f].empty()) continue;
+            chmin(nex, make_pair(lcm(last, rev[f].back()), rev[f].back()));
+        }
+        last = nex.snd;
+        --c[last];
+        res.eb(last);
+    }
+    rep(i, n) cout << res[i] << (i == n-1 ? "\n" : " ");
+    return true;
+}
+~~~
+

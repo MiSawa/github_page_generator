@@ -1,0 +1,55 @@
+---
+
+problem:
+    id: "0006"
+    name: 使いものにならないハッシュ
+    url: http://yukicoder.me/problems/24
+date: 2015/04/05
+tags: [yukicoder, 尺取り]
+source_code: ./src/0006.cc
+
+---
+
+### 概要
+
+$n$ に対するハッシュ関数 $h$ を,
+
+- $n$ が一桁なら $h(n) = n$,
+
+- $n$ が二桁以上なら, $n$ の各桁の和を $s$ としたとき, $h(n) = h(s)$
+
+で定める.
+
+$K, N$ が与えられるので, $K$ 以上 $N$ 以下の連続した素数列のうち, 列に含まれる素数の $h$ によるハッシュ値が全て異なるようなもののうち, 長さ最大のものを答えよ.
+
+
+#### 制約
+
+$1 \le K \le N \le 2 * 10^5$.
+
+### 解法
+
+尺取りすればいい.
+
+$h(n)$ は $n$ を $9$ で割った余りで決まることに注意すると,
+尺取りすらしなくてもよい.
+
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    int k, n;
+    cin >> k >> n;
+    vector<ll> ps = segsieve(k, n+1);
+    pair<int, ll> res(0, 0);
+    repsz(i, ps){
+        array<int, 9> cnt = {};
+        int j;
+        for(j = 0; i+j < size(ps); ++j) if(cnt[ps[i+j]%9]++) break;
+        chmax(res, make_pair(j, ps[i]));
+    }
+    cout << res.snd << endl;
+    return true;
+}
+~~~
+

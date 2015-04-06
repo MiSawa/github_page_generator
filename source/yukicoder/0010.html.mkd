@@ -1,0 +1,65 @@
+---
+
+problem:
+    id: "0010"
+    name: ＋か×か
+    url: http://yukicoder.me/problems/29
+date: 2015/04/05
+tags: [yukicoder, DP, メモ化再帰, 辞書順, 復元]
+source_code: ./src/0010.cc
+
+---
+
+### 概要
+
+$a_1, \dots, a_N$ と $T$ が与えられる.
+$o_i$ を $+$ か $\*$ から選び,
+$(((a_1 \ o_1\ a_2)\ o_2\ a_3) ...)\ o _ {N-1}\ a_N = T$
+となるようにしたい.
+
+このような $ o_1, \dots, o _ {N-1} $ の選び方を答えよ.
+複数選び方があるなら, "+" < "\*" な $(o_1, \dots, o _ {N-1} )$ の辞書順で最も小さいものを答えよ.
+
+#### 制約
+
+$2 \le N \le 50$, $1 \le T \le 10^5$, $1 \le a_i \le 10$.
+
+### 解法
+
+- `dp[i番目までで][式の値がkの時] = それ以降辻褄あわせて T に出来るか`
+
+をすると, 辞書順のテクで復元出来る.
+メモ化再帰にして, 復元を同時にしてしまうとやりやすい. $O(N T)$.
+
+- `dp[i番目までで][式の値をkにする] = そうするような辞書順最小の選び方`
+
+にする手もあるが, これをすると $O(N^2 T)$.
+
+### ソースコード
+~~~ cpp
+vector<int> as;
+vector<vector<int>> dp;
+int ok(int i, int now, const int &total){
+    if(now > total) return 0;
+    int &res = dp[i][now];
+    if(res >= 0) return res;
+    if(i == as.size()) return res = total == now;
+    return res = ok(i+1, now+as[i], total) or ok(i+1, now*as[i], total);
+}
+string dfs(int i, int now, const int &total){
+    if(i == as.size()) return "";
+    if(ok(i+1, now+as[i], total)) return "+" + dfs(i+1, now+as[i], total);
+    else                          return "*" + dfs(i+1, now*as[i], total);
+}
+
+bool solve(){
+    int n; cin >> n;
+    int total; cin >> total;
+    as.resize(n);
+    for(aur a : as) cin >> a;
+    dp.assign(n+1, vector<int>(total+1, -1));
+    cout << dfs(1, as[0], total) << endl;
+    return true;
+}
+~~~
+
