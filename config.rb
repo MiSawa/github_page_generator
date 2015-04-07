@@ -95,8 +95,8 @@ require 'lib/fix_url'
 require 'lib/tags'
 require 'lib/secret'
 
+activate :secret # tags より前に activate すること.
 activate :tags, :tagpage_template => 'tags/tag_template.html'
-activate :secret
 
 
 helpers do
@@ -116,3 +116,6 @@ page '/topcoder/index.html', :layout => 'layout'
 
 page '/yukicoder/*', :layout => 'yukicoder'
 page '/yukicoder/index.html', :layout => 'layout'
+
+#ignore '/secret/*'
+
