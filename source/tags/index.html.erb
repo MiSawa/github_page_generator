@@ -1,12 +1,13 @@
 ---
 
 title: Tags
+build_twice: true
 
 ---
 
-<h2>Tags</h2>
+<h1>Tags</h1>
 <ul>
-    <% tags.each do |tagname, tag| %>
-        <li><%= link_to "#{tagname} (#{tag.size})", tag.url %></li>
-    <% end %>
+  <% tags.sort_by{|tagname, tag| tagname}.each do |tagname, tag| %>
+    <li><%= link_to "#{tagname} (#{tag.size})", tag.url %></li>
+  <% end %>
 </ul>

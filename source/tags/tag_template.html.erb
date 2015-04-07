@@ -1,11 +1,11 @@
-<h1>Pages tagged '<%= tagname %>'</h1>
+<% build_twice %>
+<% current_resource.add_metadata( title: "Tag " + tagname ) %>
+
+<h1>Pages tagged by '<%= tagname %>'</h1>
 
 <ul>
-  <% pages.each_with_index do |page, i| %>
-    <% title = page.metadata[:title] %>
-    <% title ||= page.data.title %>
-    <% title ||= page.url %>
-    <li><%= link_to title, page %> </li>
+  <% pages.sort_by{|resource| get_title(resource)}.each do |resource| %>
+    <li> <%= link_to get_title(resource), resource %> </li>
   <% end %>
 </ul>
 

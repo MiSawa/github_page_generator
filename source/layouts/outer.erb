@@ -7,15 +7,12 @@
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
     <!-- Use title if it's in the page YAML frontmatter -->
-    <% title = current_page.metadata[:title] %>
-    <% title ||= current_page.data.title %>
-    <% title ||= "No title" %>
-    <title><%= title %></title>
+    <title><%= get_title current_resource %></title>
 
     <%= stylesheet_link_tag 'normalize', 'all', 'rouge' %>
     <%= javascript_include_tag 'base' %>
-    <% if current_page.metadata[:header] %>
-        <%= current_page.metadata[:header] %>
+    <% if current_resource.metadata[:header] %>
+        <%= current_resource.metadata[:header] %>
     <% end %>
     <% if build? %>
       <script>
@@ -35,17 +32,17 @@ ga('send', 'pageview');
   <div id='menu'>
     <ul>
       <li> <%= link_to 'top', '/index.html' %> </li>
-      <li> <%= link_to 'tags', '/tags/index.html' %> </li>
       <li> <%= link_to 'AOJ の記事', '/aoj/index.html' %> </li>
       <li> <%= link_to 'TopCoder の記事', '/topcoder/index.html' %> </li>
       <li> <%= link_to 'yukicoder の記事', '/yukicoder/index.html' %> </li>
+      <li> <%= link_to 'tags', '/tags/index.html' %> </li>
     </ul>
   </div>
   <div id='main'>
     <%= yield %>
-    <% if (current_page.respond_to? :tags) && !current_page.tags.empty?%>
+    <% if (current_resource.respond_to? :tags) && !current_resource.tags.empty?%>
       <h3>Tags</h3>
-      <% current_page.tags.each do |tag| %>
+      <% current_resource.tags.each do |tag| %>
         <div class='tag'><%= link_to tag, tagpage_url(tag) %></div>
       <% end %>
     <% end %>

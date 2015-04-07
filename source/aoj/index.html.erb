@@ -2,15 +2,14 @@
 
 title: AOJ
 tags: [AOJ]
+build_twice: true
 
 ---
 
-<h2>AOJ</h2>
+<h1>AOJ</h1>
+
 <ul>
-    <% tags["AOJ"].pages.sort_by{|page| page.metadata[:id] }.each_with_index do |page, i| %>
-        <% title = page.metadata[:title] %>
-        <% title ||= page.data.title %>
-        <% title ||= page.url %>
-        <li><%= link_to title, page.url %> </li>
-    <% end %>
+  <% tags["AOJ"].pages.sort_by(&:url).each do |resource| %>
+    <li><%= link_to get_title(resource), resource %> </li>
+  <% end %>
 </ul>

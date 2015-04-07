@@ -1,19 +1,19 @@
-<% problem = current_page.data.problem %>
+<% problem = current_resource.data.problem %>
 <% id = problem.id %>
 <% id = id.to_i if id and id.class == String %>
 <% url = problem.url || "http://yukicoder.me/problems/no/" + id.to_s %>
-<% current_page.add_metadata(
-    title: "yukicoder " + ("%04d" % id) + " " + problem.name
+<% current_resource.add_metadata(
+  title: "yukicoder " + ("%04d" % id) + " " + problem.name
 ) %>
-<% current_page.add_metadata(
-    header: (javascript_include_tag 'fold')
+<% current_resource.add_metadata(
+  header: (javascript_include_tag 'fold')
 ) %>
 
 <% wrap_layout :outer do %>
-    <h2> <%= current_page.metadata[:title] %> </h2>
-    <%= link_to "問題文", url %>
-    <%= yield %>
-    <% if current_page.data.source_code %>
-        <%= link_to 'download full source code', current_page.data.source_code %>
-    <% end %>
+  <h2> <%= current_resource.metadata[:title] %> </h2>
+  <%= link_to "問題文", url %>
+  <%= yield %>
+  <% if current_resource.data.source_code %>
+    <%= link_to 'download full source code', current_resource.data.source_code %>
+  <% end %>
 <% end %>

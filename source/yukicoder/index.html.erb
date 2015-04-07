@@ -2,17 +2,14 @@
 
 title: yukicoder
 tags: [yukicoder]
+build_twice: true
 
 ---
 
-<h2>yukicoder</h2>
+<h1>yukicoder</h1>
+
 <ul>
-    <% tags["yukicoder"].pages.sort_by{|page|
-        #page.metadata[:id]
-        page.url }.each_with_index do |page, i| %>
-        <% title = page.metadata[:title] %>
-        <% title ||= page.data.title %>
-        <% title ||= page.url %>
-        <li><%= link_to title, page.url %> </li>
-    <% end %>
+  <% tags["yukicoder"].pages.sort_by(&:url).each do |resource| %>
+    <li><%= link_to get_title(resource), resource %> </li>
+  <% end %>
 </ul>

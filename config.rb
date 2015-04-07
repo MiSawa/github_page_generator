@@ -86,12 +86,27 @@ activate :relative_assets
 set :relative_links, true
 set :strip_index_file, false
 
+# TODO config.rb から, ページ指定して書けるようにしたいね.
+
+require 'lib/build_twice'
+activate :build_twice
+
 require 'lib/fix_url'
 require 'lib/tags'
 require 'lib/secret'
 
 activate :tags, :tagpage_template => 'tags/tag_template.html'
 activate :secret
+
+
+helpers do
+  def get_title(resource)
+    title = resource.metadata[:title]
+    title ||= resource.data.title
+    title ||= resource.url
+  end
+end
+
 
 page '/aoj/*', :layout => 'aoj'
 page '/aoj/index.html', :layout => 'layout'
