@@ -67,7 +67,7 @@ class TagExtension < Middleman::Extension
     end
 
     def tagging_pages(resources)
-      resources.each{|resource| tagging_page resource }
+      resources.each{|resource| tagging_page resource unless resource.ignored? }
     end
 
     def tagging_page(resource)
