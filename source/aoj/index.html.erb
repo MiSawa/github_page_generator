@@ -9,7 +9,7 @@ build_twice: true
 <h1>AOJ</h1>
 
 <ul>
-  <% tags["AOJ"].pages.sort_by(&:url).each do |resource| %>
+  <% tags["AOJ"].pages.sort_by{|resource| get_title(resource)}.each do |resource| %>
     <li><%= link_to get_title(resource), resource %> </li>
   <% end %>
 </ul>
