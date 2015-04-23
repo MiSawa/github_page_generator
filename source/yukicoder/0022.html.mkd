@@ -1,0 +1,46 @@
+---
+
+problem:
+    id: "0022"
+    name: 平均の差
+    url: http://yukicoder.me/problems/68
+date: 2015/04/09
+tags: [yukicoder, 括弧, parse]
+source_code: ./src/0022.cc
+
+---
+
+### 概要
+
+対応の取れた, 括弧の列が与えられる.
+$k$ 番目の括弧と対応する括弧の場所を出力せよ.
+
+#### 制約
+
+$1 \le n \le 10^4$
+
+### 解法
+
+括弧をスタックでごにょごにょする.
+
+再帰してもいいけど, 多分そっちの方がめんどい.
+
+$k$ 番目か答えのでかい方まで行ったらやめる事も出来るけど, たぶんそうしない方が楽.
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    int n, k;
+    cin >> n >> k; --k;
+    string s; cin >> s;
+    vector<int> st;
+    vector<int> v(n);
+    repsz(i, s){
+        if(s[i] == '('){ st.eb(i); continue; }
+        v[v[i] = st.back()] = i; st.pop_back();
+    }
+    cout << v[k]+1 << endl;
+    return true;
+}
+~~~
+

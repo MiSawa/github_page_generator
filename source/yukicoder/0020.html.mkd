@@ -1,0 +1,68 @@
+---
+
+problem:
+    id: "0020"
+    name: 砂漠のオアシス
+    url: http://yukicoder.me/problems/64
+date: 2015/04/09
+tags: [yukicoder, グリッドグラフ, 最短路]
+source_code: ./src/0020.cc
+
+---
+
+### 概要
+
+$n \times n$ のグリッド上を $(1, 1)$ から $(n, n)$ まで行きたい.
+各マスに入る時, $b _ {i,j}$ のダメージを喰らう.
+初期値 $v$ の HP が $0$ 以下になると死亡.
+
+$(o_x, o_y)$ を通ると, 一回だけ HP がその時点での HP の倍になる.
+
+#### 制約
+
+$1 \le n \le 200$
+
+### 解法
+
+$(o_x, o_y)$ に行くか行かないかで場合分けして, $(1, 1)$ からの最短路長と $(o_x, o_y)$ からの最短路長をごにょごにょする.
+
+### ソースコード
+~~~ cpp
+template<typename X> inline bool valid_index(const X &x){ return true; }
+template<typename V, typename ...Args>
+inline bool valid_index(const V &v, const int &i, const Args &...args){ return 0<=i and i<v.size() and valid_index(v[i], args...); }
+
+int dxy[] = {0, 1, 0, -1, 0};
+vector<vector<int>> dijk(vector<vector<int>> &b, int sx, int sy){
+    using Elem = tuple<int, int, int>;
+
+    const int n = size(b);
+    priority_queue<Elem, vector<Elem>, greater<Elem>> pq;
+    vector<vector<int>> d(n, vector<int>(n, numeric_limits<int>::max()));
+    if(!valid_index(b, sx, sy)) return d;
+    pq.emplace(d[sx][sy] = 0, sx, sy);
+    while(!pq.empty()){
+        int c, x, y; tie(c, x, y) = pq.top(); pq.pop();
+        if(c > d[x][y]) continue;
+        rep(dir, 4){
+            int xx = x + dxy[dir], yy = y + dxy[dir+1];
+            if(valid_index(b, xx, yy) and chmin(d[xx][yy], c + b[xx][yy]))
+                pq.emplace(d[xx][yy], xx, yy);
+        }
+    }
+    return d;
+}
+
+bool solve(){
+    int n, v, ox, oy; cin >> n >> v >> oy >> ox; --ox; --oy;
+    vector<vector<int>> b(n, vector<int>(n));
+    rep(i, n) rep(j, n) cin >> b[i][j];
+    auto s = dijk(b, 0, 0), o = dijk(b, ox, oy);
+    string res = "NO";
+    if(s[n-1][n-1] < v) res = "YES";
+    if(valid_index(s, ox, oy) and s[ox][oy] < v and o[n-1][n-1] < 2 * (v - s[ox][oy])) res = "YES";
+    cout << res << endl;
+    return true;
+}
+~~~
+

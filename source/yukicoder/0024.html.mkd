@@ -1,0 +1,42 @@
+---
+
+problem:
+    id: "0024"
+    name: 数当てゲーム
+    url: http://yukicoder.me/problems/69
+date: 2015/04/09
+tags: [yukicoder]
+source_code: ./src/0024.cc
+
+---
+
+### 概要
+
+問題文読んで.
+
+#### 制約
+
+### 解法
+
+「現状でありうる答えのリスト」を持って更新.
+
+bit 演算を使ったり, set を使ったりすると楽.
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    int n;
+    cin >> n;
+    int A = bit(10)-1;
+    rep(_, n){
+        int B = 0;
+        rep(t, 4){ int x; cin >> x; B |= bit(x); }
+        string r; cin >> r;
+        if(r == "NO") B = ~B;
+        A &= B;
+    }
+    rep(i, 10) if(A>>i&1) cout << i << endl;
+    return true;
+}
+~~~
+

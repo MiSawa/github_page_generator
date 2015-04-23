@@ -1,0 +1,37 @@
+---
+
+problem:
+    id: "0021"
+    name: 平均の差
+    url: http://yukicoder.me/problems/67
+date: 2015/04/09
+tags: [yukicoder]
+source_code: ./src/0021.cc
+
+---
+
+### 概要
+
+問題文読んで.
+
+#### 制約
+
+$1 \le n \le 9$
+
+### 解法
+
+ちゃんと分割を全通り試さなきゃいけないのかと思いきや, 最小値と最大値の差を出力するだけ.
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    int n, k;
+    cin >> n >> k;
+    vector<int> in(n);
+    for(auto &x : in) cin >> x;
+    auto t = minmax_element(all(in));
+    cout << *t.second - *t.first << endl;
+    return true;
+}
+~~~
+

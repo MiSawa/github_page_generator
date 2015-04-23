@@ -1,0 +1,60 @@
+---
+
+problem:
+    id: "0109"
+    name: N! mod M
+    url: http://yukicoder.me/problems/109
+date: 2015/04/08
+tags: [yukicoder, 素数, mod, 階乗]
+source_code: ./src/0109.cc
+
+---
+
+### 概要
+
+$N! \mod M$ を求めよ.
+
+#### 制約
+
+$\max(0, M - 10^5) \le N \le 10^9$
+
+### コーナーケース
+
+$N = 0, M = 1$.
+
+### 解法
+
+$N, M$ が小さい時は愚直に計算.
+
+$M$ が十分に大きく, 素数でない時, $p^e \divides M$ なら $p^e \le M/2 \le N$ になる.
+従って, 各 $p^e$ で $N! \equiv 0 \pmod p^e$ となるから, $N \equiv 0 \pmod M$.
+
+一方, $M$ が素数の時は Wilson の定理 $(p-1)! \equiv -1 \pmod p$ を使って, 後ろから計算すればよい.
+
+### ソースコード
+~~~ cpp
+bool solve(){
+    int T;
+    cin >> T;
+    rep(_, T){
+        ll n, m;
+        cin >> n >> m;
+        if(n >= m or m == 1){ cout << 0 << endl; continue; }
+        if(n < 1000 * 1000){
+            ll res = 1;
+            rep(i, n+1) if(i) (res *= i) %= m;
+            cout << res << endl;
+            continue;
+        }
+        if(!is_prime(m)){ cout << 0 << endl; continue; }
+        ll res = 1;
+        for(int i = n+1; i <= m-1; ++i) (res *= i) %= m;
+        res = powMod(res, m-2, m);
+        (res *= m-1) %= m;
+        if(res < 0) res += m;
+        cout << res << endl;
+    }
+    return true;
+}
+~~~
+
