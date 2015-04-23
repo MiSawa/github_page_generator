@@ -36,5 +36,12 @@ div.highlight {
     @include zurui-box-deboss;
     margin: 10px;
 }
-
-
+:not(div.highlight) table {
+    border-collapse: collapse;
+    border-spacing: 2;
+    th,td {
+        padding-left: 10px;
+        padding-right: 10px;
+        border: 1px solid #000;
+    }
+}
