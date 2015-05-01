@@ -130,6 +130,49 @@ activate :secret # tags より前に activate すること.
 activate :tags, :tagpage_template => 'tags/tag_template.html'
 
 
+class SocialButton
+  attr_reader :js, :html, :style
+  def initialize(js, html, style)
+    @js, @html, @style = js, html, style
+  end
+
+@@tweet_button = SocialButton.new(<<JS, <<HTML, <<STYLE)
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+JS
+<a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+HTML
+STYLE
+@@hatena_star = SocialButton.new(<<JS, <<HTML, <<STYLE)
+<script type="text/javascript" src="http://s.hatena.ne.jp/js/HatenaStar.js"></script>
+<script type="text/javascript">
+Hatena.Star.SiteConfig = {
+  entryNodes: {
+    'div#main' : {
+      uri: 'document.location',
+      title: 'document.title',
+      container: 'span.hatena_star'
+    }
+  }
+};
+</script>
+JS
+<span class="hatena_star"></span>
+HTML
+STYLE
+  def SocialButton.tweet_button
+    @@tweet_button
+  end
+  def SocialButton.hatena_star
+    @@hatena_star
+  end
+end
+
+helpers do
+  def social_buttons
+    return [ SocialButton::hatena_star, SocialButton::tweet_button ]
+  end
+end
+
 helpers do
   def get_title(resource)
     title = resource.metadata[:title]

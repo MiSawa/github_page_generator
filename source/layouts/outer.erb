@@ -14,6 +14,9 @@
     <% if current_resource.metadata[:header] %>
         <%= current_resource.metadata[:header] %>
     <% end %>
+    <% for button in social_buttons %>
+      <%= button.js %>
+    <% end %>
     <% if build? %>
       <script>
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -39,6 +42,15 @@ ga('send', 'pageview');
     </ul>
   </div>
   <div id='main'>
+
+    <ul class="social_button_box">
+      <% for button in social_buttons %>
+        <li class="social_button" style="<%= button.style %>">
+          <%= button.html %>
+        </li>
+      <% end %>
+    </ul>
+
     <%= yield %>
     <% if (current_resource.respond_to? :tags) && !current_resource.tags.empty?%>
       <h3>Tags</h3>
@@ -48,18 +60,20 @@ ga('send', 'pageview');
     <% end %>
 
     <h3>Comments</h3>
-    <div id="disqus_thread"></div>
-    <script type="text/javascript">
-var disqus_shortname = 'misawa';
-/* * * DON'T EDIT BELOW THIS LINE * * */
-(function() {
-    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    <% if build? %>
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+  var disqus_shortname = 'misawa';
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+  (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    <% end %>
   </div>
   </body>
 </html>

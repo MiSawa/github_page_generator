@@ -45,3 +45,27 @@ div.highlight {
         border: 1px solid #000;
     }
 }
+.social_button_box {
+    text-align: right;
+    .social_button {
+        display: inline-block;
+
+        span.hatena_star {
+            display: inline-block;
+            vertical-align: top;
+            margin-top: -3.5px;
+            .hatena-star-add-button {
+                vertical-align: top !important;
+                padding: 0px 2px 0px 2px !important;
+                background-color: #FAFAFA;
+                border: #ccc solid 1px;
+                border-radius: 2px;
+            }
+            a>img{
+                margin-top: -0.5px;
+                zoom: 1.5;
+            }
+        }
+    }
+}
+
