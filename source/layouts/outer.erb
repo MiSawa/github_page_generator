@@ -34,15 +34,13 @@ ga('send', 'pageview');
   <body class='<%= page_classes %>'>
   <div id='menu'>
     <ul>
-      <li> <%= link_to 'top', '/index.html' %> </li>
-      <li> <%= link_to 'AOJ の記事', '/aoj/index.html' %> </li>
-      <li> <%= link_to 'TopCoder の記事', '/topcoder/index.html' %> </li>
-      <li> <%= link_to 'yukicoder の記事', '/yukicoder/index.html' %> </li>
-      <li> <%= link_to 'tags', '/tags/index.html' %> </li>
+    <% for page in data.menu.pages %>
+      <li> <%= link_to page.label, page.url %> </li>
+    <% end %>
     </ul>
   </div>
-  <div id='main'>
 
+  <div id='main'>
     <ul class="social_button_box">
       <% for button in social_buttons %>
         <li class="social_button" style="<%= button.style %>">

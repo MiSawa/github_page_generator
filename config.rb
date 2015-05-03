@@ -135,16 +135,16 @@ class SocialButton
   def initialize(js, html, style)
     @js, @html, @style = js, html, style
   end
-
 @@tweet_button = SocialButton.new(<<JS, <<HTML, <<STYLE)
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 JS
-<a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+<a href="https://twitter.com/share" class="twitter-share-button" data-via="Mi_Sawa" data-dnt="true">Tweet</a>
 HTML
 STYLE
 @@hatena_star = SocialButton.new(<<JS, <<HTML, <<STYLE)
 <script type="text/javascript" src="http://s.hatena.ne.jp/js/HatenaStar.js"></script>
 <script type="text/javascript">
+Hatena.Star.Token = 'bd3a38c3b5f80b3ffb7ac27a6d10b8a144d8a948';
 Hatena.Star.SiteConfig = {
   entryNodes: {
     'div#main' : {
@@ -178,6 +178,7 @@ helpers do
     title = resource.metadata[:title]
     title ||= resource.data.title
     title ||= resource.url
+    title += " - みさわめも"
   end
 end
 

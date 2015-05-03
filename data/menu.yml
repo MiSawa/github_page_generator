@@ -1,0 +1,15 @@
+pages:
+  - label: 'top'
+    url: '/index.html'
+  - label: 'aoj'
+    url: '/aoj/index.html'
+  - label: 'topcoder'
+    url: '/topcoder/index.html'
+  - label: 'yukicoder'
+    url: '/yukicoder/index.html'
+  - label: 'tags'
+    url: '/tags/index.html'
+  - label: 'other'
+    url: '/other/index.html'
+
+
