@@ -1,0 +1,90 @@
+---
+
+problem:
+    round: SRM601
+    level: [Div1 Medium 500]
+    rd: "15713"
+    pm: "12891"
+    name: WinterAndSnowmen
+    url: http://community.topcoder.com/stat?c=problem_statement&pm=12891&rd=15713
+date: 2015/09/30
+tags: [TopCoder, DP]
+
+---
+
+### 概要
+
+$ {1, \dots, N} $ からいくつか選び, その XOR を $ A $ とする.
+
+$ {1, \dots, M} $ から, 上で選ばなかったものをいくつか選び, その XOR を $ B $ とする.
+
+$ A < B $ となるような選び方の総数を答えよ.
+
+
+#### 制約
+
+$ 1 \le N, M \le 2000 $
+
+### 解法
+
+$ n = \max(N, M) $ とする.
+
+$ O(n^3) $ はわかった.
+
+$ N = M $ のとき, $ A = B $ となる割り当てを全部求めて, 全体から引いて2で割ればよい.
+$ A = B $ なる割り当ては, $ A\operatorname{xor}B $ がゼロになるやつ.
+
+それ以降解らなくて解説を見た.
+
+$ A < B $ になるのは, $ A $ と $ B $ の上の方のビットが同じで, 最初に違うのが $ A $ の方が $0$ になっているという状態.
+
+すなわち, $ A\operatorname{xor}B $ の最上位ビットが $ B $ 内で立っている状態.
+
+各ビットに対し, $ A \operatorname{xor} B $ と, $ B $ 内でのそのビットを持ちながら DP すると, $ O(n^2 \log n) $. (TLE)
+
+メモ化再帰に書き直すと AC したが, 本来は, 状態をもう少しまとめることで速くする.
+
+具体的には, $ A \operatorname{xor} B $ の $ i $ ビット目以上の所だけでメモればいい.
+
+
+### ソースコード
+
+~~~ cpp
+// 150.0
+
+constexpr int mod = 1000000007;
+
+array<array<array<int, 2>, 4096>, 2048> memo;
+int p, N, M;
+int dfs(int t, int k, int b){
+    int &res = memo[t][k][b];
+    if(res >= 0) return res;
+    if(t == 0)   return res = (b == 1 and k == 1);
+    // if(t == 0)   return res = (b == 1 and (k >> p) == 1);
+    res = dfs(t-1, k, b);
+    if(t <= N) res += dfs(t-1, k^(t>>p), b);
+    // if(t <= N) res += dfs(t-1, k^t, b);
+    if(res >= mod) res -= mod;
+    if(t <= M) res += dfs(t-1, k^(t>>p), b ^ (t>>p&1));
+    // if(t <= M) res += dfs(t-1, k^t, b ^ (t>>p&1));
+    if(res >= mod) res -= mod;
+    return res;
+}
+
+int WinterAndSnowmen::getNumber( int N, int M ){
+    // dp[ t 番目まで使って ][ X xor Y ][ Y の i bit 目 ]
+
+    int res = 0;
+    for(int p = 0; (N|M)>>p; ++p){
+        ::p = p;
+        ::N = N;
+        ::M = M;
+        rep(t, size(memo)) rep(k, size(memo[0])) rep(b, size(memo[0][0]))
+            memo[t][k][b] = -1;
+        res += dfs(max(N, M), 0, 0);
+        if(res >= mod) res -= mod;
+    }
+    return res;
+}
+~~~
+

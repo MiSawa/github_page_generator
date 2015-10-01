@@ -1,0 +1,17 @@
+<% problem = current_resource.data.problem %>
+<% url = problem.url || "http://#{problem.contest.downcase}.contest.atcoder.jp/tasks/#{problem.contest.downcase}_#{problem.id.downcase}" %>
+<% current_resource.add_metadata(
+  title: problem.contest + " " + problem.id + " " + problem.name
+) %>
+<% current_resource.add_metadata(
+  header: (javascript_include_tag 'fold')
+) %>
+
+<% wrap_layout :outer do %>
+  <h2> <%= current_resource.metadata[:title] %> </h2>
+  <%= link_to "問題文", url %>
+  <%= yield %>
+  <% if current_resource.data.source_code %>
+    <%= link_to 'download full source code', current_resource.data.source_code %>
+  <% end %>
+<% end %>

@@ -1,0 +1,63 @@
+---
+
+problem:
+    round: SRM594
+    level: [Div1 Easy 250]
+    rd: "15706"
+    pm: "12804"
+    name: AstronomicalRecords
+    url: http://community.topcoder.com/stat?c=problem_statement&pm=12804&rd=15706
+date: 2015/10/01
+tags: [TopCoder, DP]
+
+---
+
+### 概要
+
+秘密の数列 $ \{ X_i \} $ の, 部分列を(overlap を許して)とった.
+
+各部分列に対し, その部分列内での比を保つように変換した  $ \{ A_i \} $ と $ \{ B_i \} $ が与えられる. (つまり, 一つ目の部分列を $c_1$ 倍, 二つ目の部分列を $c_2$ 倍したようなやつ.)
+
+元の数列の長さとしてありうる最小値を答えよ.
+
+
+#### 制約
+
+$ 2 \le |A|, |B| \le 50,\ 0 \le A_i, B_i \le 10^9 $.
+
+### 解法
+
+もちろん, 少なくとも一つはマッチさせられる.
+
+マッチする箇所を一つ仮定すると, 比を揃えることが出来る.
+
+この状態から元の列としてありうる最小の長さを求めるには, overlap できる部分の最大長さを求めればよくて, そういうのを最長共通部分列と呼ぶのでした.
+
+
+### ソースコード
+
+~~~ cpp
+// 218.76 pts
+
+int AstronomicalRecords::minimalPlanets( vector <int> A_, vector <int> B_ ){
+    vector<ll> a(all(A_)), b(all(B_));
+    const int n = size(a), m = size(b);
+    int res = n + m;
+    rep(x, n) rep(y, m){
+        vector<ll> aa(n), bb(m);
+        rep(i, n) aa[i] = b[y] * a[i];
+        rep(j, m) bb[j] = a[x] * b[j];
+        vector<vector<int>> dp(n+1, vector<int>(m+1));
+        int lcs = 0;
+        rep(i, n) rep(j, m){
+            if(aa[i] == bb[j]) chmax(dp[i+1][j+1], dp[i][j] + 1);
+            chmax(dp[i+1][j], dp[i][j]);
+            chmax(dp[i][j+1], dp[i][j]);
+        }
+        rep(i, n+1) rep(j, m+1) chmax(lcs, dp[i][j]);
+        chmin(res, n + m - lcs);
+    }
+    return res;
+}
+~~~
+

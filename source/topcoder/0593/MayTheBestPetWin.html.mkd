@@ -1,0 +1,90 @@
+---
+
+problem:
+    round: SRM593
+    level: [Div1 Easy 450]
+    rd: "15705"
+    pm: "12779"
+    name: MayTheBestPetWin
+    url: http://community.topcoder.com/stat?c=problem_statement&pm=12779&rd=15705
+date: 2015/10/01
+tags: [TopCoder, DP]
+
+---
+
+### 概要
+
+長さ $ n $ の数列 $ \{ A_i \} $ と $ \{ B_i \} $ が与えられる.
+これらの index を $ S $ と $ T $ に分割し,
+
+`$$
+\max( \sum_{i \in S} B_i - \sum_{j \in T} A_j, \sum_{j \in T} B_j - \sum_{i \in S} A_i)
+$$`
+
+を最小化してほしい.
+
+
+#### 制約
+
+$ 2 \le n \le 50,\ 1 \le A_i, B_i \le 10^4 $.
+
+### 解法
+
+集合 $ U $ に対し, $ f(U) = \sum_{i \in U} B_i - \sum_{i \not \in U} A_i $ とする.
+
+このとき, $ f(U) + f(U^c) = \sum B_i - \sum A_i =: C $.
+
+よって, $ f(U) $ が $ C/2 $ に近くなるようにすればよい.
+
+DP をする.
+
+- $i$ を $U$ に加えると, $ f(U) $ は $ +B_i $ される.
+- $i$ を $U^c$ に加えると, $ f(U) $ は $ -A_i $ される.
+
+よって, 各 $i$ について, ありうる $ f(U) $ を列挙する DP をすればよい.
+
+高速化の為, offset をかませる. つまり, $ g(U) = f(U) + \sum{j \le i} A_j $ のようなものを持って DP をする.
+
+すると,
+
+- $i$ を $U$ に加えると, $ g(U) $ は $ + A_i + B_i $ される.
+- $i$ を $U^c$ に加えると, $ g(U) $ は $ \pm 0 $ される.
+
+これにより, 配列を一つだけ持って $0$-$1$ knapsack のように DP 出来る.
+
+最初, set を使って TLE したり, `(obj+1)/2` の $+1$ を忘れる off-by-one error を出して, submit debug のようになってしまった.
+
+### ソースコード
+
+~~~ cpp
+// 135 pts
+
+int MayTheBestPetWin::calc( vector <int> A, vector <int> B ){
+    // maxdiff(s, t) = max( max(s) - min(t), max(t) - min(s) )
+    // max(s) + max(t) = const
+    // min(s) + min(t) = const
+    // s に (a, b) を加えると, +b, -a
+    // t に (a, b) を加えると, -a, +b
+    const int n = size(A);
+    vector<int> dp(2 * 50 * 11000);
+    dp[0] = 1;
+    rep(i, n){
+        for(int t = size(dp)-1-A[i]-B[i]; t >= 0; --t) if(dp[t])
+            dp[t+A[i]+B[i]] = 1;
+    }
+    // set<int> dp; dp.emplace(0);
+    // rep(i, n){
+    //     set<int> qb = dp;
+    //     for(auto s : dp){
+    //         qb.emplace(s + B[i] + A[i]);
+    //     }
+    //     dp.swap(qb);
+    // }
+    int obj = 0;
+    rep(i, n) obj += B[i] + A[i];
+    int x = (obj+1)/2;
+    while(!dp[x]) ++x;
+    return x - accumulate(all(A), 0);
+}
+~~~
+

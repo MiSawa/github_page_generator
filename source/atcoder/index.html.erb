@@ -1,0 +1,15 @@
+---
+
+title: AtCoder
+tags: [AtCoder]
+build_twice: true
+
+---
+
+<h1>AtCoder</h1>
+
+<ul>
+  <% tags["AtCoder"].pages.sort_by(&:url).each do |resource| %>
+    <li><%= link_to get_title(resource), resource %> </li>
+  <% end %>
+</ul>

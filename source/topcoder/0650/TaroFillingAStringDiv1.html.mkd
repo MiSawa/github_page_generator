@@ -2,7 +2,7 @@
 
 problem:
     round: SRM650
-    level: [Div1Easy]
+    level: [Div1 Easy]
     rd: 16314
     pm: 13669
     name: TaroFillingAStringDiv1

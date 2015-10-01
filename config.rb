@@ -104,6 +104,35 @@ class HTMLWithMathjax < Middleman::Renderers::MiddlemanRedcarpetHTML
       "<code>#{code}</code>"
     end
   end
+  def preprocess(fulldoc)
+    dollar              = Regexp.escape "$"
+    backslash_dollar    = Regexp.escape "\\$"
+    none_escaped        = "(?:(?:^|[^\\\\])(?:\\\\\\\\)*)"
+    not_dollar          = "(?:^|$|(?:" + none_escaped + backslash_dollar + ")|(?:[^$]))"
+    not_quote           = "(?:^|$|(?:" + none_escaped + Regexp.escape("\\`") + ")|(?:[^`]))"
+    not_quote_nor_dollar= "(?:^|$|(?:" + none_escaped + Regexp.escape("\\") + "(?:" + Regexp.escape("`") + "|" + Regexp.escape("$") + ")" + ")|(?:[^`$]))"
+    not_quote_none_escaped = "(?:^|$|[^" + Regexp.escape("`\\") + "]" + none_escaped + "?)"
+    not_quote_nor_dollar_none_escaped = "(?:^|$|[^$" + Regexp.escape("`\\") + "](?:(?:^|[^\\\\`$])(?:\\\\\\\\)*)?)"
+
+    tex = Regexp.new("(" + not_quote_nor_dollar_none_escaped + ")(" + dollar +
+        "(?:|" +
+        "(?:" + not_quote_nor_dollar + ")|" + # 1文字
+        "(?:" + not_quote_nor_dollar + not_quote_nor_dollar + ")|" + # 2文字
+        "(?:" + not_quote_nor_dollar + not_dollar + "*" + not_quote_nor_dollar + ")" +
+        ")" + not_quote_nor_dollar_none_escaped + dollar + ")(" + not_quote_nor_dollar + ")")
+    tex2 = Regexp.new("(" + not_quote_nor_dollar_none_escaped + ")(" + dollar + dollar +
+        "(?:|" +
+        not_quote_nor_dollar + "|" + # 1文字
+        not_quote_nor_dollar + not_quote_nor_dollar + "|" + # 2文字
+        not_quote_nor_dollar + not_dollar + "*" + not_quote_nor_dollar +
+        ")" + not_quote_nor_dollar + dollar + dollar + ")(" + not_quote_nor_dollar + ")")
+    [tex, tex2].each do |reg|
+      fulldoc.gsub!(reg) do |x|
+        $1 + '`' + $2 + '`' + $3
+      end
+    end
+    fulldoc
+  end
 end
 #set :markdown_engine, :redcarpet
 #set :markdown, :fenced_code_blocks => true, :smartypants => true,
@@ -178,7 +207,6 @@ helpers do
     title = resource.metadata[:title]
     title ||= resource.data.title
     title ||= resource.url
-    title += " - みさわめも"
   end
 end
 
@@ -192,5 +220,10 @@ page '/topcoder/index.html', :layout => 'layout'
 page '/yukicoder/*', :layout => 'yukicoder'
 page '/yukicoder/index.html', :layout => 'layout'
 
-#ignore '/secret/*'
+page '/atcoder/*', :layout => 'atcoder'
+page '/atcoder/index.html', :layout => 'layout'
+
+configure :build do
+  ignore '/secret/*'
+end
 
