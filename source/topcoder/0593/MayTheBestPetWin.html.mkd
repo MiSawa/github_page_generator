@@ -2,7 +2,7 @@
 
 problem:
     round: SRM593
-    level: [Div1 Easy 450]
+    level: [Div1 Med 450]
     rd: "15705"
     pm: "12779"
     name: MayTheBestPetWin
