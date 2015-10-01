@@ -212,11 +212,9 @@ helpers do
 end
 
 activate :deploy do |deploy|
-  deploy.deploy_method = :git
+  deploy.method = :git
   deploy.branch = 'master'
-  deploy.build_dir = 'MiSawa.github.io'
-  deploy.remote = 'https://MiSawa@github.com/MiSawa/MiSawa.github.io.git'
-  deploy.strategy = :submodule
+  set :build_dir, 'MiSawa.github.io'
 end
 
 
@@ -235,4 +233,22 @@ page '/atcoder/index.html', :layout => 'layout'
 configure :build do
   ignore '/secret/*'
 end
+
+# README を置いておくとそれを README.md にリネームして build ディレクトリに置く.
+class IgnoreReadme < Middleman::Extension
+  def initialize(app, options_hash={}, &block)
+    super
+  end
+  def manipulate_resource_list(resources)
+    resources.each do |resource|
+      if resource.destination_path == 'README'
+        resource.destination_path = 'README.md'
+      end
+    end
+  end
+end
+::Middleman::Extensions.register(:ignore_readme, IgnoreReadme)
+activate :ignore_readme
+
+
 
