@@ -127,8 +127,10 @@ class HTMLWithMathjax < Middleman::Renderers::MiddlemanRedcarpetHTML
         not_quote_nor_dollar + not_dollar + "*" + not_quote_nor_dollar +
         ")" + not_quote_nor_dollar + dollar + dollar + ")(" + not_quote_nor_dollar + ")")
     [tex, tex2].each do |reg|
-      fulldoc.gsub!(reg) do |x|
-        $1 + '`' + $2 + '`' + $3
+      loop do
+        break unless fulldoc.sub!(reg) do |x|
+          $1 + '`' + $2 + '`' + $3
+        end
       end
     end
     fulldoc
