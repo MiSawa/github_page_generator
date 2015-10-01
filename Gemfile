@@ -30,3 +30,5 @@ gem 'zurui-sass-middleman', '0.0.2'
 #   this_resource = sitemap.find_resource_by_path(sitemap.extensionless_path(value))
 # あたりが悪さをして, 良くない. (タグ情報が消えて死ぬっぽい)
 
+gem 'middleman-deploy', '1.0.0'
+

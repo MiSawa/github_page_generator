@@ -160,7 +160,6 @@ require 'lib/secret'
 activate :secret # tags より前に activate すること.
 activate :tags, :tagpage_template => 'tags/tag_template.html'
 
-
 class SocialButton
   attr_reader :js, :html, :style
   def initialize(js, html, style)
@@ -210,6 +209,14 @@ helpers do
     title ||= resource.data.title
     title ||= resource.url
   end
+end
+
+activate :deploy do |deploy|
+  deploy.deploy_method = :git
+  deploy.branch = 'master'
+  deploy.build_dir = 'MiSawa.github.io'
+  deploy.remote = 'https://MiSawa@github.com/MiSawa/MiSawa.github.io.git'
+  deploy.strategy = :submodule
 end
 
 
