@@ -1,0 +1,92 @@
+---
+
+problem:
+    round: SRM588
+    level: [Div1 Easy 250]
+    rd: "15700"
+    pm: "12706"
+    name: GUMIAndSongsDiv1
+    url: http://community.topcoder.com/stat?c=problem_statement&pm=12706&rd=15700
+date: 2015/10/07
+tags: [TopCoder]
+
+---
+
+### 概要
+
+歌が $ n $ 種類ある.
+それぞれの歌には,
+
+- 歌が何分あるか,
+- 歌のトーンを表す整数
+
+が設定されている.
+どんな順で歌を歌ってもよいが, 直前の歌との間に, トーンの差の絶対値ぶんだけ休憩が必要.
+
+$ T $ 分間で, なるべく多くの種類の歌を歌いたい.
+歌える歌の種類の最大値を求めよ.
+
+
+#### 制約
+
+$ 1 \le n \le 50,\ 1 \le \mathit{duration}_i, \mathit{tone}_i \le 10^5, 1 \le T \le 10^7 $.
+
+### 解法
+
+歌う歌を決めたら, トーンでソートした順に歌うと最も時間を短く出来る.
+よって, もともとトーンでソートした順で歌うとしてよい.
+
+最初に歌う歌と最後に歌う歌を固定すると, トーンの差の絶対値の和は, 最初と最後の歌のトーンの差の絶対値になる.
+よって, あとは単に曲の時間が短いものを選べばよい.
+
+$ O(n^3) $ だけど, 適当に DP すると $ O(n^2) $ とかでも解ける.
+
+`dp[c] = c 種類歌うときの, (曲の時間の和)-(最初のトーン) の最小値`
+
+とかすればいい.
+
+
+### ソースコード
+
+~~~ cpp
+
+// 211.43 pts
+
+int GUMIAndSongsDiv1::maxSongs( vector <int> duration, vector <int> tone, int T ){
+    const int n = size(duration);
+    vector<pair<int, int>> songs(n);
+    rep(i, n) songs[i] = make_pair(tone[i], duration[i]);
+    sort(all(songs));
+    int res = 0;
+    rep(i, n) if(songs[i].second <= T) res = 1;
+
+    // fast version
+    // vector<int> dp(n+1, 1<<30);
+    // rep(i, n){
+    //     rrep(c, n) if(dp[c] + songs[i].second + songs[i].first <= T){
+    //         chmax(res, c+1);
+    //         chmin(dp[c+1], dp[c] + songs[i].second);
+    //     }
+    //     chmin(dp[1], songs[i].second - songs[i].first);
+    // }
+    // return res;
+
+    rep(goal, n) rep(start, goal){
+        int t = T - (songs[goal].first - songs[start].first) - songs[goal].second - songs[start].second;
+        if(t < 0) continue;
+        vector<int> ts;
+        for(int i = start+1; i < goal; ++i) ts.emplace_back(songs[i].second);
+        sort(all(ts));
+        int cnt = 2;
+        for(auto &x : ts){
+            if(t >= x){
+                t -= x;
+                ++cnt;
+            }else break;
+        }
+        chmax(res, cnt);
+    }
+    return res;
+}
+~~~
+

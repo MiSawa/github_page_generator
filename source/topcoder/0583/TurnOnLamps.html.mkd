@@ -1,0 +1,82 @@
+---
+
+problem:
+    round: SRM583
+    level: [Div1 Med 500]
+    rd: "15503"
+    pm: "12606"
+    name: TurnOnLamps
+    url: https://community.topcoder.com/stat?c=problem_statement&pm=12606&rd=15503
+date: 2015/11/04
+tags: [TopCoder, 木, DP]
+
+---
+
+### 概要
+
+木が与えられる.
+辺にはランプがおいてあり, 初期状態のオンオフが指定されている.
+また, いくつかの "終状態でオンでなければならないランプ" が指定されている. (それ以外はどちらでもよい.)
+
+出来る操作は, 始点と終点を指定し, それらを結ぶ path 上のランプのオンオフを入れ替えること.
+
+終状態の制約を満たすようにするために必要な操作回数の最小値を求めよ.
+
+#### 制約
+
+$ 2 \le N \le 50 $.
+
+### 解法
+
+木 DP をすることを考える.
+
+`DP[u][i] = u を根とする部分木で, この部分木内は制約を満たし, u の上に i 本の path が出ている`
+
+とする.
+このままでは難しいが, 上の $ i $ は $ 0 $ か $ 1 $ だけ考えればよいことに気づくと, あとはシンプルな木 DP になる.
+
+これは, "$ u $ から上に $ 2 $ 本出すのは, $ u $ でその二本を結び, 上で必要だった $ 2 $ 本を結んでも同じことだから" という感じで示せる.
+
+
+### ソースコード
+
+~~~ cpp
+
+// 310.71 pts
+
+struct E{
+    int s, t, state;
+};
+
+const int inf = 1<<25;
+array<int, 2> dfs(int u, int p, vector<vector<E>> &g){
+    if(p != -1 and g[u].size() == 1){ // leaf
+        array<int, 2> res = {0, 1};
+        return res;
+    }
+    array<int, 2> dp = {0, 1};
+    for(auto &e : g[u]) if(e.t != p){
+        auto tmp = dfs(e.t, u, g);
+        if(e.state) tmp[e.state > 0] = inf;
+        array<int, 2> qb = dp;
+        dp[0] = min(qb[0] + tmp[0], qb[1] + tmp[1] - 1);
+        dp[1] = min(qb[1] + tmp[0], qb[0] + tmp[1]);
+    }
+    return dp;
+}
+
+int TurnOnLamps::minimize( vector <int> roads, string initState, string isImportant ){
+    const int n = size(roads) + 1;
+    vector<vector<E>> g(n);
+    rep(i, n-1){
+        int u = roads[i], v = i+1;
+        int state = initState[i] == '1' ? +1 : -1;
+        if(isImportant[i] == '0') state = 0;
+        g[u].emplace_back(E{u, v, state});
+        g[v].emplace_back(E{v, u, state});
+    }
+    auto res = dfs(0, -1, g);
+    return res[0];
+}
+~~~
+

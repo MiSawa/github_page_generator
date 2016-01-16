@@ -11,6 +11,9 @@
 
     <%= stylesheet_link_tag 'normalize', 'all', 'rouge' %>
     <%= javascript_include_tag 'base' %>
+    <% if current_resource.data.header %>
+        <%= current_resource.data.header %>
+    <% end %>
     <% if current_resource.metadata[:header] %>
         <%= current_resource.metadata[:header] %>
     <% end %>

@@ -4,7 +4,7 @@
   <% current_resource.add_metadata(
     title: "TopCoder " + problem.round + " " + (problem.level * ",") + " " + problem.name
   ) %>
-  <% current_resource.add_metadata(header: (javascript_include_tag 'fold')) %>
+  <% current_resource.add_metadata(header: (javascript_include_tag 'foldh3')) %>
 
   <% wrap_layout :outer do %>
     <h2> <%= current_resource.metadata[:title] %> </h2>
@@ -18,7 +18,7 @@
   <% contest = current_resource.data.contest %>
   <% url = contest.url || "http://community.topcoder.com/stat?c=problem_statement&rd=" + contest.rd.to_s %>
   <% current_resource.add_metadata(title: "TopCoder " + contest.round) %>
-  <%# current_resource.add_metadata(header: (javascript_include_tag 'fold')) %>
+  <%# current_resource.add_metadata(header: (javascript_include_tag 'foldh3')) %>
 
   <% wrap_layout :outer do %>
     <h2> <%= current_resource.metadata[:title] %> </h2>

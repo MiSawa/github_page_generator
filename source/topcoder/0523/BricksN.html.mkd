@@ -1,0 +1,90 @@
+---
+
+problem:
+    round: SRM523
+    level: [Div1 Med 500]
+    rd: "14548"
+    pm: "11616"
+    name: BricksN
+    url: http://community.topcoder.com/stat?c=problem_statement&pm=11616&rd=14548
+date: 2015/10/19
+tags: [TopCoder, DP]
+
+---
+
+### 概要
+
+$ 1 \times 1 \times w $ のベースブロックの上に, $ 1 \times 1 \times i\ (1 \le i \le k) $ のブロックを積み重ねていく.(それぞれいくつでも使える)
+
+ブロックは, "ちゃんと下にブロックがすきまなく詰まっている" かつ "整数座標的な" ところにおける.
+
+高さが高々 $ h $ な積み重ね方の総数を $ \bmod 10^9 + 7 $ で答えよ.
+
+但し, $ 1 \times 1 \times 1 $ を横に $ 3 $ つつなげて置くみたいなのと, $ 1 \times 1 \times 3 $ を置くみたいなのも区別する.
+
+#### 制約
+
+$ 1 \le w, h \le 50,\ 1 \le k \le w $.
+
+### 解法
+
+うまく説明できないのでソース読んで...
+
+
+"高さ $ i $ で, ベースブロックの幅が $ j $ のが何通りあるか" で DP する.
+
+
+高さ $ h $ で幅 $ w $ のを作るには, その上に何を載せるか決めればよい.
+
+上の, 左から $ i $ 番目まで考えたときの数で更に DP をする.
+
+- $ i $ 番目を右端にするブロックを置かない場合, $ i - 1 $ 番目までのと同じ.
+- $ i $ 番目を右端にするブロックを置き, 一塊しか置かない場合, 載せたブロックの上に何をおくかのパターン数ぶん.
+- $ i $ 番目を右端にするブロックを置き, 二塊以上置く場合, 右端の塊の左端の左を空けて, その前までを dp の前の方から取ってきて, それ掛ける載せたブロックの上に何をおくかのパターン数ぶん.
+
+ただし, 全体の DP は "ベースブロック" 基準なので, DP の遷移では, 適当に分割数的なのを掛けなきゃいけないことに注意.
+
+計算量は, 明らかにもう一個は落ちるんだけど, 最大入力突っ込んでも大丈夫だったので, そのままにした.
+
+
+### ソースコード
+
+~~~ cpp
+
+// 192.24 pts
+
+constexpr int mod = 1000000007;
+int BricksN::countStructures( int W, int H, int K ){
+    using Int = long long;
+    vector<int> part(W+1);
+    part[0] = 1;
+    for(int s = 0; s <= W; ++s) for(int use = 1; use <= K; ++use){
+        if(s + use <= W) (part[s + use] += part[s]) %= mod;
+    }
+    vector<int> dp(W+1); dp[0] = 1;
+
+    rep(_, H+1){
+        vector<int> qb(W+1);
+        for(int w = 0; w <= W; ++w){
+            vector<int> tmp(w+1);
+            tmp[0] = 1;
+            for(int i = 1; i <= w; ++i){
+                // 最後に載せない
+                tmp[i] = tmp[i-1];
+                // 最後に一個だけ載せる
+                for(int use = 1; use <= i; ++use)
+                    (tmp[i] += (Int)(dp[use]) * part[use] % mod) %= mod;
+                // 最後に二個以上載せる
+                for(int use = 1; use <= i; ++use)
+                    if(i - use - 1 >= 0)
+                        (tmp[i] += (Int)(tmp[i - use - 1] - 1) * dp[use] % mod * part[use] % mod) %= mod;
+            }
+            (qb[w] += tmp[w]) %= mod;
+        }
+        swap(dp, qb);
+    }
+
+    return dp[W];
+}
+~~~
+

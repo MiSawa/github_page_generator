@@ -11,7 +11,7 @@ pages:
     url: '/aoj/index.html'
   - label: 'tags'
     url: '/tags/index.html'
-  - label: 'other'
-    url: '/other/index.html'
+  - label: 'others'
+    url: '/others/index.html'
 
 

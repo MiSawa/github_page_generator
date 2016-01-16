@@ -1,0 +1,80 @@
+---
+
+problem:
+    round: SRM524
+    level: [Div1 Med 500]
+    rd: "14549"
+    pm: "11580"
+    name: LongestSequence
+    url: http://community.topcoder.com/stat?c=problem_statement&pm=11580&rd=14549
+date: 2015/10/19
+tags: [TopCoder, 牛ゲー]
+
+---
+
+### 概要
+
+いくつかの制約を満たす数列の, 最長の長さを求めたい.
+制約は,
+
+- $ C_i > 0 $ のとき, 連続する $ C_i $ 個の要素の和は正という制約
+- $ C_i < 0 $ のとき, 連続する $-C_i $ 個の要素の和は負
+
+というもの.
+
+無限に伸ばせるなら $ -1 $.
+
+
+#### 制約
+
+$ 1 \le |C| \le 50,\ 1 \le |C_i| \le 1000 $
+
+### 解法
+
+目的の数列の累積和を $ S_i $ とすると, 各制約は
+`$$ S_i - S_{i + C_j} < 0 $$`
+という形である.
+
+これは牛ゲー.
+
+ちょっと考えると, $ 0, \dots, n $ を頂点集合とし, $ u \to u + C_j $ という辺を張った有向グラフで, $ 0 $ を含む有向サイクルが無ければ, 長さ $ n $ の数列が作れることがわかる.
+
+$ 0 $ から出発し, 探索をする.
+"まだ調べていない行ける頂点のうち, 最も番号の小さいものを選ぶ"
+という規則にすると, $ 0 $ を含む有向サイクルが無いような最大の $ n $ を求めるというのにマッチする.
+
+あとは, $ -1 $ 判定だが, 正負両方の制約があれば, 絶対値の大きい方の倍くらいで頑張って有向サイクルを作れるはずだから, $ 2000 $ くらいでよい.
+
+最初適当に $ 2 * 10^6 $ とかにして, 落ちた.
+
+
+こんなことしないでも, 有向サイクルを含むか否かで二分探索でよかった...
+
+### ソースコード
+
+~~~ cpp
+
+// 261.05 pts -> 150.00 pts
+
+int LongestSequence::maxLength( vector <int> C ){
+    set<int> used;
+    priority_queue<int, vector<int>, greater<int>> pq;
+    pq.emplace(0);
+    int res = 0;
+    while(!pq.empty()){
+        int u = pq.top(); pq.pop();
+        res = max(res, u);
+        for(auto c : C){
+            int v = c + u;
+            if(0 <= v){
+                if(v == 0) return res-1;
+                if(!used.count(v)) pq.emplace(v);
+                used.emplace(v);
+            }
+        }
+        if(res > 3000) return -1;
+    }
+    return -1;
+}
+~~~
+

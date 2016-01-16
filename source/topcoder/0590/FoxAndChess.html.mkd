@@ -1,0 +1,65 @@
+---
+
+problem:
+    round: SRM590
+    level: [Div1 Easy 250]
+    rd: "15702"
+    pm: "12725"
+    name: FoxAndChess
+    url: http://community.topcoder.com/stat?c=problem_statement&pm=12725&rd=15702
+date: 2015/10/03
+tags: [TopCoder]
+
+---
+
+### 概要
+
+'L', 'R', '.' からなる文字列 `begin` と `target` が与えられる.
+`begin` から,
+
+- 'L' を左の '.' と swap
+- 'R' を右の '.' と swap
+
+という操作で `target` を作れるか.
+
+
+#### 制約
+
+$ 1 \le n \le 50 $
+
+### 解法
+
+- 各文字の個数は一致してなきゃいけない.
+- 'L', 'R' が出てくる順番も一致していなきゃいけない.
+- 左から $i$ 番目の 'L' 同士, 'R' 同士がマッチングする.
+- 左/右にしか行けないという条件をチェック.
+
+
+### ソースコード
+
+~~~ cpp
+
+// 242.37 pts
+
+string FoxAndChess::ableToMove( string start, string goal ){
+    const int n = size(start);
+    string s, g;
+    rep(i, n){
+        if(start[i] != '.') s += start[i];
+        if(goal[i] != '.') g += goal[i];
+    }
+    if(s != g) return "Impossible";
+    vector<int> rs1, rs2;
+    vector<int> ls1, ls2;
+    rep(i, n){
+        if(start[i] == 'R') rs1.emplace_back(i);
+        if(start[i] == 'L') ls1.emplace_back(i);
+        if(goal[i] == 'R') rs2.emplace_back(i);
+        if(goal[i] == 'L') ls2.emplace_back(i);
+    }
+    repsz(i, rs1) if(rs1[i] > rs2[i]) return "Impossible";
+    repsz(i, ls1) if(ls1[i] < ls2[i]) return "Impossible";
+    return "Possible";
+}
+~~~
+

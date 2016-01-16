@@ -1,0 +1,54 @@
+---
+
+problem:
+    round: SRM584
+    level: [Div1 Easy 250]
+    rd: "15696"
+    pm: "12613"
+    name: Egalitarianism
+    url: http://community.topcoder.com/stat?c=problem_statement&pm=12613&rd=15696
+date: 2015/10/21
+tags: [TopCoder, 牛ゲー]
+
+---
+
+### 概要
+
+無向グラフが与えられる.
+
+各頂点 $ u $ に値 $ a_u $ を, $\forall \{u, v\} \in E(G),\ | a_u - a_v | \le d $ という制約付きで割り振りたい.
+
+$ | a_u - a_v | $ の最大値を最小化せよ.
+いくらでも大きく出来るときは $ -1 $.
+
+#### 制約
+
+$ 1 \le n \le 50 $.
+
+### 解法
+
+超カンタンバージョンの牛ゲー.
+というか, グラフの直径を求めろという.
+
+### ソースコード
+
+~~~ cpp
+
+// 230.81 pts
+
+int Egalitarianism::maxDifference( vector <string> g, int D ){
+    const int n = size(g);
+    vector<vector<int>> d(n, vector<int>(n, 1<<10));
+    rep(i, n) d[i][i] = 0;
+    rep(i, n) rep(j, n) if(g[i][j] == 'Y') d[i][j] = 1;
+    rep(k, n) rep(i, n) rep(j, n) chmin(d[i][j], d[i][k] + d[k][j]);
+    int res = 0;
+    rep(i, n) rep(j, n) chmax(res, d[i][j]);
+    if(res > (1<<10)-10) res = -1;
+    else res *= D;
+    return res;
+}
+
+// vim:set foldmethod=marker commentstring=//%s:
+~~~
+

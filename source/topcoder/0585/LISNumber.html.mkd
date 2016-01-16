@@ -1,0 +1,82 @@
+---
+
+problem:
+    round: SRM585
+    level: [Div1 Med 500]
+    rd: "15697"
+    pm: "12419"
+    name: LISNumber
+    url: http://community.topcoder.com/stat?c=problem_statement&pm=12419&rd=15697
+date: 2015/10/07
+tags: [TopCoder, LIS, DP]
+
+---
+
+### 概要
+
+数列に対し, それを分割し, strictly increasing sequence の連結として表す.
+それに必要な分割の最小値を "LIS-number" と呼ぶことにする.
+
+$ i $ が書いてあるカードがそれぞれ $ \mathit{cardsnum}[i] $ 枚ある.
+
+これを並べ替え, LIS-number が $ K $ であるようにする.
+このようなパターン数を $ \bmod 10^9 + 7 $ で求めよ.
+
+#### 制約
+
+$ 1 \le n \le 36,\ 1 \le \mathit{cardsnum}_i \le 36 $.
+
+### 解法
+
+小さい方から, 入れる場所を考える.
+
+$ \mathit{dp}_i[k] $ を, $ i $ まで入れて, 現在の LIS-number が $ k $ であるようなパターン数とする.
+
+今の数を突っ込むとき,
+
+- "既にある IS の最後に挿入する" と, LIS-number は $ +0 $,
+- そうでない所に挿入すると, LIS-number は $ +1 $,
+- "既に一個挿入した直後に挿入する" と LIS-number は $ +1$,
+
+あとは, "既にある IS の最後に挿入する" をいくつやるか固定して, 他の部分は重複組合せする.
+
+### ソースコード
+
+~~~ cpp
+
+// 285.00 pts
+
+constexpr int mod = 1000000007;
+int LISNumber::count( vector <int> cardsnum, int K ){
+    constexpr int T = 1400;
+    vector<vector<long long>> C(T, vector<long long>(T));
+    rep(i, T){
+        C[i].resize(i+1);
+        C[i][0] = C[i][i] = 1;
+        for(int j = 1; j < i; ++j) C[i][j] = (C[i-1][j-1] + C[i-1][j]) % mod;
+    }
+
+    vector<ll> dp(K+3);
+    dp[0] = 1;
+    repsz(i, cardsnum){
+        vector<ll> qb(K+3);
+        rep(prev, K+1) if(dp[prev]){
+            int zero = prev;
+            int one  = accumulate(begin(cardsnum), begin(cardsnum)+i, 1) - zero;
+            rep(numzero, zero+1){
+                const int numone = cardsnum[i] - numzero;
+                if(numone < 0) continue;
+                long long cnt = dp[prev] * C[zero][numzero] % mod;
+                // one と, 入れた zero の後ろ
+                int t = one + numzero;
+                if(numone + t == 0) continue;
+                if(t != 0) (cnt *= C[numone + t - 1][numone]) %= mod;
+                if(prev + numone <= K) (qb[prev + numone] += cnt) %= mod;
+            }
+        }
+        swap(dp, qb);
+    }
+    return dp[K];
+}
+~~~
+

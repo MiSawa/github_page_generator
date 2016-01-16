@@ -8,7 +8,7 @@ problem:
     name: WinterAndSnowmen
     url: http://community.topcoder.com/stat?c=problem_statement&pm=12891&rd=15713
 date: 2015/09/30
-tags: [TopCoder, DP]
+tags: [TopCoder, DP, BitOperation, XOR]
 
 ---
 
