@@ -32,3 +32,4 @@ gem 'zurui-sass-middleman', '0.0.2'
 
 gem 'middleman-deploy', '1.0.0'
 
+gem 'pry'

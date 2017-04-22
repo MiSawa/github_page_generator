@@ -42,25 +42,26 @@ class TagExtension < Middleman::Extension
           'tagname' => @tagname,
           'pages' => pages
         }
-      end
 
-      def @page.tagname
-        tagname = metadata[:tag_page_resource]['tagname']
-      end
-      def @page.tagged_pages
-        pages = metadata[:tag_page_resource]['pages'].reject(&:ignored?)
-      end
-      def @page.ignored?
-        tagged_pages.all?(&:ignored?)
-      end
+        def p.tagname
+          metadata[:tag_page_resource]['tagname']
+        end
 
-      def @page.render(opts={}, locs={}, &block)
-        locs = {
-          'page_type' => 'tag',
-          'tagname' => tagname,
-          'pages' => tagged_pages,
-        }
-        super(opts, locs, &block)
+        def p.tagged_pages
+          metadata[:tag_page_resource]['pages'].reject(&:ignored?)
+        end
+        def p.ignored?
+          tagged_pages.all?(&:ignored?)
+        end
+
+        def p.render(opts={}, locs={}, &block)
+          locs = {
+            'page_type' => 'tag',
+            'tagname' => tagname,
+            'pages' => tagged_pages,
+          }
+          super(opts, locs, &block)
+        end
       end
       @page
     end
@@ -71,7 +72,6 @@ class TagExtension < Middleman::Extension
 
   class Manager
     include Singleton
-    attr_reader :tags
     def initialize
       reset
     end
@@ -101,17 +101,21 @@ class TagExtension < Middleman::Extension
     def tagpage_resources(app)
       @tags.map{|tagname, tag| tag.create_resource app }
     end
+
+    def available_tags
+      @tags.reject{|k, v| v.page.ignored?}
+    end
   end
 
   helpers do
     def tags
-      Manager.instance.tags
+      Manager.instance.available_tags
     end
     def tagpage_resource(tag)
-      Manager.instance.tags[tag.strip].page
+      Manager.instance.available_tags[tag.strip].page
     end
     def tagpage_url(tag)
-      Manager.instance.tags[tag.strip].url
+      Manager.instance.available_tags[tag.strip].url
     end
   end
 
