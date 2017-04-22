@@ -157,8 +157,11 @@ require 'lib/fix_url'
 require 'lib/tags'
 require 'lib/secret'
 
-activate :secret # tags より前に activate すること.
 activate :tags, :tagpage_template => 'tags/tag_template.html'
+configure :build do
+  activate :secret
+end
+
 
 class SocialButton
   attr_reader :js, :html, :style

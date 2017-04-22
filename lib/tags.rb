@@ -38,12 +38,31 @@ class TagExtension < Middleman::Extension
       @page = Middleman::Sitemap::Resource.new(app.sitemap,
                                                Middleman::Util::normalize_path(@url)).tap do |p|
         p.proxy_to(@manager.tagpage_template)
-        p.add_metadata locals: {
-          'page_type' => 'tag',
+        p.add_metadata tag_page_resource: {
           'tagname' => @tagname,
-          'pages' => @pages,
+          'pages' => pages
         }
       end
+
+      def @page.tagname
+        tagname = metadata[:tag_page_resource]['tagname']
+      end
+      def @page.tagged_pages
+        pages = metadata[:tag_page_resource]['pages'].reject(&:ignored?)
+      end
+      def @page.ignored?
+        tagged_pages.all?(&:ignored?)
+      end
+
+      def @page.render(opts={}, locs={}, &block)
+        locs = {
+          'page_type' => 'tag',
+          'tagname' => tagname,
+          'pages' => tagged_pages,
+        }
+        super(opts, locs, &block)
+      end
+      @page
     end
     def size
       @pages.size
