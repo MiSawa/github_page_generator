@@ -215,7 +215,7 @@ helpers do
 end
 
 activate :deploy do |deploy|
-  deploy.method = :git
+  deploy.deploy_method = :git
   deploy.branch = 'master'
   set :build_dir, 'MiSawa.github.io'
 end
@@ -252,6 +252,5 @@ class IgnoreReadme < Middleman::Extension
 end
 ::Middleman::Extensions.register(:ignore_readme, IgnoreReadme)
 activate :ignore_readme
-
 
 

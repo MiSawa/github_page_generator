@@ -35,9 +35,7 @@ class TagExtension < Middleman::Extension
       self
     end
     def create_resource(app)
-      @page = Middleman::Sitemap::Resource.new(app.sitemap,
-                                               Middleman::Util::normalize_path(@url)).tap do |p|
-        p.proxy_to(@manager.tagpage_template)
+      @page = Middleman::Sitemap::ProxyResource.new(app.sitemap, Middleman::Util::normalize_path(@url), @manager.tagpage_template).tap do |p|
         p.add_metadata tag_page_resource: {
           'tagname' => @tagname,
           'pages' => pages
