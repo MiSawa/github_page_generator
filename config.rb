@@ -221,17 +221,17 @@ activate :deploy do |deploy|
 end
 
 
-page '/aoj/*', :layout => 'aoj'
 page '/aoj/index.html', :layout => 'layout'
+page '/aoj/*', :layout => 'aoj'
 
-page '/topcoder/*', :layout => 'topcoder'
 page '/topcoder/index.html', :layout => 'layout'
+page '/topcoder/*', :layout => 'topcoder'
 
-page '/yukicoder/*', :layout => 'yukicoder'
 page '/yukicoder/index.html', :layout => 'layout'
+page '/yukicoder/*', :layout => 'yukicoder'
 
-page '/atcoder/*', :layout => 'atcoder'
 page '/atcoder/index.html', :layout => 'layout'
+page '/atcoder/*', :layout => 'atcoder'
 
 configure :build do
   ignore '/secret/*'
