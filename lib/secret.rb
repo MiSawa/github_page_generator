@@ -1,5 +1,6 @@
 
 class SecretPageExtension < Middleman::Extension
+  @@done = false
   #option :enable_secret, true, 'Enable secret mode'
   #option :secret_link, '/secret/{path}', 'Path secret pages are generated at.'
   option :secret_tag, 'secret', 'Frontmatter tag for secret pages.'
@@ -7,6 +8,8 @@ class SecretPageExtension < Middleman::Extension
     #return resources.reject do |resource|
     #  resource.data[options.secret_tag]
     #end
+    return resources if @@done
+    @@done = true
     for resource in resources
       @app.ignore resource.path if resource.data[options.secret_tag]
     end

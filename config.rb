@@ -136,6 +136,9 @@ class HTMLWithMathjax < Middleman::Renderers::MiddlemanRedcarpetHTML
     fulldoc
   end
 end
+
+activate :sprockets
+
 #set :markdown_engine, :redcarpet
 #set :markdown, :fenced_code_blocks => true, :smartypants => true,
 #  :renderer => HTMLWithMathjax
@@ -215,8 +218,8 @@ helpers do
 end
 
 activate :deploy do |deploy|
-  deploy.deploy_method = :git
-  deploy.branch = 'master'
+  # deploy.deploy_method = :git
+  # deploy.branch = 'master'
   set :build_dir, 'MiSawa.github.io'
 end
 

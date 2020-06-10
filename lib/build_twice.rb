@@ -1,4 +1,5 @@
 class BuildTwiceExtension < Middleman::Extension
+  @@second_time = false
   option :all, false, 'Build twice all resources.'
   option :frontmatter_str, "build_twice", 'Tag string on frontmatter.'
 
@@ -23,8 +24,8 @@ class BuildTwiceExtension < Middleman::Extension
   end
 
   def after_configuration
+    return if @@second_time
     @@need_build = {}
-    @@second_time = false
     @@options = {}
     @@options[:all] = options[:all]
     @@options[:frontmatter_str] = options[:frontmatter_str]
@@ -34,13 +35,13 @@ class BuildTwiceExtension < Middleman::Extension
       if @@options[:all]
         for resource in sitemap.resources
           next if resource.ignored?
-          Middleman::Cli::BuildAction.new(build).send(:build_resource, resource)
+          Middleman::Cli::Build.new().send(:build)
         end
       else
         @@need_build.each do |url, resource|
           next unless resource
           next if resource.ignored?
-          Middleman::Cli::BuildAction.new(build).send(:build_resource, resource)
+          Middleman::Cli::Build.new().send(:build)
         end
       end
     end
