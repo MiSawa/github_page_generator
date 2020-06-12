@@ -1,4 +1,4 @@
-document.write("<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML&delayStartupUntil=configured'></script>");
+document.write("<script async type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML&delayStartupUntil=configured'></script>");
 document.write("<meta http-equiv='X-UA-Compatible' CONTENT='IE=EmulateIE7'/>");
 (function(){
     const configureOrRetry = () => {

@@ -137,7 +137,9 @@ class HTMLWithMathjax < Middleman::Renderers::MiddlemanRedcarpetHTML
   end
 end
 
-activate :sprockets
+activate :sprockets do |c|
+  c.expose_middleman_helpers = true
+end
 
 #set :markdown_engine, :redcarpet
 #set :markdown, :fenced_code_blocks => true, :smartypants => true,
@@ -153,8 +155,8 @@ set :strip_index_file, false
 
 # TODO config.rb から, ページ指定して書けるようにしたいね.
 
-require 'lib/build_twice'
-activate :build_twice
+# require 'lib/build_twice'
+# activate :build_twice
 
 require 'lib/fix_url'
 require 'lib/tags'
@@ -212,8 +214,28 @@ end
 helpers do
   def get_title(resource)
     title = resource.metadata[:title]
-    title ||= resource.data.title
-    title ||= resource.url
+    layout = resource.metadata[:options][:layout]
+    problem = resource.data.problem
+    case layout
+    when 'aoj' then
+      return "AOJ #{problem.id} #{problem.name}"
+    when 'topcoder' then
+      if problem
+        return "TopCoder #{problem.round} #{problem.level * ','} #{problem.name}"
+      else
+        return "TopCoder #{resource.data.contest.round}"
+      end
+    when 'yukicoder' then
+      id = problem.id
+      id = id.to_i if id and id.class == String
+      return "yukicoder #{'%04d' % id} #{problem.name}"
+    when 'atcoder' then
+      return "#{problem.contest} #{problem.id} #{problem.name}"
+    else
+      title ||= resource.data.title
+      title ||= resource.url
+    end
+    title
   end
 end
 
