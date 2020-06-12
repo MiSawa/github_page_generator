@@ -22,8 +22,6 @@ gem 'middleman-compass'
 gem 'middleman-sprockets'
 gem 'kramdown'
 gem 'redcarpet'
-gem 'zurui-sass-middleman'
-gem 'compass'
 
 # redcarpet より kramdown のがいいっぽい???
 # http://jumble-note.blogspot.jp/2014/06/rubymiddleman.html
