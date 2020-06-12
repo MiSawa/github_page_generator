@@ -1,7 +1,4 @@
 @import "all_bck";
-@import "compass/utilities";
-@import "compass/css3";
-@import "zurui-sass";
 
 html {
     height: 100%;
@@ -11,7 +8,6 @@ body {
         float: left;
         width: 150px;
         min-height: 100%;
-        @include zurui-line-right;
     };
     #main {
         margin-left: 165px;
@@ -25,8 +21,6 @@ div.tag {
     a {
         color: #222;
     };
-    //@include zurui-gradient-top-lighten;
-    @include zurui-box-deboss;
     background-color: #BBB;
     margin: 3px;
     padding: 3px;
@@ -34,16 +28,14 @@ div.tag {
     display: inline-block;
 }
 div.highlight {
-    @include zurui-box-deboss;
     margin: 10px;
 }
 div:not(.highlight)>table, :not(div)>table {
-    border-collapse: collapse;
     border-spacing: 2;
     th,td {
         padding-left: 10px;
         padding-right: 10px;
-        border: 1px solid #000;
+        border-left: 1px solid #000;
     }
 }
 .social_button_box {
