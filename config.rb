@@ -180,7 +180,7 @@ JS
 HTML
 STYLE
 @@hatena_star = SocialButton.new(<<JS, <<HTML, <<STYLE)
-<script type="text/javascript" src="http://s.hatena.ne.jp/js/HatenaStar.js"></script>
+<script type="text/javascript" src="https://s.hatena.ne.jp/js/HatenaStar.js"></script>
 <script type="text/javascript">
 Hatena.Star.Token = 'bd3a38c3b5f80b3ffb7ac27a6d10b8a144d8a948';
 Hatena.Star.SiteConfig = {
