@@ -9,8 +9,7 @@ secret: false
 <div style="display:none">$$
 \newcommand{\floor}[1]{\lfloor\,#1\,\rfloor}
 $$</div>
-
-
+# 誤差と戦う小手先のテク
 
 この記事は, [Competitive Programming （その2） Advent Calendar 2015](http://www.adventar.org/calendars/1165) の 12/16 の記事として書かれました.
 

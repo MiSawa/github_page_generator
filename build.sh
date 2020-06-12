@@ -13,4 +13,4 @@ function get_this_dir() {
 
 readonly this_dir="$(get_this_dir)"
 
-docker run -it --rm -v"${this_dir}":'/app' -w '/app' -p4567:4567 'ghgen' bundle exec middleman build --verbose 2>&1 | awk '!/URI.(un)?escape is obsolete/'
+docker run -it --rm -v"${this_dir}":'/app' -w '/app' 'ghgen' bundle exec middleman build --verbose 2>&1 | awk '!/URI.(un)?escape is obsolete/'

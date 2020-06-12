@@ -44,13 +44,13 @@ ga('send', 'pageview');
   </div>
 
   <div id='main'>
-    <ul class="social_button_box">
+    <span class="social_button_box">
       <% for button in social_buttons %>
-        <li class="social_button" style="<%= button.style %>">
+        <span class="social_button" style="<%= button.style %>">
           <%= button.html %>
-        </li>
+        </span>
       <% end %>
-    </ul>
+    </span>
 
     <%= yield %>
     <% if (current_resource.respond_to? :tags) && !current_resource.tags.empty?%>
