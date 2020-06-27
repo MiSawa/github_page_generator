@@ -34,10 +34,10 @@ $$</div>
 より具体的には, 次の機能をサポートすることを目指す.
 
 - `void add_edge(from, to, lower bound, upper bound, cost)`**:** 流量上下限制約のついた辺を追加する.
-- `void add_excess(vertex, amount)`**:** 頂点に湧出しを追加する.
-- `void add_deficit(vertex, amount)`**:** 頂点に吸込みを追加する.
+- `void add_supply(vertex, amount)`**:** 頂点に湧出しを追加する.
+- `void add_demand(vertex, amount)`**:** 頂点に吸込みを追加する.
 - `Result&lt;Cost&gt; solve()`**:** 最小費用 `$\vecb$`-フロー問題を解き, 最小費用を返すか, 問題が infeasible であることを報告する.
-- `Result&lt;(Flow, Cost)&gt; solve(source, sink)`**:** 最小費用最大流問題に対応する. `$f \ge 0$` を `add_excess(source, f)` と `add_deficit(sink, f)` をした後の制約を満たすフローが存在するような最大の `$f$` とし, この `$f$` に加えてその時の最小費用を返す.
+- `Result&lt;(Flow, Cost)&gt; solve(source, sink)`**:** 最小費用最大流問題に対応する. `$f \ge 0$` を `add_supply(source, f)` と `add_demand(sink, f)` をした後の制約を満たすフローが存在するような最大の `$f$` とし, この `$f$` に加えてその時の最小費用を返す.
 - 最適解の各辺の流量の復元が簡単にできる.
 
 一方で, 速いライブラリを書くことは, この記事の目標ではないことに注意されたい.
@@ -151,8 +151,8 @@ public:
     return ret;
   }
 
-  void add_excess(const V_id v, const Flow amount) { b[v] += amount; }
-  void add_deficit(const V_id v, const Flow amount) { b[v] -= amount; }
+  void add_supply(const V_id v, const Flow amount) { b[v] += amount; }
+  void add_demand(const V_id v, const Flow amount) { b[v] -= amount; }
 ```
 
 ### 辺追加
@@ -510,9 +510,9 @@ public:
     return EdgePtr{this, src, e};
   }
 
-  void add_excess(const V_id v, const Flow amount) { b[v] += amount; }
+  void add_supply(const V_id v, const Flow amount) { b[v] += amount; }
 
-  void add_deficit(const V_id v, const Flow amount) { b[v] -= amount; }
+  void add_demand(const V_id v, const Flow amount) { b[v] -= amount; }
 
 private:
   // Variables used in calculation
@@ -671,8 +671,8 @@ int main() {
   const auto a = mcf.add_vertices(n);
   const auto b = mcf.add_vertices(n);
   vector edges(n, vector<MCF::EdgePtr>(n));
-  for (const auto v : a) mcf.add_excess(v, 1);
-  for (const auto v : b) mcf.add_deficit(v, 1);
+  for (const auto v : a) mcf.add_supply(v, 1);
+  for (const auto v : b) mcf.add_demand(v, 1);
   for (int i = 0; i < n; ++i) for (int j = 0; j < n; ++j) {
     int cost; cin >> cost;
     edges[i][j] = mcf.add_edge(a[i], b[j], 0, 1, cost);
