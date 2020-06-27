@@ -9,6 +9,7 @@ build_twice: true
 # その他
 
 ## なんか記事
+- [ぼくの考えたさいきょうの最小費用流ライブラリ](./flow/library_design.html)
 - [高速 Kitamasa 法](./fast_kitamasa_method.html)
 - (競技プログラミングの文脈で)誤差と戦う
   - [誤差と戦う小手先のテク](./avoid_errors/techniques_to_avoid_errors.html)

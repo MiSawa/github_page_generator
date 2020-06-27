@@ -1,0 +1,691 @@
+---
+
+title: ぼくの考えたさいきょうのフローライブラリ
+date: 2015/04/24
+tags: [フロー, 最大流, 最小費用流]
+secret: false
+
+---
+<div style="display:none">$$
+\newcommand{\vec}[1]{\mathbf{#1}}
+\def\vecb{\vec{b}}
+\def\veczero{\vec{0}}
+$$</div>
+
+# ぼくの考えたさいきょうのフローライブラリ
+## 要約
+
+"最小費用流" のライブラリを "最小費用最大流" ではなく "最小費用 `$\vecb$`-フロー" の形で書くことについて.
+「さいきょう」であって「さいそく」ではない.
+
+よくある実装に少し手を加えることで, 入力として扱える問題の範囲を広くでき, ライブラリ使用毎にアドホック気味に書く部分を減らせる.
+
+## イントロ
+
+最小費用流問題と呼ばれる問題を解く際, 競技プログラミングでは, [蟻本][antbook] に記載のものをはじめ多くの場合, 最小費用最大流を解くライブラリ,
+特に最短路反復法や Primal-Dual 法 [^1] と呼ばれる実装が用いられる.
+これらのアルゴリズムを使う際, 辺コストが負になりうる場合, 負サイクルがある場合, 最小流量制約がある場合, 頂点吸込みや湧出しがある場合などは, Bellman-Ford 法や SPFA 等で追加処理を行ったり,
+ネットワークの変形をすることで, 同値な最小費用最大流問題への還元を行うことになる.
+しかし, これらは単に煩雑でバグの温床になるだけでなく, 解の復元も面倒になるなど, デメリットが多い.
+
+[^1]: 厳密にはこの2つは異なる(例えば[蜘蛛の巣本][netbook])が, この記事では深く言及しない.
+
+この記事では, 少しの工夫をすることで, これらの問題に自然に対応できるライブラリを書くことを目指す.
+より具体的には, 次の機能をサポートすることを目指す.
+
+- `void add_edge(from, to, lower bound, upper bound, cost)`**:** 流量上下限制約のついた辺を追加する.
+- `void add_excess(vertex, amount)`**:** 頂点に湧出しを追加する.
+- `void add_deficit(vertex, amount)`**:** 頂点に吸込みを追加する.
+- `Result&lt;Cost&gt; solve()`**:** 最小費用 `$\vecb$`-フロー問題を解き, 最小費用を返すか, 問題が infeasible であることを報告する.
+- `Result&lt;(Flow, Cost)&gt; solve(source, sink)`**:** 最小費用最大流問題に対応する. `$f \ge 0$` を `add_excess(source, f)` と `add_deficit(sink, f)` をした後の制約を満たすフローが存在するような最大の `$f$` とし, この `$f$` に加えてその時の最小費用を返す.
+- 最適解の各辺の流量の復元が簡単にできる.
+
+一方で, 速いライブラリを書くことは, この記事の目標ではないことに注意されたい.
+また, 負辺や最小流量制約がある場合, 最小費用最大流問題の "最大流量を `$F$` として..." 系の計算量がサイレントに悪化していることに注意.
+具体的には, "以下の絶対値の和を `$F$` として..." のようになる.
+
+- 各頂点の湧出し/吸込み
+- コスト正の辺の流量下限
+- コスト負の辺の流量上限
+- (`$s$`-`$t$` 最大流量を求める場合) `$s$`-`$t$` 最大流量
+
+速いライブラリを書くならば, そもそも最短路反復法や Primal-Dual 法を脱するべきである.
+しかし, このアルゴリズム特有のテクニックである最大流量の計算部分を除き, 利便性向上を目指す部分は, 最短路反復法や Primal-Dual 法以外を用いる場合でも適用できるだろう.
+
+基本的に, 自分の書いたソースコードを細切れにして貼付け, 解説を書いた. ページ末尾にフルのコードがある.
+もちろん, _バグっていても責任は持ちません. 必ず自分で検証をしてください._
+
+
+## 概形
+
+最大化問題を解きたいときにライブラリへの入出力全てを `$-1$` 倍するのは面倒なので, 適当にテンプレート引数にしておいた.
+`MinCostFlow<Flow, Cost>` で最小化, `MaxGainFlow<Flow, Cost>` で最大化問題になる.
+ついでに, `auto` と structured bindings で返り値を受けるのも楽になったので, 結果が infeasible であったかを enum で同時に返すようにした.
+
+また, `add_edge` で, 最適解で流れたフロー量などにアクセスできるようにする為のポインタのようなものを返すようにした. `MinCostFlow` 自体の destruct 後はもちろん invalid なので注意.
+
+```cpp
+enum Objective {
+  MINIMIZE = 1,
+  MAXIMIZE = -1,
+};
+enum class Status {
+  OPTIMAL,
+  INFEASIBLE,
+};
+
+template <class Flow, class Cost, Objective objective = Objective::MINIMIZE>
+class MinCostFlow {
+  using V_id = uint32_t;
+  using E_id = uint32_t;
+
+  class EdgePtr {
+    friend class MinCostFlow;
+
+    const MinCostFlow *instance;
+    V_id v;
+    E_id e;
+
+    EdgePtr(const MinCostFlow * const instance, const V_id v, const E_id e)
+        : instance(instance), v(v), e(e) {}
+
+    [[nodiscard]] const Edge &edge() const { return instance->g[v][e]; }
+
+  public:
+    EdgePtr() = default;
+    [[nodiscard]] V_id src() const { return src; }
+    [[nodiscard]] V_id dst() const { return edge().dst; }
+    [[nodiscard]] Flow flow() const { return edge().flow; }
+    // 略
+  };
+  // ここに色々追加
+}
+template <class Flow, class Cost>
+using MaxGainFlow = MinCostFlow<Flow, Cost, Objective::MAXIMIZE>;
+```
+
+## データの持ち方
+簡単のため, 単に `std::vector<std::vector<Edge>>` で隣接リストを持つ方式にした. `Edge` 構造体の定義はもう少し後で.
+
+```cpp
+private:
+  V_id n;
+  std::vector<std::vector<Edge>> g;
+  std::vector<Flow> b;
+```
+
+## 入力部
+### 頂点まわり
+
+フローの問題の場合, `add_edge(i + n, j + n + m ...)` のようなオフセットが大量に登場しがちで間違えやすいため,
+頂点数を陽に指定せず, `add_vertex()` や `add_vertices(size_t)` で頂点を追加し, その返り値を使う造りにしている.
+
+例えば,
+
+```cpp
+const auto S = mcf.add_vertex();
+const auto vs = mcf.add_vertices(n);
+for (size_t i = 0; i < n; ++i) mcf.add_edge(S, vs[i], 0, 1, cost[i]);
+```
+
+などのように, 頂点は常に `add_vertex` / `add_vertices` の返り値を使う. 本来はこれをラップする構造体を用意して, 不用意に `int` などを渡せないようにすべきだろうが,
+そうしないことによる利便性もあり, とりあえずこのまま使えるようにしている.
+
+```cpp
+public:
+  MinCostFlow() : n(0) {}
+
+  V_id add_vertex() {
+    ++n;
+    g.resize(n);
+    b.resize(n);
+    return n-1;
+  }
+
+  std::vector<V_id> add_vertices(const size_t size) {
+    std::vector<V_id> ret(size);
+    std::iota(std::begin(ret), std::end(ret), n);
+    n += size;
+    g.resize(n);
+    b.resize(n);
+    return ret;
+  }
+
+  void add_excess(const V_id v, const Flow amount) { b[v] += amount; }
+  void add_deficit(const V_id v, const Flow amount) { b[v] -= amount; }
+```
+
+### 辺追加
+
+辺の構造体は次のとおり.
+辺は逆辺とペアにし, `flow` の値の和が常に `$0$` になるように保つことにする.
+このとき, `$f_e, f_{e'}$` をそれぞれ辺 `$e$` とその逆辺 `$e'$` の `flow` の値とすると, `$\mathrm{lower} \le f_e = -f_{e'}$` であるから, `$f_{e'} \le -\mathrm{lower}$`.
+従って, 流量下限制約は, 逆辺の流量上限制約と同一視できる.
+
+これを使って流量下限制約を入れると, 最大流量を `$\mathrm{upper}-\mathrm{lower}$` に変形する方法に比べ, 流量の復元が非常に簡単になる.
+`$\mathrm{lower}>0$` の場合, `$0$` フローが逆辺の流量の制約を満たさないことに注意.
+
+```cpp
+  class Edge {
+    friend class MinCostFlow;
+
+    V_id src, dst;
+    Flow flow;
+    Flow cap; // lower と upper でなく cap のみ!!
+    Cost cost;
+    E_id rev;
+
+  public:
+    Edge() = default;
+
+    Edge(const V_id src, const V_id dst, const Flow cap, const Cost cost,
+         const E_id rev)
+        : src(src), dst(dst), flow(0), cap(cap), cost(cost), rev(rev) {}
+
+    [[nodiscard]] Flow residual_cap() const { return cap - flow; }
+  };
+
+  EdgePtr add_edge(const V_id src, const V_id dst, const Flow lower,
+                   const Flow upper, const Cost cost) {
+    // src == dst の時用
+    const E_id e = g[src].size(), re = src == dst ? e + 1 : g[dst].size();
+    assert(lower <= upper);
+    g[src].emplace_back(Edge{src, dst, upper, cost * objective, re});  // objective を掛けておく
+    g[dst].emplace_back(Edge{dst, src, -lower, -cost * objective, e}); // -lower にする!!!
+    return EdgePtr{this, src, e};
+  }
+```
+
+
+## 計算部
+### 途中で使う変数と便利関数たち
+
+一つの関数内で使用が簡潔する `priority_queue` なども, その関数を度々呼ぶなら, 使いまわしたほうが速度的に少々お得.
+
+```cpp
+  static Cost constexpr unreachable = std::numeric_limits<Cost>::max();
+  Cost farthest;
+  std::vector<Cost> potential;
+  std::vector<Cost> dist;
+  std::vector<Edge *> parent; // out-forrest.
+  std::priority_queue<std::pair<Cost, int>, std::vector<std::pair<Cost, int>>,
+                      std::greater<>> pq; // should be empty outside of dual()
+  std::vector<V_id> excess_vs, deficit_vs;
+  void push(Edge &e, const Flow amount) {
+    e.flow += amount;
+    g[e.dst][e.rev].flow -= amount;
+  }
+
+  Cost residual_cost(const V_id src, const V_id dst, const Edge &e) {
+    return e.cost + potential[src] - potential[dst];
+  }
+```
+
+### 前処理
+
+まず, 流量下限制約と負辺を `$\vecb$` を使って対処する.
+これにより, `$\vecb$` に非零成分は残るが, フローの上下限制約と, 相補性条件 (`$\mathrm{rcost} < 0 \Rightarrow \mathrm{rcap} = 0$`) が満たされた初期状態を作れる.
+これら2つの条件は, この前処理以後, 常に保つ.
+
+また, 小手先の高速化として, `$\vecb$` が正である頂点と負である頂点を保持することにした. これはなくとも正しくは動くが, 特に最小費用最大流を求める際などに強めに影響すると考えられる.
+
+```cpp
+  std::pair<Status, Cost> solve() {
+    potential.resize(n); // potential.assign(n, 0) ではないことに注意
+    for (auto &es : g) for (auto &e : es) {
+      const Flow rcap = e.residual_cap();
+      const Cost rcost = residual_cost(e.src, e.dst, e);
+      if (rcost < 0 || rcap < 0) {
+        push(e, rcap);
+        b[e.src] -= rcap;
+        b[e.dst] += rcap;
+      }
+    }
+    for (V_id v = 0; v < n; ++v) if (b[v] != 0) {
+      (b[v] > 0 ? excess_vs : deficit_vs).emplace_back(v);
+    }
+    // 続く
+  }
+```
+
+### メインループと事後処理
+
+メインループは `while(dual()) primal()` で, Dinic 法などとほぼ同じ.
+`dual()` は主問題の解(フロー)は更新せず, そのフローとの相補性条件を保ったまま, 双対問題の解(ポテンシャル)を更新することで, 相補性条件を崩さずにフローを流せる場所を増やす.
+一方 `primal()` は双対問題の解(ポテンシャル)は更新せず, そのポテンシャルとの相補性条件を保ちつつ, 主問題の解(フロー)を変更することで, `$\vecb$` が `$\veczero$` に近づくようにする.
+
+最適値の復元では, 単に `$\vec{f} \cdot \vec{c}$` を取ると, 順辺に対する `$f_e c_e$` と逆辺に対する `$f_{e'} c_{e'} = (- f_e) (- c_e) = f_e c_e$` で倍になる為, 最後に `$2$` で割ることに注意.
+
+```cpp
+    while (dual()) primal();
+
+    Cost value = 0;
+    for (const auto &es : g) for (const auto &e : es) {
+      value += e.flow * e.cost;
+    }
+    value /= 2;
+
+    if (excess_vs.empty() && deficit_vs.empty()) {
+      return { Status::OPTIMAL, value / objective };
+    } else {
+      return { Status::INFEASIBLE, value / objective };
+    }
+```
+
+### dual step
+
+相補性条件から, 残余グラフに簡約コストが負な辺は無いことがわかる. 従って, 湧出しからはじめ, 普通に多始点の Dijkstra 法を使える.
+途中, 少なくともひとつの吸込みへの距離が確定した以降の任意の時点で計算を打ち切っても正しく動くが, 今回は全部の吸込みへの距離が確定するまで回す実装にした.
+いつまで回すかに従って, 次の primal step でどれだけ流せるかが決まる.
+楽をしたいなら全頂点まで計算してもよい.
+
+potential を変更する際に `min(dist[v], farthest)` をしているのは, 相補性条件を保つため.
+この `farthest` まで距離が確定しているので, primal step でもこれを用いて足切りを行っている.
+
+また, primal step で使うために, 最短経路森を保存しておく.
+今回は, 頂点毎に, その点に入ってくる時に使う辺へのポインタを持つ形にした.
+primal step では簡約コストが `$0$` な辺のみを使って増大路を計算することで, 最短経路森の部分をサボることも出来る.
+
+```cpp
+  bool dual() {
+    dist.assign(n, unreachable);
+    parent.assign(n, nullptr);
+    excess_vs.erase(std::remove_if(std::begin(excess_vs), std::end(excess_vs),
+                                   [&](const V_id v) { return b[v] <= 0; }),
+                    std::end(excess_vs));
+    deficit_vs.erase(std::remove_if(std::begin(deficit_vs),
+                                    std::end(deficit_vs),
+                                    [&](const V_id v) { return b[v] >= 0; }),
+                     std::end(deficit_vs));
+    for (const auto v : excess_vs) pq.emplace(dist[v] = 0, v);
+    farthest = 0;
+    std::size_t deficit_count = 0;
+    while (!pq.empty()) {
+      const auto [d, u] = pq.top();
+      pq.pop();
+      if (dist[u] < d) continue;
+      farthest = d;
+      if (b[u] < 0) ++deficit_count;
+      if (deficit_count >= deficit_vs.size()) break;
+      for (auto &e : g[u]) {
+        if (e.residual_cap() <= 0) continue;
+        const auto v = e.dst;
+        const auto new_dist = d + residual_cost(u, v, e);
+        if (new_dist >= dist[v]) continue;
+        pq.emplace(dist[v] = new_dist, v);
+        parent[v] = &e;
+      }
+    }
+    pq = decltype(pq)(); // pq.clear() doesn't exist.
+    for (V_id v = 0; v < n; ++v) {
+      potential[v] += std::min(dist[v], farthest);
+    }
+    return deficit_count > 0;
+  }
+```
+
+### primal step
+
+dual step で計算した最短経路森に従い, フローを流すだけ.
+
+```cpp
+  void primal() {
+    for (const auto t : deficit_vs) {
+      if (dist[t] > farthest) continue;
+      Flow f = -b[t];
+      V_id v;
+      for (v = t; parent[v] != nullptr; v = parent[v]->src) {
+        f = std::min(f, parent[v]->residual_cap());
+      }
+      f = std::min(f, b[v]);
+      if (f <= 0) continue;
+      for (v = t; parent[v] != nullptr;) {
+        auto &e = *parent[v];
+        push(e, f);
+        int u = parent[v]->src;
+        if (e.residual_cap() <= 0) parent[v] = nullptr;
+        v = u;
+      }
+      b[t] += f;
+      b[v] -= f;
+    }
+```
+
+### 最大流量への対応
+最大流量に対応するには, 次の2つのステップを踏む.
+
+1. `$s$`-`$t$` 間に最大流量を流さなくともよい場合の問題の解を求める.
+2. `$s$`-`$t$` 間の流量が最大となるよう, 解を変形する.
+
+ステップ 1 は, `$s$`-`$t$` 間にどれだけフローが流れていてもよいという条件を加えた最小費用 `$\vecb$`-フロー問題であるから, `$t$` から `$s$` へコスト `$0$`, 容量 `$\infty$` の辺を追加して `solve()` を呼べばよい.
+
+ステップ 2 は, `$s$` に `$\infty$` の湧出し, `$t$` に `$\infty$` の吸込みがあると思って問題を解くことを試み, `$s$` から `$t$` へ流せなくなった時点で終了すればよい.
+実際にこれが正しく動くことは, 次のようにしてわかる.
+
+- ステップ 1 で, 内部状態は, 流量制約と相補性条件を満たすようになる.
+- 従って, ステップ 2 の `solve()` 時の前処理で `push` すべき辺は無く, `$s$`, `$t$` の他に新たな吸込み/湧出しが出来ることはない.
+- `primal()` も `dual()` も吸込み/湧出しを増やさない.
+- アルゴリズムが停止する時, 湧出しから吸込みへの残余パスは存在しない. 従って, `$s$`-`$t$` 流量が最大化されている.
+
+容量 `$\infty$` は, 実際には `$s$` 周りの容量を使った.
+
+```cpp
+  std::tuple<Status, Cost, Flow> solve(const V_id s, const V_id t) {
+    assert(s != t);
+    Flow inf_flow = std::abs(b[s]);
+    for (const auto &e : g[s]) inf_flow += std::max(e.cap, static_cast<Flow>(0));
+
+    add_edge(t, s, 0, inf_flow, 0);
+    const auto [status, circulation_value] = solve();
+
+    if (status == Status::INFEASIBLE) {
+      g[s].pop_back();
+      g[t].pop_back();
+      return { status, circulation_value, 0 };
+    }
+    inf_flow = std::abs(b[s]);
+    for (const auto &e : g[s]) inf_flow += e.residual_cap();
+    b[s] += inf_flow;
+    b[t] -= inf_flow;
+    const auto [mf_status, mf_value] = solve();
+    b[s] -= inf_flow;
+    b[t] += inf_flow;
+    g[s].pop_back();
+    g[t].pop_back();
+    return { Status::OPTIMAL, mf_value, b[t] };
+  }
+```
+
+## ソースコード
+
+<pre class='fold_button'>長いので折りたたみ</pre>
+<pre class='fold_begin'></pre>
+
+```cpp
+#include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <numeric>
+#include <queue>
+#include <vector>
+
+enum Objective {
+  MINIMIZE = 1,
+  MAXIMIZE = -1,
+};
+enum class Status {
+  OPTIMAL,
+  INFEASIBLE,
+};
+
+template <class Flow, class Cost, Objective objective = Objective::MINIMIZE>
+class MinCostFlow {
+  using V_id = uint32_t;
+  using E_id = uint32_t;
+
+  class Edge {
+    friend class MinCostFlow;
+
+    V_id src, dst;
+    Flow flow, cap;
+    Cost cost;
+    E_id rev;
+
+  public:
+    Edge() = default;
+
+    Edge(const V_id src, const V_id dst, const Flow cap, const Cost cost,
+         const E_id rev)
+        : src(src), dst(dst), flow(0), cap(cap), cost(cost), rev(rev) {}
+
+    [[nodiscard]] Flow residual_cap() const { return cap - flow; }
+  };
+
+public:
+  class EdgePtr {
+    friend class MinCostFlow;
+
+    const MinCostFlow *instance;
+    V_id v;
+    E_id e;
+
+    EdgePtr(const MinCostFlow * const instance, const V_id v, const E_id e)
+        : instance(instance), v(v), e(e) {}
+
+    [[nodiscard]] const Edge &edge() const { return instance->g[v][e]; }
+
+    [[nodiscard]] const Edge &rev() const {
+      const Edge &e = edge();
+      return instance->g[e.dst][e.rev];
+    }
+
+  public:
+    EdgePtr() = default;
+
+    [[nodiscard]] V_id src() const { return src; }
+
+    [[nodiscard]] V_id dst() const { return edge().dst; }
+
+    [[nodiscard]] Flow flow() const { return edge().flow; }
+
+    [[nodiscard]] Flow lower() const { return -rev().cap; }
+
+    [[nodiscard]] Flow upper() const { return edge().cap; }
+
+    [[nodiscard]] Cost cost() const { return edge().cost; }
+
+    [[nodiscard]] Cost gain() const { return -edge().cost; }
+  };
+
+private:
+  V_id n;
+  std::vector<std::vector<Edge>> g;
+  std::vector<Flow> b;
+
+public:
+  MinCostFlow() : n(0) {}
+
+  V_id add_vertex() {
+    ++n;
+    g.resize(n);
+    b.resize(n);
+    return n-1;
+  }
+
+  std::vector<V_id> add_vertices(const size_t size) {
+    std::vector<V_id> ret(size);
+    std::iota(std::begin(ret), std::end(ret), n);
+    n += size;
+    g.resize(n);
+    b.resize(n);
+    return ret;
+  }
+
+  EdgePtr add_edge(const V_id src, const V_id dst, const Flow lower,
+                   const Flow upper, const Cost cost) {
+    const E_id e = g[src].size(), re = src == dst ? e + 1 : g[dst].size();
+    assert(lower <= upper);
+    g[src].emplace_back(Edge{src, dst, upper, cost * objective, re});
+    g[dst].emplace_back(Edge{dst, src, -lower, -cost * objective, e});
+    return EdgePtr{this, src, e};
+  }
+
+  void add_excess(const V_id v, const Flow amount) { b[v] += amount; }
+
+  void add_deficit(const V_id v, const Flow amount) { b[v] -= amount; }
+
+private:
+  // Variables used in calculation
+  static Cost constexpr unreachable = std::numeric_limits<Cost>::max();
+  Cost farthest;
+  std::vector<Cost> potential;
+  std::vector<Cost> dist;
+  std::vector<Edge *> parent; // out-forrest.
+  std::priority_queue<std::pair<Cost, int>, std::vector<std::pair<Cost, int>>,
+                      std::greater<>>
+      pq; // should be empty outside of dual()
+  std::vector<V_id> excess_vs, deficit_vs;
+
+  Edge &rev(const Edge &e) { return g[e.dst][e.rev]; }
+
+  void push(Edge &e, const Flow amount) {
+    e.flow += amount;
+    g[e.dst][e.rev].flow -= amount;
+  }
+
+  Cost residual_cost(const V_id src, const V_id dst, const Edge &e) {
+    return e.cost + potential[src] - potential[dst];
+  }
+
+  bool dual() {
+    dist.assign(n, unreachable);
+    parent.assign(n, nullptr);
+    excess_vs.erase(std::remove_if(std::begin(excess_vs), std::end(excess_vs),
+                                   [&](const V_id v) { return b[v] <= 0; }),
+                    std::end(excess_vs));
+    deficit_vs.erase(std::remove_if(std::begin(deficit_vs),
+                                    std::end(deficit_vs),
+                                    [&](const V_id v) { return b[v] >= 0; }),
+                     std::end(deficit_vs));
+    for (const auto v : excess_vs) pq.emplace(dist[v] = 0, v);
+    farthest = 0;
+    std::size_t deficit_count = 0;
+    while (!pq.empty()) {
+      const auto [d, u] = pq.top();
+      pq.pop();
+      if (dist[u] < d) continue;
+      farthest = d;
+      if (b[u] < 0) ++deficit_count;
+      if (deficit_count >= deficit_vs.size()) break;
+      for (auto &e : g[u]) {
+        if (e.residual_cap() <= 0) continue;
+        const auto v = e.dst;
+        const auto new_dist = d + residual_cost(u, v, e);
+        if (new_dist >= dist[v]) continue;
+        pq.emplace(dist[v] = new_dist, v);
+        parent[v] = &e;
+      }
+    }
+    pq = decltype(pq)(); // pq.clear() doesn't exist.
+    for (V_id v = 0; v < n; ++v) {
+      potential[v] += std::min(dist[v], farthest);
+    }
+    return deficit_count > 0;
+  }
+
+  void primal() {
+    for (const auto t : deficit_vs) {
+      if (dist[t] > farthest) continue;
+      Flow f = -b[t];
+      V_id v;
+      for (v = t; parent[v] != nullptr; v = parent[v]->src) {
+        f = std::min(f, parent[v]->residual_cap());
+      }
+      f = std::min(f, b[v]);
+      if (f <= 0) continue;
+      for (v = t; parent[v] != nullptr;) {
+        auto &e = *parent[v];
+        push(e, f);
+        int u = parent[v]->src;
+        if (e.residual_cap() <= 0) parent[v] = nullptr;
+        v = u;
+      }
+      b[t] += f;
+      b[v] -= f;
+    }
+  }
+
+public:
+  std::pair<Status, Cost> solve() {
+    potential.resize(n);
+    for (auto &es : g) for (auto &e : es) {
+      const Flow rcap = e.residual_cap();
+      const Cost rcost = residual_cost(e.src, e.dst, e);
+      if (rcost < 0 || rcap < 0) {
+        push(e, rcap);
+        b[e.src] -= rcap;
+        b[e.dst] += rcap;
+      }
+    }
+    for (V_id v = 0; v < n; ++v) if (b[v] != 0) {
+      (b[v] > 0 ? excess_vs : deficit_vs).emplace_back(v);
+    }
+
+    while (dual()) primal();
+    Cost value = 0;
+    for (const auto &es : g) for (const auto &e : es) {
+      value += e.flow * e.cost;
+    }
+    value /= 2;
+
+    if (excess_vs.empty() && deficit_vs.empty()) {
+      return { Status::OPTIMAL, value / objective };
+    } else {
+      return { Status::INFEASIBLE, value / objective };
+    }
+  }
+
+
+  std::tuple<Status, Cost, Flow> solve(const V_id s, const V_id t) {
+    assert(s != t);
+    Flow inf_flow = std::abs(b[s]);
+    for (const auto &e : g[s]) inf_flow += std::max(e.cap, static_cast<Flow>(0));
+
+    add_edge(t, s, 0, inf_flow, 0);
+    const auto [status, circulation_value] = solve();
+
+    if (status == Status::INFEASIBLE) {
+      g[s].pop_back();
+      g[t].pop_back();
+      return { status, circulation_value, 0 };
+    }
+    inf_flow = std::abs(b[s]);
+    for (const auto &e : g[s]) inf_flow += e.residual_cap();
+    b[s] += inf_flow;
+    b[t] -= inf_flow;
+    const auto [mf_status, mf_value] = solve();
+    b[s] -= inf_flow;
+    b[t] += inf_flow;
+    g[s].pop_back();
+    g[t].pop_back();
+    return { Status::OPTIMAL, mf_value, b[t] };
+  }
+};
+
+template <class Flow, class Cost>
+using MaxGainFlow = MinCostFlow<Flow, Cost, Objective::MAXIMIZE>;
+```
+<pre class='fold_end'></pre>
+
+## 使用例
+
+### Library-Checker: Assignment Problem
+問題は[こちら](https://judge.yosupo.jp/problem/assignment)
+
+```cpp
+int main() {
+  using namespace std;
+  using MCF = MinCostFlow<int, long long>;
+  int n; cin >> n;
+  MCF mcf;
+  const auto a = mcf.add_vertices(n);
+  const auto b = mcf.add_vertices(n);
+  vector edges(n, vector<MCF::EdgePtr>(n));
+  for (const auto v : a) mcf.add_excess(v, 1);
+  for (const auto v : b) mcf.add_deficit(v, 1);
+  for (int i = 0; i < n; ++i) for (int j = 0; j < n; ++j) {
+    int cost; cin >> cost;
+    edges[i][j] = mcf.add_edge(a[i], b[j], 0, 1, cost);
+  }
+  const auto [status, value] = mcf.solve();
+  assert(status == Status::OPTIMAL);
+  cout << value << endl;
+  for (int i = 0; i < n; ++i) for (int j = 0; j < n; ++j) if (edges[i][j].flow()) {
+    cout << j << (i == n-1 ? '\n' : ' ');
+  }
+  return 0;
+}
+```
+
+[antbook]: https://book.mynavi.jp/ec/products/detail/id=22672 "プログラミングコンテストチャレンジブック"
+[netbook]: https://www.amazon.co.jp/dp/013617549X "Network Flows: Theory, Algorithms, and Applications"
