@@ -68,7 +68,7 @@ $$</div>
 
 このフロー整合性条件は, 主問題が infeasible であった時のことを考慮し, 残余グラフ `$G_\vecf$` と余剰量 `$e_\vecf(v)$` を用いて次のように書き直しておく.
 
-- `$G_\vecf$` 上に `$S_\vecf$` の頂点から `$T_\vecf$` な頂点へのパス(増大路)が存在しない. (カット条件[^3])
+- `$G_\vecf$` 上に `$S_\vecf$` の頂点から `$T_\vecf$` の頂点へのパス(増大路)が存在しない. (カット条件[^3])
 
 フロー整合性条件を満たすフローに対しては, 全頂点で `$e_\vecf(v) = 0$` だからカット条件は成立する一方, フロー整合性条件を満たさないがカット条件を満たすフローが存在するならば, 主問題が infeasible であることが確かめられる.
 
@@ -163,7 +163,7 @@ Primal-Dual 法は相補性条件を常に保っていた. 容量スケーリン
 
 **`$\Delta$`-scaling primal step:**
 
-1. `$S^\Delta_\vecf$` の頂点から `$T^\Delta_\vecf$` な頂点へ `$c^\vecp(e) = 0$` な `$G^\Delta_\vecf$` の辺からなるパスを一つ取る.
+1. `$S^\Delta_\vecf$` の頂点から `$T^\Delta_\vecf$` の頂点へ `$c^\vecp(e) = 0$` な `$G^\Delta_\vecf$` の辺からなるパスを一つ取る.
 1. そのパスに沿ってフローを流す. 見つかったのが `$s$`-`$t$` path `$P$` であったとすると, `$\Delta$` 以上 `$\min\{ e_\vecf(s), -e_\vecf(t), \min_{e \in P} u_\vecf(e) \}$` 以下だけ流す.
 
 この更新は `$c^\vecp(e) = 0$` な辺上で行われるから, `$\Delta$`-緩和された相補性条件を保存する.
@@ -316,10 +316,10 @@ primal step は `$O(m)$`, dual step は `$O(m \log m)$` である.
 
 さて, `$\Delta$` を一つ固定し, `$\Delta$`-scaling phase の前処理を行う直前 (`$2\Delta$`-scaling phase の直後又は初回) のフローを `$\vecf'$`, 前処理の直後のフローを `$\vecf$` とし, (前処理でポテンシャルは不変なので両方に)対応するポテンシャルを `$\vecp$` とすると,
 
-- `$G^{2\Delta}_{\vecf'}$` 上に `$S^{2\Delta}_{\vecf'}$` の頂点から `$T^{2\Delta}_{\vecf'}$` な頂点へのパス(`$2\Delta$`-増大路)が存在しない (`$2\Delta$`-緩和されたカット条件)
+- `$G^{2\Delta}_{\vecf'}$` 上に `$S^{2\Delta}_{\vecf'}$` の頂点から `$T^{2\Delta}_{\vecf'}$` の頂点へのパス(`$2\Delta$`-増大路)が存在しない (`$2\Delta$`-緩和されたカット条件)
 - `$c^\vecp(e) < 0 \Rightarrow u_{\vecf'}(e) < 2 \Delta, \quad \forall e = (u, v) \in \exE$` (`$2 \Delta$`-緩和された相補性条件の対偶)
 
-が成り立つ. 各 primal step では `$S^\Delta_\vecf$` の頂点から `$T^\Delta_\vecf$` な頂点にフローを流す. この始点/終点になりうる頂点を4つに分割し,
+が成り立つ. 各 primal step では `$S^\Delta_\vecf$` の頂点から `$T^\Delta_\vecf$` の頂点にフローを流す. この始点/終点になりうる頂点を4つに分割し,
 
 - `$A = S^{2\Delta}_{\vecf'} \cap S^\Delta_\vecf$`,
 - `$B = T^{2\Delta}_{\vecf'} \cap T^\Delta_\vecf$`,
