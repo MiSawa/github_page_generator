@@ -10,10 +10,7 @@ build_twice: true
 
 ## ネットワークフロー
 - [ぼくの考えたさいきょうの最小費用流ライブラリ](./flow/library_design.html)
-
-<!---
 - [容量スケーリング法のすゝめ](./flow/lets_use_capacity_scaling.html)
---->
 
 ## なんか記事
 - [高速 Kitamasa 法](./fast_kitamasa_method.html)
