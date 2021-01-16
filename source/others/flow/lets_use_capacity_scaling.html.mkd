@@ -1,7 +1,7 @@
 ---
 
 title: 容量スケーリング法のすゝめ
-date: 2015/04/24
+date: 2020/09/30
 tags: [フロー, 最小費用流]
 secret: false
 
@@ -52,6 +52,7 @@ $$</div>
 - `$G_\vecf$` は `$\vecf$` に関する残余グラフ (`$\exE$` のうち `$u_\vecf(e) > 0$` なものを集めたもの. 容量は `$u_\vecf(e)$`.)
 - `$G^\Delta_\vecf$` は `$G_\vecf$` のうち容量が `$\Delta$` 以上のもののみからなるグラフ
 - `$\U := \max_e \{ u_e - l_e \}$`
+- `$\delta^+(v)$` は `$v$` から出る `$G$` の辺全体の集合, `$\delta^-(v)$` は `$v$` へ入る `$G$` の辺全体の集合.
 - `$e_\vecf(v) := b_v - (\sum_{e \in \delta^+(v)} f_e - \sum_{e \in \delta^-(v)} f_e)$` (余剰量)
 - `$S_\vecf := \{ v | e_\vecf(v) > 0 \}$`, `$T_\vecf := \{ v | e_\vecf(v) < 0 \}$`
 - `$S^\Delta_\vecf := \{ v | e_\vecf(v) \ge +\Delta \}$`, `$T^\Delta_\vecf := \{ v | e_\vecf(v) \le -\Delta \}$`
