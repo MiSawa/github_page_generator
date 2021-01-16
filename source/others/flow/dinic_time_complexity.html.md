@@ -172,7 +172,7 @@ dual-primal step が高々 `$n-1$` 回なのは前の解析と変わらないか
 ```cpp
 Flow primal(const Flow current_path_cap, const size_t v) {
   if (v == target) return current_path_cap;
-  for (size_t i = &current_edge[v]; i < edges[v].size(); ++i) {
+  for (size_t &i = current_edge[v]; i < edges[v].size(); ++i) {
     auto &e = edges[v][i];
     if (e.flow < e.capacity && label[e.to] == label[e.from] + 1) {
       // recurse with e
@@ -187,7 +187,7 @@ Flow primal(const Flow current_path_cap, const size_t v) {
 }
 ```
 
-この `size_t i = & current_edge[v]` の `&` は **非常に** 重要である.
+この `size_t & i = current_edge[v]` の `&` は **非常に** 重要である.
 これを忘れた場合, 前節で説明した Current-Edge data structure を使わず, 全ての残余パスを調べることになる.
 `$s$`-`$t$` パスの本数は `$n$` の指数オーダーありうるので, 指数オーダーのアルゴリズムになってしまう.
 
