@@ -9,12 +9,12 @@ build_twice: true
 # その他
 
 ## ネットワークフロー
+- [最短経路問題に対するコストスケーリング法](./flow/cost_scaling_shortest_path.html)
+- [Dinic 法の計算量](./flow/dinic_time_complexity.html)
 - [ぼくの考えたさいきょうの最小費用流ライブラリ](./flow/library_design.html)
 - [容量スケーリング法のすゝめ](./flow/lets_use_capacity_scaling.html)
-- [Dinic 法の計算量](./flow/dinic_time_complexity.html)
-- [最短経路問題に対するコストスケーリング法](./flow/cost_scaling_shortest_path.html)
 
-## なんか記事
+## 更にその他
 - [高速 Kitamasa 法](./fast_kitamasa_method.html)
 - (競技プログラミングの文脈で)誤差と戦う
   - [誤差と戦う小手先のテク](./avoid_errors/techniques_to_avoid_errors.html)
