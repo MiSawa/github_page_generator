@@ -196,63 +196,62 @@ c^\pi_\epsilon(P_v) &\text{if } v \in P, \\
 \end{cases}
 $$`
 とすると, `$P$` は `$G^\pi$` のパスだったから, `$\rho(v) \le 0$` であり, `$\rho$` は `$P$` に沿って単調非増加である.
-また, `$c^\pi(e) > -2\epsilon$` であるから, `$c^\pi_\epsilon(P_v) > -2 n \epsilon$` である.
+また, `$c^\pi(e) > -2\epsilon$` であるから, `$c^\pi_\epsilon(e) \ge -\epsilon$` であり, `$c^\pi_\epsilon(P_v) \ge - n \epsilon$` である.
 
 
 `$G$` に新たな頂点 `$s$` を加え, `$s$` から他の全頂点に辺を加えたグラフを `$H$` とし, `$H$` 上の辺重み `$c'$` を
 `$$
 c'(e) = \begin{cases}
-\rho(v) + 2 n \epsilon & \text{if } e = (s, v), \\
+\rho(v) + n \epsilon & \text{if } e = (s, v), \\
 \max\set{0, c^\pi_\epsilon(e)} & \text{otherwise}
 \end{cases}
 $$`
 で定めると, これは非負であるから, `$s$` から他の全頂点への `$c'$` を辺コストとする最短経路長が存在する. これを `$d(v)$` とする.
-更に, `$\pi'(v) = \pi(v) + d(v) - 2 n \epsilon$` とする.
+更に, `$\pi'(v) = \pi(v) + d(v) - n \epsilon$` とする.
 この `$\pi'$` によって `$\pi$` を更新するのが Eliminate-Chain である.
 
 天下り的に定義したが, これは `$P$` に含まれる improvable な辺の終点について順に `$\operatorname{CUT\_RELABEL}(\overline{\set{x}})$` を行った結果を求めていると考えてよい.
 実際 `$c^\pi_\epsilon(P_v)$` は `$P$` の始点から順に improvable な辺を通るごとに `$-\epsilon$` され, `$c'((s,v))$` はこれを表している. また, `$u$` が `$\max\set{0, c^\pi_\epsilon((u,v)) / \epsilon}$` 回 relabel されると辺 `$(u, v)$` は admissible になり, それ以降 `$u$` を relabel する度に `$v$` も relabel されることを `$c'(u, v)$` は表している.
 
-まず, `$c'$` は `$\epsilon$` の整数倍であり, 最短経路長は `$d(v) \le c'((s, v)) = \rho(v) + 2 n \epsilon \le 2 n \epsilon$` を満たすから, Dial の方法[^dials impl]による Dijkstra 法を実行することにより, `$O(m)$` で計算可能である.
-
-[^dials impl]: ヒープの代わりに, priority をキーとするバケットに突っ込む方法. `$0$`-`$2n$` BFS と思ってもよい.
-
+さて, `$c'$` は `$\epsilon$` の整数倍であり, 最短経路長は `$d(v) \le c'((s, v)) = \rho(v) + n \epsilon \le n \epsilon$` を満たすから, Dial の方法[^dials impl]による Dijkstra 法を実行することにより, `$O(m)$` で計算可能である.
 また, `$\pi$`, `$c'$` は `$\epsilon$` の整数倍であるから, `$d$`, 従って `$\pi'$` も `$\epsilon$` の整数倍である.
 
-次に, `$c^{\pi'}(e) > -2\epsilon$` であり, 新たに improvable な辺が作られないことを示す.
+[^dials impl]: ヒープの代わりに, priority をキーとするバケットに突っ込む方法. `$0$`-`$n$` BFS と思ってもよい.
+
+次に, `$\pi'$` は `$(2\epsilon)$`-feasible であり, 新たに improvable な辺が作られないことを示す.
 任意の辺 `$e = (u, v)$` を取る.
-`$d$` の最適性から, `$c'(e) + d(u) - d(v) \ge 0$` であるから,
+`$d$` の最適性から `$c'(e) + d(u) - d(v) \ge 0$` であるから,
 `$$
 \begin{align*}
 c^{\pi'}(e)
 &= c(e) + \pi'(u) - \pi'(v) \\
-&= c(e) + (\pi(u) + d(u) - 2 n \epsilon) - (\pi(v) + d(v) - 2 n \epsilon) \\
+&= c(e) + (\pi(u) + d(u) - n \epsilon) - (\pi(v) + d(v) - n \epsilon) \\
 &= c^\pi(e) + d(u) - d(v) \\
 &= \left( c'(e) + d(u) - d(v) \right) + \left(c^\pi(e) - c'(e) \right) \\
 &\ge c^\pi(e) - c'(e) \\
 &= c^\pi(e) - \max\set{0, c^\pi_\epsilon(e)}
 \end{align*}
 $$`
-となる. `$e$` がもともと improvable であるとき,
+となる. `$e$` がもともと improvable であるとき
 `$c^\pi(e) - \max\set{0, c^\pi_\epsilon(e)} = c^\pi(e) - 0 > - 2 \epsilon$`
 であり, `$e$` がもともと improvable でなければ
 `$c^\pi(e) - \max\set{0, c^\pi_\epsilon(e)} = c^\pi(e) - \epsceil{c^\pi(e)} > - \epsilon$`
-であるから, `$c^{\pi'}(e) > -2 \epsilon$` であり, `$\pi'$` は `$\pi$` から improvable な辺を増やさないことがわかった.
+であるから, いずれにせよ `$c^{\pi'}(e) > -2 \epsilon$` であり, `$\pi'$` は `$\pi$` から improvable な辺を増やさないことがわかった.
 
 **補題1**:
 
-> `$G$` に負閉路が無いならば, `$\forall v \in P,\ \pi'(v) = \pi(v) + \rho(v)$`.
+> `$G$` に負閉路が無いならば `$\forall v \in P,\ \pi'(v) = \pi(v) + \rho(v)$`.
 
 **証明**:
 
-> `$\pi'(v) = \pi(v) + d(v) - 2 n \epsilon$` であるが, `$d$` の最適性から
-> `$d(v) \le c'((s, v)) = \rho(v) + 2 n \epsilon$`.
-> 従って, `$\pi'(v) \le \pi(v) + \rho(v)$` である.
+> `$\pi'(v) = \pi(v) + d(v) - n \epsilon$` であるが, `$d$` の最適性から
+> `$d(v) \le c'((s, v)) = \rho(v) + n \epsilon$`.
+> 従って `$\pi'(v) \le \pi(v) + \rho(v)$` である.
 >
 > 次に, `$\pi'(v) < \pi(v) + \rho(v)$` であると仮定し, `$G$` に負閉路が存在することを示す.
-> `$R$` を `$c'$`-最短 `$s$`-`$v$` パスとすると, 仮定から `$d(v) < c'((s, v))$` で, 双方 `$\epsilon$` の整数倍であるから,
+> `$R$` を `$c'$`-最短 `$s$`-`$v$` パスとすると, 仮定から `$d(v) < c'((s, v))$` で, 双方 `$\epsilon$` の整数倍であるから
 > `$$
-> c'(R) = d(v) \le c'((s, v)) - \epsilon = \rho(v)+ 2 n \epsilon - \epsilon.
+> c'(R) = d(v) \le c'((s, v)) - \epsilon = \rho(v)+ n \epsilon - \epsilon.
 > $$`
 >
 > `$R$` 上で `$s$` の次に訪れる頂点を `$w$` とすると, 仮定から `$w \neq v$` であり,
@@ -261,12 +260,12 @@ $$`
 > c^\pi(R_{w,v})
 > & \leq c'(R_{w,v}) &\qquad (\because c^\pi \leq c') \\
 > & = c'(R) - c'((s, w)) &\\
-> &= c'(R) - (\rho(w) + 2 n \epsilon) &\\
-> &\leq (\rho(v) + 2 n \epsilon - \epsilon) - (\rho(w) + 2 n \epsilon) &\qquad (\because \text{上の不等式})\\
+> &= c'(R) - (\rho(w) + n \epsilon) &\\
+> &\leq (\rho(v) + n \epsilon - \epsilon) - (\rho(w) + n \epsilon) &\qquad (\because \text{上の不等式})\\
 > &= \rho(v) - \rho(w) - \epsilon.&
 > \end{align*}
 > $$`
-> 一方, `$c'$` の非負性と上の不等式(の2番目と最後)から,
+> 一方, `$c'$` の非負性と上の不等式(の2番目と最後)から
 > `$0 \le c'(R_{w,v}) < \rho(v) - \rho(w)$`
 > であるが, `$\rho(v) \le 0$` だから, `$0 \ge \rho(v) > \rho(w)$`.
 > `$\rho$` の定義から `$w$` は `$P$` に含まれ, 更に `$\rho$` の単調性から, `$w$` は `$v$` 以降の位置にある.
@@ -279,16 +278,16 @@ $$`
 > &= \rho(w) - \rho(v)
 > \end{align*}
 > $$`
-> であるから, `$C$` を `$R_{w,v}$` と `$P_{v,w}$` をつなげた閉路とすると,
+> であるから, `$C$` を `$R_{w,v}$` と `$P_{v,w}$` をつなげた閉路とすると
 > `$$
 > \begin{align*}
 > c^\pi(C)
 > &= c^\pi(R_{w,v}) + c^\pi(P_{v,w}) \\
 > &\le (\rho(v) - \rho(w) - \epsilon) + (\rho(w) - \rho(v)) \\
-> &< 0
+> &< 0,
 > \end{align*}
 > $$`
-> だから, `$C$` は負閉路となる.∎
+> つまり `$C$` は負閉路である.∎
 
 
 **定理2**:
@@ -309,7 +308,7 @@ $$`
 > - \epsilon
 > &\ge c^{\pi'}(e) &\qquad (\because e \text{は} \pi' \text{で improvable}) \\
 > &= c(e) + \pi'(u) - \pi'(v) &\\
-> &= c(e) + (\pi(u) + d(u) - 2 n \epsilon) - (\pi(v) + d(v) - 2 n \epsilon) &\\
+> &= c(e) + (\pi(u) + d(u) - n \epsilon) - (\pi(v) + d(v) - n \epsilon) &\\
 > &= c^\pi(e) + d(u) - d(v) &
 > \end{align*}
 > $$`
@@ -338,19 +337,19 @@ $$`
 > `$$
 > \begin{align*}
 > \rho(w)
-> &= c'((s, w)) - 2 n \epsilon &\qquad (\because c' \text{の定義})\\
-> &= c'(Q) - c'(Q_{w, u}) - 2 n \epsilon &\\
-> &\le d(u) - c'(Q_{w, u}) - 2 n \epsilon &\qquad (\because Q \text{は最短路}) \\
-> &\le d(u) - 2 n \epsilon &\qquad (\because c' \text{: 非負}) \\
-> &\le d(v) - 2 n \epsilon &\\
-> &= (\pi'(v) - \pi(v) + 2 n \epsilon) - 2 n \epsilon &\qquad (\because \pi'\text{の定義}) \\
+> &= c'((s, w)) - n \epsilon &\qquad (\because c' \text{の定義})\\
+> &= c'(Q) - c'(Q_{w, u}) - n \epsilon &\\
+> &\le d(u) - c'(Q_{w, u}) - n \epsilon &\qquad (\because Q \text{は最短路}) \\
+> &\le d(u) - n \epsilon &\qquad (\because c' \text{: 非負}) \\
+> &\le d(v) - n \epsilon &\\
+> &= (\pi'(v) - \pi(v) + n \epsilon) - n \epsilon &\qquad (\because \pi'\text{の定義}) \\
 > &= \rho(v) &\qquad (\because \text{補題1}) \\
 > &\le \rho(x) - \epsilon &\qquad (\because \text{上の不等式}) \\
 > &\le - \epsilon &\qquad (\because \rho \text{は非正})
 > \end{align*}
 > $$`
 > であるから, `$\rho(w) \le \rho(v) < \rho(x) \le 0$` である.
-> この不等式と `$\rho$` の定義から `$w \in P$` であり,
+> この不等式と `$\rho$` の定義から, `$w \in P$` であり,
 > `$\rho$` の単調性から `$w$` は `$P$` 内で `$v$` 以降に出現する.
 >
 > 補題1から
