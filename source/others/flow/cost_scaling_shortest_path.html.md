@@ -242,158 +242,168 @@ $$`
 
 **補題1**:
 
-> `$G$` に負閉路が無いならば `$\forall v \in P,\ \pi'(v) = \pi(v) + \rho(v)$`.
+:::indent
+`$G$` に負閉路が無いならば `$\forall v \in P,\ \pi'(v) = \pi(v) + \rho(v)$`.
+:::
 
 **証明**:
 
-> `$\pi'(v) = \pi(v) + d(v) - n \epsilon$` であるが, `$d$` の最適性から
-> `$d(v) \le c'((s, v)) = \rho(v) + n \epsilon$`.
-> 従って `$\pi'(v) \le \pi(v) + \rho(v)$` である.
->
-> 次に, `$\pi'(v) < \pi(v) + \rho(v)$` であると仮定し, `$G$` に負閉路が存在することを示す.
-> `$R$` を `$c'$`-最短 `$s$`-`$v$` パスとすると, 仮定から `$d(v) < c'((s, v))$` で, 双方 `$\epsilon$` の整数倍であるから
-> `$$
-> c'(R) = d(v) \le c'((s, v)) - \epsilon = \rho(v)+ n \epsilon - \epsilon.
-> $$`
->
-> `$R$` 上で `$s$` の次に訪れる頂点を `$w$` とすると, 仮定から `$w \neq v$` であり,
-> `$$
-> \begin{align*}
-> c^\pi(R_{w,v})
-> & \leq c'(R_{w,v}) &\qquad (\because c^\pi \leq c') \\
-> & = c'(R) - c'((s, w)) &\\
-> &= c'(R) - (\rho(w) + n \epsilon) &\\
-> &\leq (\rho(v) + n \epsilon - \epsilon) - (\rho(w) + n \epsilon) &\qquad (\because \text{上の不等式})\\
-> &= \rho(v) - \rho(w) - \epsilon.&
-> \end{align*}
-> $$`
-> 一方, `$c'$` の非負性と上の不等式(の2番目と最後)から
-> `$0 \le c'(R_{w,v}) < \rho(v) - \rho(w)$`
-> であるが, `$\rho(v) \le 0$` だから, `$0 \ge \rho(v) > \rho(w)$`.
-> `$\rho$` の定義から `$w$` は `$P$` に含まれ, 更に `$\rho$` の単調性から, `$w$` は `$v$` 以降の位置にある.
->
-> `$$
-> \begin{align*}
-> c^\pi(P_{v,w})
-> &\le c^\pi_\epsilon(P_{v,w}) \\
-> &= c^\pi_\epsilon(P_w) - c^\pi_\epsilon(P_v) \\
-> &= \rho(w) - \rho(v)
-> \end{align*}
-> $$`
-> であるから, `$C$` を `$R_{w,v}$` と `$P_{v,w}$` をつなげた閉路とすると
-> `$$
-> \begin{align*}
-> c^\pi(C)
-> &= c^\pi(R_{w,v}) + c^\pi(P_{v,w}) \\
-> &\le (\rho(v) - \rho(w) - \epsilon) + (\rho(w) - \rho(v)) \\
-> &< 0,
-> \end{align*}
-> $$`
-> つまり `$C$` は負閉路である.∎
+:::indent
+`$\pi'(v) = \pi(v) + d(v) - n \epsilon$` であるが, `$d$` の最適性から
+`$d(v) \le c'((s, v)) = \rho(v) + n \epsilon$`.
+従って `$\pi'(v) \le \pi(v) + \rho(v)$` である.
+
+次に, `$\pi'(v) < \pi(v) + \rho(v)$` であると仮定し, `$G$` に負閉路が存在することを示す.
+`$R$` を `$c'$`-最短 `$s$`-`$v$` パスとすると, 仮定から `$d(v) < c'((s, v))$` で, 双方 `$\epsilon$` の整数倍であるから
+`$$
+c'(R) = d(v) \le c'((s, v)) - \epsilon = \rho(v)+ n \epsilon - \epsilon.
+$$`
+
+`$R$` 上で `$s$` の次に訪れる頂点を `$w$` とすると, 仮定から `$w \neq v$` であり,
+`$$
+\begin{align*}
+c^\pi(R_{w,v})
+& \leq c'(R_{w,v}) &\qquad (\because c^\pi \leq c') \\
+& = c'(R) - c'((s, w)) &\\
+&= c'(R) - (\rho(w) + n \epsilon) &\\
+&\leq (\rho(v) + n \epsilon - \epsilon) - (\rho(w) + n \epsilon) &\qquad (\because \text{上の不等式})\\
+&= \rho(v) - \rho(w) - \epsilon.&
+\end{align*}
+$$`
+一方, `$c'$` の非負性と上の不等式(の2番目と最後)から
+`$0 \le c'(R_{w,v}) < \rho(v) - \rho(w)$`
+であるが, `$\rho(v) \le 0$` だから, `$0 \ge \rho(v) > \rho(w)$`.
+`$\rho$` の定義から `$w$` は `$P$` に含まれ, 更に `$\rho$` の単調性から, `$w$` は `$v$` 以降の位置にある.
+
+`$$
+\begin{align*}
+c^\pi(P_{v,w})
+&\le c^\pi_\epsilon(P_{v,w}) \\
+&= c^\pi_\epsilon(P_w) - c^\pi_\epsilon(P_v) \\
+&= \rho(w) - \rho(v)
+\end{align*}
+$$`
+であるから, `$C$` を `$R_{w,v}$` と `$P_{v,w}$` をつなげた閉路とすると
+`$$
+\begin{align*}
+c^\pi(C)
+&= c^\pi(R_{w,v}) + c^\pi(P_{v,w}) \\
+&\le (\rho(v) - \rho(w) - \epsilon) + (\rho(w) - \rho(v)) \\
+&< 0,
+\end{align*}
+$$`
+つまり `$C$` は負閉路である.∎
+:::
 
 
 **定理2**:
 
-> `$G$` に負閉路が無いとする.
-> `$P$` の始点でない頂点 `$v$` が `$\pi$` で improvable であり, `$P$` において `$v$` に入る辺が `$\pi$` で improvable であるならば, `$v$` は `$\pi'$` では improvable でない.
+:::indent
+`$G$` に負閉路が無いとする.
+`$P$` の始点でない頂点 `$v$` が `$\pi$` で improvable であり, `$P$` において `$v$` に入る辺が `$\pi$` で improvable であるならば, `$v$` は `$\pi'$` では improvable でない.
+:::
 
 **証明**:
 
-> `$v$` が `$\pi$` でも `$\pi'$` でも improvable であるとする.
-> `$\pi'$` で新たに improvable になる辺は無いから, `$\pi'$` でも `$\pi$` でも improvable な `$v$` に入る辺が存在する.
-> このような辺を任意に取り, `$e = (u, v)$` とする.
->
-> `$Q$` を `$s$` から `$u$` への `$c'$`-最短パスとし, `$Q$` で `$s$` の次の頂点を `$w$` とする.
->
-> `$$
-> \begin{align*}
-> - \epsilon
-> &\ge c^{\pi'}(e) &\qquad (\because e \text{は} \pi' \text{で improvable}) \\
-> &= c(e) + \pi'(u) - \pi'(v) &\\
-> &= c(e) + (\pi(u) + d(u) - n \epsilon) - (\pi(v) + d(v) - n \epsilon) &\\
-> &= c^\pi(e) + d(u) - d(v) &
-> \end{align*}
-> $$`
-> であるが, `$c^\pi(e) > -2 \epsilon$` であるから,
-> `$$
-> \begin{align*}
-> d(u) - d(v)
-> &= c^{\pi'}(e) - c^\pi(e) \\
-> &\le - \epsilon - c^\pi(e) \\
-> &< -\epsilon + 2 \epsilon \\
-> &= \epsilon
-> \end{align*}
-> $$`
-> であり, `$d$` は `$\epsilon$` の整数倍であったから, `$d(u) \le d(v)$`.
->
-> さて, `$P$` 上で `$v$` の一つ前の辺が improvable であった. この辺を `$(x, v)$` とすると,
-> `$$
-> \begin{align*}
-> \rho(v) - \rho(x)
-> &= c^\pi_\epsilon(P_v) - c^\pi_\epsilon(P_x) \\
-> &= c^\pi_\epsilon((x, v)) \\
-> &\le - \epsilon
-> \end{align*}
-> $$`
-> である. 従って,
-> `$$
-> \begin{align*}
-> \rho(w)
-> &= c'((s, w)) - n \epsilon &\qquad (\because c' \text{の定義})\\
-> &= c'(Q) - c'(Q_{w, u}) - n \epsilon &\\
-> &\le d(u) - c'(Q_{w, u}) - n \epsilon &\qquad (\because Q \text{は最短路}) \\
-> &\le d(u) - n \epsilon &\qquad (\because c' \text{: 非負}) \\
-> &\le d(v) - n \epsilon &\\
-> &= (\pi'(v) - \pi(v) + n \epsilon) - n \epsilon &\qquad (\because \pi'\text{の定義}) \\
-> &= \rho(v) &\qquad (\because \text{補題1}) \\
-> &\le \rho(x) - \epsilon &\qquad (\because \text{上の不等式}) \\
-> &\le - \epsilon &\qquad (\because \rho \text{は非正})
-> \end{align*}
-> $$`
-> であるから, `$\rho(w) \le \rho(v) < \rho(x) \le 0$` である.
-> この不等式と `$\rho$` の定義から, `$w \in P$` であり,
-> `$\rho$` の単調性から `$w$` は `$P$` 内で `$v$` 以降に出現する.
->
-> 補題1から
-> `$$
-> \begin{align*}
-> c^{\pi'}(P_{v,w})
-> &= c(P_{v,w}) + \pi'(v) - \pi'(w) \\
-> &= c(P_{v,w}) + (\pi(v) + \rho(v)) - (\pi(w) + \rho(w)) \\
-> &= c^\pi(P_{v,w}) + \rho(v) - \rho(w) \\
-> &= c^\pi(P_{v,w}) + c^\pi_\epsilon(P_v) - c^\pi_\epsilon(P_w) \\
-> &= c^\pi(P_{v,w}) - c^\pi_\epsilon(P_{v,w}) \\
-> &\le 0
-> \end{align*}
-> $$`
-> となる. 一方,
-> `$$
-> \begin{align*}
-> c^{\pi'}(Q_{w,u})
-> &= c^\pi(Q_{w,u}) + d(w) - d(u) &\qquad (\because \pi'\text{の定義}) \\
-> &\le c'(Q_{w,u}) + d(w) - d(u) &\qquad (\because c^\pi \le c') \\
-> &= 0 &\qquad (\because Q_{w,u} \text{は最短路, } d \text{は最短路長})
-> \end{align*}
-> $$`
-> であり, これと `$c^{\pi'}(e) \le -\epsilon$` から, `$P_{v,w}$`, `$Q_{w,u}$`, `$e$` を繋げた閉路 `$C$` は
-> `$$
-> \begin{align*}
-> c^{\pi'}(C)
-> &= c^{\pi'}(P_{v,w}) + c^{\pi'}(Q_{w,u}) + c^{\pi'}(e) \\
-> &\le 0 + 0 - \epsilon \\
-> &< 0,
-> \end{align*}
-> $$`
->すなわち負閉路である. ∎
+:::indent
+`$v$` が `$\pi$` でも `$\pi'$` でも improvable であるとする.
+`$\pi'$` で新たに improvable になる辺は無いから, `$\pi'$` でも `$\pi$` でも improvable な `$v$` に入る辺が存在する.
+このような辺を任意に取り, `$e = (u, v)$` とする.
+
+`$Q$` を `$s$` から `$u$` への `$c'$`-最短パスとし, `$Q$` で `$s$` の次の頂点を `$w$` とする.
+
+`$$
+\begin{align*}
+-\epsilon
+&\ge c^{\pi'}(e) &\qquad (\because e \text{は} \pi' \text{で improvable}) \\
+&= c(e) + \pi'(u) - \pi'(v) &\\
+&= c(e) + (\pi(u) + d(u) - n \epsilon) - (\pi(v) + d(v) - n \epsilon) &\\
+&= c^\pi(e) + d(u) - d(v) &
+\end{align*}
+$$`
+であるが, `$c^\pi(e) > -2 \epsilon$` であるから,
+`$$
+\begin{align*}
+d(u) - d(v)
+&= c^{\pi'}(e) - c^\pi(e) \\
+&\le - \epsilon - c^\pi(e) \\
+&< -\epsilon + 2 \epsilon \\
+&= \epsilon
+\end{align*}
+$$`
+であり, `$d$` は `$\epsilon$` の整数倍であったから, `$d(u) \le d(v)$`.
+
+さて, `$P$` 上で `$v$` の一つ前の辺が improvable であった. この辺を `$(x, v)$` とすると,
+`$$
+\begin{align*}
+\rho(v) - \rho(x)
+&= c^\pi_\epsilon(P_v) - c^\pi_\epsilon(P_x) \\
+&= c^\pi_\epsilon((x, v)) \\
+&\le - \epsilon
+\end{align*}
+$$`
+である. 従って,
+`$$
+\begin{align*}
+\rho(w)
+&= c'((s, w)) - n \epsilon &\qquad (\because c' \text{の定義})\\
+&= c'(Q) - c'(Q_{w, u}) - n \epsilon &\\
+&\le d(u) - c'(Q_{w, u}) - n \epsilon &\qquad (\because Q \text{は最短路}) \\
+&\le d(u) - n \epsilon &\qquad (\because c' \text{: 非負}) \\
+&\le d(v) - n \epsilon &\\
+&= (\pi'(v) - \pi(v) + n \epsilon) - n \epsilon &\qquad (\because \pi'\text{の定義}) \\
+&= \rho(v) &\qquad (\because \text{補題1}) \\
+&\le \rho(x) - \epsilon &\qquad (\because \text{上の不等式}) \\
+&\le - \epsilon &\qquad (\because \rho \text{は非正})
+\end{align*}
+$$`
+であるから, `$\rho(w) \le \rho(v) < \rho(x) \le 0$` である.
+この不等式と `$\rho$` の定義から, `$w \in P$` であり,
+`$\rho$` の単調性から `$w$` は `$P$` 内で `$v$` 以降に出現する.
+
+補題1から
+`$$
+\begin{align*}
+c^{\pi'}(P_{v,w})
+&= c(P_{v,w}) + \pi'(v) - \pi'(w) \\
+&= c(P_{v,w}) + (\pi(v) + \rho(v)) - (\pi(w) + \rho(w)) \\
+&= c^\pi(P_{v,w}) + \rho(v) - \rho(w) \\
+&= c^\pi(P_{v,w}) + c^\pi_\epsilon(P_v) - c^\pi_\epsilon(P_w) \\
+&= c^\pi(P_{v,w}) - c^\pi_\epsilon(P_{v,w}) \\
+&\le 0
+\end{align*}
+$$`
+となる. 一方,
+`$$
+\begin{align*}
+c^{\pi'}(Q_{w,u})
+&= c^\pi(Q_{w,u}) + d(w) - d(u) &\qquad (\because \pi'\text{の定義}) \\
+&\le c'(Q_{w,u}) + d(w) - d(u) &\qquad (\because c^\pi \le c') \\
+&= 0 &\qquad (\because Q_{w,u} \text{は最短路, } d \text{は最短路長})
+\end{align*}
+$$`
+であり, これと `$c^{\pi'}(e) \le -\epsilon$` から, `$P_{v,w}$`, `$Q_{w,u}$`, `$e$` を繋げた閉路 `$C$` は
+`$$
+\begin{align*}
+c^{\pi'}(C)
+&= c^{\pi'}(P_{v,w}) + c^{\pi'}(Q_{w,u}) + c^{\pi'}(e) \\
+&\le 0 + 0 - \epsilon \\
+&< 0,
+\end{align*}
+$$`
+すなわち負閉路である. ∎
+:::
 
 **注意**:
 
-> 上の定理では, `$P$` の improvable な辺の指す先が improvable で無くなることは証明したが, 一般に improvable な頂点が improvable で無くなることは証明していない.
-> 元の論文ではこれを証明している(と主張している).
-> しかし, どうにも "`$w \in P$`" と "`$w$` は `$v$` 以降に出現する" の二つの部分で行間を埋められず,
-> この記事ではこのような形にした.
->
-> 他にも, `$P$` が improvable な辺から始まり, improvable な辺を最も多く含む `$G^\pi$` のパスであることを仮定すると, `$P$` に含まれる全ての improvable な頂点が improvable でなくなることが示せるだろう.
+:::indent
+上の定理では, `$P$` の improvable な辺の指す先が improvable で無くなることは証明したが, 一般に improvable な頂点が improvable で無くなることは証明していない.
+元の論文ではこれを証明している(と主張している).
+しかし, どうにも "`$w \in P$`" と "`$w$` は `$v$` 以降に出現する" の二つの部分で行間を埋められず,
+この記事ではこのような形にした.
+
+他にも, `$P$` が improvable な辺から始まり, improvable な辺を最も多く含む `$G^\pi$` のパスであることを仮定すると, `$P$` に含まれる全ての improvable な頂点が improvable でなくなることが示せるだろう.
+:::
 
 
 さて, 上の定理から, improvable な辺一つからなるパスを `$P$` として Eliminate-Chain を繰返すことにより, `$O(nm)$` で Refine を実現出来ることがわかる.

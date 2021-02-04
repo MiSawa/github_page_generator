@@ -47,6 +47,15 @@ div.tag {
     border: 1.5px inset;
 }
 
+div.footnotes {
+    margin-top: 3em;
+    border-top: 1px solid #888;
+    font-size: 95%;
+    p {
+        margin: 0.5em;
+    }
+}
+
 .fold-plus {
     font-weight: bold;
 }
