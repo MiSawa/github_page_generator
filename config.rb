@@ -72,80 +72,17 @@ configure :build do
 end
 
 
-#set :markdown_engine, :kramdown
-#set :markdown, :parse_block_html => true
-
-
-# markdown engine
-# https://gist.github.com/plusjade/2699636
-require 'redcarpet'
-require 'middleman-core/renderers/redcarpet'
-class HTMLWithMathjax < Middleman::Renderers::MiddlemanRedcarpetHTML
-  #require 'rouge'
-  #require 'rouge/plugins/redcarpet'
-  #include Rouge::Plugins::Redcarpet
-  #def block_code(code, language)
-  #  #Middleman::Syntax::Highlighter.highlight(code, language)
-  #  if language == 'mathjax'
-  #    "<script type=\"math/tex; mode=display\">
-  #    #{code}
-  #    </script>"
-  #  else
-  #    "<pre><code class=\"#{language}\">#{code}</code></pre>"
-  #  end
-  #end
-  def codespan(code)
-    if code[0] == "$" && code[-1] == "$"
-      code
-      #code.gsub!(/^\$/,'')
-      #code.gsub!(/\$$/,'')
-      #"<script type=\"math/tex\">#{code}</script>"
-    else
-      "<code>#{code}</code>"
-    end
-  end
-  def preprocess(fulldoc)
-    dollar              = Regexp.escape "$"
-    backslash_dollar    = Regexp.escape "\\$"
-    none_escaped        = "(?:(?:^|[^\\\\])(?:\\\\\\\\)*)"
-    not_dollar          = "(?:^|$|(?:" + none_escaped + backslash_dollar + ")|(?:[^$]))"
-    not_quote           = "(?:^|$|(?:" + none_escaped + Regexp.escape("\\`") + ")|(?:[^`]))"
-    not_quote_nor_dollar= "(?:^|$|(?:" + none_escaped + Regexp.escape("\\") + "(?:" + Regexp.escape("`") + "|" + Regexp.escape("$") + ")" + ")|(?:[^`$]))"
-    not_quote_none_escaped = "(?:^|$|[^" + Regexp.escape("`\\") + "]" + none_escaped + "?)"
-    not_quote_nor_dollar_none_escaped = "(?:^|$|[^$" + Regexp.escape("`\\") + "](?:(?:^|[^\\\\`$])(?:\\\\\\\\)*)?)"
-
-    tex = Regexp.new("(" + not_quote_nor_dollar_none_escaped + ")(" + dollar +
-        "(?:|" +
-        "(?:" + not_quote_nor_dollar + ")|" + # 1文字
-        "(?:" + not_quote_nor_dollar + not_quote_nor_dollar + ")|" + # 2文字
-        "(?:" + not_quote_nor_dollar + not_dollar + "*" + not_quote_nor_dollar + ")" +
-        ")" + not_quote_nor_dollar_none_escaped + dollar + ")(" + not_quote_nor_dollar + ")")
-    tex2 = Regexp.new("(" + not_quote_nor_dollar_none_escaped + ")(" + dollar + dollar +
-        "(?:|" +
-        not_quote_nor_dollar + "|" + # 1文字
-        not_quote_nor_dollar + not_quote_nor_dollar + "|" + # 2文字
-        not_quote_nor_dollar + not_dollar + "*" + not_quote_nor_dollar +
-        ")" + not_quote_nor_dollar + dollar + dollar + ")(" + not_quote_nor_dollar + ")")
-    [tex, tex2].each do |reg|
-      loop do
-        break unless fulldoc.sub!(reg) do |x|
-          $1 + '`' + $2 + '`' + $3
-        end
-      end
-    end
-    fulldoc
-  end
-end
-
 activate :sprockets do |c|
   c.expose_middleman_helpers = true
 end
 
-#set :markdown_engine, :redcarpet
-#set :markdown, :fenced_code_blocks => true, :smartypants => true,
-#  :renderer => HTMLWithMathjax
-set :markdown_engine, :redcarpet
-set :markdown, :tables => true, :fenced_code_blocks => true, :smartypants => true, :footnotes => true, :renderer => HTMLWithMathjax
+require 'lib/ex_markdown'
+set :markdown_engine, :kramdown
+set :markdown,
+  tables: true,
+  smartypants: true,
+  input: :ExMarkdown
+
 
 activate :syntax, :line_numbers => true
 

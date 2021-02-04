@@ -23,12 +23,12 @@ $$</div>
 
 - 一般に, `$n$` 頂点 `$m$` 辺のグラフと実数の辺容量 `$u$` が与えられたとき, このネットワーク上での Dinic 法の計算量は `$O(n^2 m)$` である.
 - 辺容量が整数のとき,
- - 最大流を `$F$` とすると, `$O(F m)$` でもある.
- - 辺容量が高々 `$k$` のとき, `$O(k m^{3/2})$` でもある.
- - 辺容量が高々 `$k$` で多重辺が無いとき, `$O(k n^{2/3}m)$` でもある.
- - 各頂点を通れるフロー量が高々 `$k$`, すなわち `$k \ge \max_v \min(\sum_{e \in \delta^+(v)} u_e, \sum_{e \in \delta^-(v)} u_e)$` なとき, 計算量は `$O(k \sqrt{n} m)$` でもある.[^delta]
- - 二部マッチングのときは, 上が `$k = 1$` で成立し, `$O(\sqrt{n} m)$`.
- - 容量が整数は必須だけれど, 他の条件は高々定数個の例外があっても OK.
+  - 最大流を `$F$` とすると, `$O(F m)$` でもある.
+  - 辺容量が高々 `$k$` のとき, `$O(k m^{3/2})$` でもある.
+  - 辺容量が高々 `$k$` で多重辺が無いとき, `$O(k n^{2/3}m)$` でもある.
+  - 各頂点を通れるフロー量が高々 `$k$`, すなわち `$k \ge \max_v \min(\sum_{e \in \delta^+(v)} u_e, \sum_{e \in \delta^-(v)} u_e)$` なとき, 計算量は `$O(k \sqrt{n} m)$` でもある.[^delta]
+  - 二部マッチングのときは, 上が `$k = 1$` で成立し, `$O(\sqrt{n} m)$`.
+  - 容量が整数は必須だけれど, 他の条件は高々定数個の例外があっても OK.
 - 動的木を使うと, 一般のグラフで `$O(n m \log n)$` になる.
 - 実装をミスると指数オーダー.
 
@@ -123,20 +123,20 @@ primal step では, dual step で求めた `$\label(\cdot)$` に加えて `$\ce(
 
 1. `$i = 0, v_0 = s$` とする.[^fromt]
 2. `$\ce(v_i) \neq \bot$` だが `$\ce(v_i)$` が admissible でないとき:
- 1. `$\ce(v_i)$` を `$\ne(\ce(v_i))$` で更新する.
- 2. 2. へ戻る.
+   1. `$\ce(v_i)$` を `$\ne(\ce(v_i))$` で更新する.
+   2. 2.へ戻る.
 3. `$\ce(v_i) \neq \bot$` のとき:
- 1. `$\ce(v_i) = (v_i, v_{i+1})$` となるよう `$v_{i+1}$` を定める
- 2. `$i$` を `$i+1$` に更新する
- 3. 2. へ戻る.
+   1. `$\ce(v_i) = (v_i, v_{i+1})$` となるよう `$v_{i+1}$` を定める
+   2. `$i$` を `$i+1$` に更新する
+   3. 2.へ戻る.
 4. `$v_i = s$`, すなわち `$i = 0$` のとき:
- 1. admissible な辺からなる `$s$`-`$t$` パスを発見出来なかったことを報告し, 終了する.
+   1. admissible な辺からなる `$s$`-`$t$` パスを発見出来なかったことを報告し, 終了する.
 5. `$v_i \neq t$` のとき:
- 1. `$i$` を `$i-1$` で更新する.
- 2. `$\ce(v_i)$` を `$\ne(\ce(v_i))$` で更新する.
- 3. 2. へ戻る.
+   1. `$i$` を `$i-1$` で更新する.
+   2. `$\ce(v_i)$` を `$\ne(\ce(v_i))$` で更新する.
+   3. 2.へ戻る.
 6. `$v_i = t$` のとき:
- 1. パス `$s = v_0, \dots, v_i = t$` を報告し, 終了する.
+   1. パス `$s = v_0, \dots, v_i = t$` を報告し, 終了する.
 
 [^fromt]: 今回は `$s$` から出発するようにしたが, `$t$` から始めてもよい. その場合さまざまなものが逆転する.
 このアルゴリズムにおける重要な不変条件として,
@@ -210,26 +210,26 @@ primal step, dual step はそれぞれ `$s$` 側と `$t$` 側から出来るた�
 
 1. `$v = \operatorname{GetRoot}(s)$` とする.
 2. `$\ce(v) \neq \bot$` だが `$\ce(v)$` が admissible でないとき:
- 1. `$\ce(v)$` を `$\ne(\ce(v))$` で更新する.
- 2. 2. へ戻る.
+   1. `$\ce(v)$` を `$\ne(\ce(v))$` で更新する.
+   2. 2.へ戻る.
 3. `$\ce(v) \neq \bot$` のとき:
- 1. `$\operatorname{Link}(\ce(v))$` する
- 2. 1. へ戻る.
+   1. `$\operatorname{Link}(\ce(v))$` する
+   2. 1.へ戻る.
 4. `$v = s$` のとき:
- 1. admissible な辺からなる `$s$`-`$t$` パスを発見出来なかったことを報告し, 終了する.
+   1. admissible な辺からなる `$s$`-`$t$` パスを発見出来なかったことを報告し, 終了する.
 5. `$v \neq t$` のとき:
- 1. `$e = (u, v) = \operatorname{GetLastEdgeInPath}(s)$` とする.
- 2. `$\operatorname{Cut}(e)$` する.
- 3. `$\ce(u)$` を `$\ne(e)$` で更新する.
- 4. 1. へ戻る.
+   1. `$e = (u, v) = \operatorname{GetLastEdgeInPath}(s)$` とする.
+   2. `$\operatorname{Cut}(e)$` する.
+   3. `$\ce(u)$` を `$\ne(e)$` で更新する.
+   4. 1.へ戻る.
 6. `$v = t$` のとき:
- 1. `$u = \operatorname{MinNodeOfPath}(s)$` とし, `$f = \operatorname{GetValue}(u)$` とする.
- 2. `$\operatorname{AddToPath}(s, -f)$` する.
- 3. `$u = \operatorname{MinNodeOfPath}(s)$` とし, `$e = \ce(u)$`, `$f = \operatorname{GetValue}(u)$` とする.
- 4. `$f \neq 0$` ならば 1. へ戻る.
- 5. `$\operatorname{Cut}(e)$` する.
- 6. `$\ce(u)$` を `$\ne(e)$` で更新する.
- 7. 6.3. へ戻る.
+   1. `$u = \operatorname{MinNodeOfPath}(s)$` とし, `$f = \operatorname{GetValue}(u)$` とする.
+   2. `$\operatorname{AddToPath}(s, -f)$` する.
+   3. `$u = \operatorname{MinNodeOfPath}(s)$` とし, `$e = \ce(u)$`, `$f = \operatorname{GetValue}(u)$` とする.
+   4. `$f \neq 0$` ならば 1.へ戻る.
+   5. `$\operatorname{Cut}(e)$` する.
+   6. `$\ce(u)$` を `$\ne(e)$` で更新する.
+   7. 6.3.へ戻る.
 
 このアルゴリズムの終了時点での各頂点に付与された値に応じて, 暫定解のフロー量を更新する.
 このアルゴリズムは primal step を `$O(m \log n)$` で実装し, 全体として `$O(n m \log n)$` の最大流アルゴリズムを与えている.
