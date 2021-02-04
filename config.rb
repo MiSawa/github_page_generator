@@ -80,7 +80,22 @@ end
 # https://gist.github.com/plusjade/2699636
 require 'redcarpet'
 require 'middleman-core/renderers/redcarpet'
+require 'cgi'
+
+
 class HTMLWithMathjax < Middleman::Renderers::MiddlemanRedcarpetHTML
+  class << self
+    attr_accessor :markdown_configs
+  end
+  @markdown_configs = {
+    :tables => true,
+    :fenced_code_blocks => true,
+    :smartypants => true,
+    :footnotes => true,
+    :renderer => HTMLWithMathjax
+  }
+  @@engine = Redcarpet::Markdown.new(HTMLWithMathjax.new(), HTMLWithMathjax.markdown_configs)
+
   #require 'rouge'
   #require 'rouge/plugins/redcarpet'
   #include Rouge::Plugins::Redcarpet
@@ -95,6 +110,7 @@ class HTMLWithMathjax < Middleman::Renderers::MiddlemanRedcarpetHTML
   #  end
   #end
   def codespan(code)
+    p "code span #{code}"
     if code[0] == "$" && code[-1] == "$"
       code
       #code.gsub!(/^\$/,'')
@@ -104,7 +120,46 @@ class HTMLWithMathjax < Middleman::Renderers::MiddlemanRedcarpetHTML
       "<code>#{code}</code>"
     end
   end
+
+  def block_html(raw_html)
+    p "block html #{raw_html}"
+    match = raw_html.match(/^<div colons ([^ >]+)(.*?)>(.*)<\/div>$/m)
+    if match
+      tag, args, content = match.captures
+      "\n<#{tag}#{args}>\n#{render content}\n</#{tag}>\n"
+    else
+      raw_html
+    end
+  end
+
+  def raw_html(raw_html)
+    match = raw_html.match(/^<span colons ([^ >]+)(.*?)>(.*)<\/span>$/m)
+    if match
+      tag, args, content = match.captures
+      "\n<#{tag}#{args}>\n#{render content}\n</#{tag}>\n"
+    else
+      raw_html
+    end
+  end
+
   def preprocess(fulldoc)
+    p "preprocess: #{fulldoc}"
+    fulldoc = quote_tex fulldoc
+    fulldoc = replace_colons fulldoc
+    p "preprocessed: #{fulldoc}"
+    fulldoc
+  end
+
+  private
+  def render(markdown)
+    p "recursively call on #{markdown}"
+    ret = @@engine.render markdown
+    p "rendored: #{ret}"
+    ret
+  end
+
+  private
+  def quote_tex(fulldoc)
     dollar              = Regexp.escape "$"
     backslash_dollar    = Regexp.escape "\\$"
     none_escaped        = "(?:(?:^|[^\\\\])(?:\\\\\\\\)*)"
@@ -135,6 +190,58 @@ class HTMLWithMathjax < Middleman::Renderers::MiddlemanRedcarpetHTML
     end
     fulldoc
   end
+
+  private
+  def handle_container(container)
+    if (match = container.match(/^details\s*(.*)$/))
+      summary = CGI.escapeHTML match.captures[0]
+      if summary.empty?
+        open = "\n\n<div colons details>\n"
+      else
+        open = "\n\n<div colons details><summary>#{summary}</summary>\n"
+      end
+      close = "</div>\n"
+      return [open, close]
+    elsif (match = container.match(/^indent$/))
+      open = "\n\n<div colons div class='indent'>\n"
+      close = "</div>\n"
+      return [open, close]
+    elsif (match = container.match(/^div\s*(.*)$/))
+      open = "\n\n<div colons div #{match[0]}>\n"
+      close = "</div>\n"
+      return [open, close]
+    end
+    raise "Don't know how to handle #{container}"
+  end
+
+  private
+  def replace_colons(fulldoc)
+    res = ""
+    close_tags = []
+    fulldoc.lines.each_with_index do |l, i|
+      match = l.match(/^\s*:::\s*(.*)\s*$/)
+      if match
+        container = match.captures[0]
+        if container.empty?
+          if (close=close_tags.pop)
+            res += close
+          else
+            raise "Too many close tags (:::) compared to open tags. Around line #{i}"
+          end
+        else
+          open, close = handle_container container
+          res += open
+          close_tags.push close
+        end
+      else
+        res += l
+      end
+    end
+    unless close_tags.empty?
+      raise "#{close_tags.size} unclosed containers"
+    end
+    res
+  end
 end
 
 activate :sprockets do |c|
@@ -144,8 +251,9 @@ end
 #set :markdown_engine, :redcarpet
 #set :markdown, :fenced_code_blocks => true, :smartypants => true,
 #  :renderer => HTMLWithMathjax
-set :markdown_engine, :redcarpet
-set :markdown, :tables => true, :fenced_code_blocks => true, :smartypants => true, :footnotes => true, :renderer => HTMLWithMathjax
+config[:markdown_engine] = :redcarpet
+p HTMLWithMathjax.markdown_configs
+config[:markdown] = HTMLWithMathjax.markdown_configs
 
 activate :syntax, :line_numbers => true
 
