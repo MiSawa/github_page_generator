@@ -22,6 +22,12 @@ body {
     height: 95%;
 }
 
+// Undo what normalize.css does
+// to get the triangle back
+summary {
+    display: revert;
+}
+
 h2 {
     margin-top: 1.5em;
     margin-left: -0.7em;
@@ -54,6 +60,10 @@ code>table {
         padding-right: 10px;
         border-left: 1px solid #000;
     }
+}
+
+div.indent {
+    padding-left: 1em;
 }
 
 :not(code)>table {
