@@ -1,0 +1,37 @@
+---
+
+title: Dinic 法実装の小手先テクたち
+date: 2021/01/15
+tags: [フロー, 最大流]
+secret: true
+
+---
+<div style="display:none">$$
+\newcommand{\vec}[1]{\mathbf{#1}}
+\def\vecb{\vec{b}}
+\def\veczero{\vec{0}}
+\def\vecf{\vec{f}}
+\def\exG{\overleftrightarrow{G}}
+\def\label{\operatorname{label}}
+\def\ce{\operatorname{current\_edge}}
+\def\fe{\operatorname{first\_edge}}
+\def\ne{\operatorname{next\_edge}}
+$$</div>
+
+# Dinic 法実装の小手先テクたち
+
+## 内容
+
+[前の記事](./dinic_time_complexity.html)では, Dinic 法とその計算量解析を紹介した.
+この記事では, 実装の際の小手先のテクニックを, Rust による実装とベンチマーク付きで紹介する.
+
+
+## 原型
+
+特に何も考えず, Current Edge data structure を使って実装した
+
+
+
+
+## 参考文献
+
