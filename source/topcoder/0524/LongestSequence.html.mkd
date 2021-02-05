@@ -27,7 +27,7 @@ tags: [TopCoder, 牛ゲー]
 
 #### 制約
 
-$ 1 \le |C| \le 50,\ 1 \le |C_i| \le 1000 $
+`$ 1 \le |C| \le 50,\ 1 \le |C_i| \le 1000 $`
 
 ### 解法
 
