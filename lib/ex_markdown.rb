@@ -10,6 +10,7 @@ class ::Kramdown::Parser::ExMarkdown < ::Kramdown::Parser::GFM
   CONTAINER_MARK = "^#{OPT_SPACE}:::#{SPS}*"
   ANY_CONTAINER = /#{CONTAINER_MARK}.*?\n/
   INDENTATION_START = /#{CONTAINER_MARK}indent#{SPS}*\n/
+  DETAILS_START_EXCEPT_SUMMARY = /#{CONTAINER_MARK}details/
   DETAILS_START = /#{CONTAINER_MARK}details(|#{SPS}+(.*?))#{SPS}*\n/
   CONTAINER_END = /#{CONTAINER_MARK}\n/
 
@@ -43,6 +44,18 @@ class ::Kramdown::Parser::ExMarkdown < ::Kramdown::Parser::GFM
     start_line_number = @src.current_line_number
     @src.match? DETAILS_START
     summary = @src[2]
+
+    el = new_block_el(:details, nil, {summary: summary}, {location: start_line_number})
+
+    if summary
+      summary_el = Element.new(:summary, nil, nil, location: start_line_number)
+      el.children << summary_el
+      env = save_env
+      reset_env(:src => Kramdown::Utils::StringScanner.new(summary, start_line_number))
+      parse_spans(summary_el, /\n/)
+      restore_env env
+    end
+
     result = []
     nest = 0
     until @src.eos?
@@ -60,11 +73,14 @@ class ::Kramdown::Parser::ExMarkdown < ::Kramdown::Parser::GFM
       warning("No close tag for details (line #{start_line_number}) - auto closing it")
     end
 
-    el = new_block_el(:details, nil, {summary: summary}, {location: start_line_number})
-    @tree.children << el
     parse_blocks(el, result[1..-2] * '')
-
+    @tree.children << el
     true
+  end
+
+  def update_elements(element)
+    # The super implementation splits lines and inserts </br>.
+    # I don't want this behavior.
   end
 
   define_parser(:indentation, INDENTATION_START)
@@ -90,29 +106,13 @@ class ::Middleman::Renderers::MiddlemanKramdownHTML < ::Kramdown::Converter::Htm
     def convert_indentation(el, indent)
       format_as_indented_block_html('div', {'class': 'indent'}, inner(el, indent), indent)
     end
+
+    def convert_summary(el, indent)
+      format_as_indented_block_html('summary', {}, inner(el, indent), indent)
+    end
+
     def convert_details(el, indent)
-      ret = "#{' ' * indent}<details>\n"
-      p el, indent
-      if (summary = el.attr[:summary])
-        ret += "#{' ' * indent}#{format_as_indented_span_html('summary', nil, summary)}\n"
-      end
-      ret += inner(el, indent)
-      ret += "#{' ' * indent}</details>\n"
-      ret
-    end
-
-    def convert_br(_el, _indent)
-      ""
-    end
-
-    REDUNDANT_LINE_BREAK_REGEX = /(^|[^\n]+)\n([^\n]+)/u
-    def convert_text(el, _indent)
-      str = super(el, _indent)
-      p "before: #{str}"
-      while str.gsub!(REDUNDANT_LINE_BREAK_REGEX, '\1\2')
-      end
-      p "after: #{str}"
-      str
+      format_as_indented_block_html('details', {}, inner(el, indent), indent)
     end
   end
   prepend KarmdownHtmlExt
