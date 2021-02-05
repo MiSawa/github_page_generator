@@ -359,9 +359,9 @@ r(-\phi^{-1}) &= (-\phi^{-1})^n = (-\phi)^{-n}
 `$$\begin{align*}
 r(t)
 &= \phi^n \frac{t + \phi^{-1}}{\phi + \phi^{-1}}
- + (-\phi)^{-n} \frac{t - \phi}{-\phi^{-1} - \phi} \\
++(-\phi)^{-n} \frac{t - \phi}{-\phi^{-1} - \phi} \\
 &= \frac{\phi^n (t + \phi^{-1}) - (-\phi)^{-n} (t - \phi)}{\phi + \phi^{-1}} \\
-&= \frac{\phi^n - (-\phi)^{-n}}{\sqrt{5}}t + \frac{\phi^{n-1} - (-\phi)^{-n+1}}{\sqrt{5}} \\
+&= \frac{\phi^n - (-\phi)^{-n}}{\sqrt{5}}t + \frac{\phi^{n-1} - (-\phi)^{-n+1}}{\sqrt{5}}
 \end{align*}$$`
 と, `$r(t)$` を復元できる.
 従って,

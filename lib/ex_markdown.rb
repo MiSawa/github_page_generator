@@ -14,6 +14,44 @@ class ::Kramdown::Parser::ExMarkdown < ::Kramdown::Parser::GFM
   DETAILS_START = /#{CONTAINER_MARK}details(|#{SPS}+(.*?))#{SPS}*\n/
   CONTAINER_END = /#{CONTAINER_MARK}\n/
 
+  def adapt_source(source)
+    source = super
+    source = escape_maths source
+    source
+  end
+
+  def escape_maths(fulldoc)
+    dollar              = Regexp.escape "$"
+    backslash_dollar    = Regexp.escape "\\$"
+    none_escaped        = "(?:(?:^|[^\\\\])(?:\\\\\\\\)*)"
+    not_dollar          = "(?:^|$|(?:" + none_escaped + backslash_dollar + ")|(?:[^$]))"
+    not_quote           = "(?:^|$|(?:" + none_escaped + Regexp.escape("\\`") + ")|(?:[^`]))"
+    not_quote_nor_dollar= "(?:^|$|(?:" + none_escaped + Regexp.escape("\\") + "(?:" + Regexp.escape("`") + "|" + Regexp.escape("$") + ")" + ")|(?:[^`$]))"
+    not_quote_none_escaped = "(?:^|$|[^" + Regexp.escape("`\\") + "]" + none_escaped + "?)"
+    not_quote_nor_dollar_none_escaped = "(?:^|$|[^$" + Regexp.escape("`\\") + "](?:(?:^|[^\\\\`$])(?:\\\\\\\\)*)?)"
+
+    tex = Regexp.new("(" + not_quote_nor_dollar_none_escaped + ")(" + dollar +
+        "(?:|" +
+        "(?:" + not_quote_nor_dollar + ")|" + # 1文字
+        "(?:" + not_quote_nor_dollar + not_quote_nor_dollar + ")|" + # 2文字
+        "(?:" + not_quote_nor_dollar + not_dollar + "*" + not_quote_nor_dollar + ")" +
+        ")" + not_quote_nor_dollar_none_escaped + dollar + ")(" + not_quote_nor_dollar + ")")
+    tex2 = Regexp.new("(" + not_quote_nor_dollar_none_escaped + ")(" + dollar + dollar +
+        "(?:|" +
+        not_quote_nor_dollar + "|" + # 1文字
+        not_quote_nor_dollar + not_quote_nor_dollar + "|" + # 2文字
+        not_quote_nor_dollar + not_dollar + "*" + not_quote_nor_dollar +
+        ")" + not_quote_nor_dollar + dollar + dollar + ")(" + not_quote_nor_dollar + ")")
+    [tex, tex2].each do |reg|
+      loop do
+        break unless fulldoc.sub!(reg) do |x|
+          $1 + '`' + $2 + '`' + $3
+        end
+      end
+    end
+    fulldoc
+  end
+
   def parse_indentation
     start_line_number = @src.current_line_number
     result = []
@@ -113,6 +151,16 @@ class ::Middleman::Renderers::MiddlemanKramdownHTML < ::Kramdown::Converter::Htm
 
     def convert_details(el, indent)
       format_as_indented_block_html('details', {}, inner(el, indent), indent)
+    end
+
+    def convert_smart_quote(el, indent)
+      case el.value
+      when :lsquo, :rsquo then
+        return '&#39;'
+      when :ldquo, :rdquo then
+        return '&quot;'
+      end
+      super el, indent
     end
   end
   prepend KarmdownHtmlExt

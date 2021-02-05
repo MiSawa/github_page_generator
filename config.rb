@@ -79,8 +79,14 @@ end
 require 'lib/ex_markdown'
 set :markdown_engine, :kramdown
 set :markdown,
+  smartypants: false,
   tables: true,
-  smartypants: true,
+  auto_ids: false,
+  typographic_symbols: {
+    hellip: '...',
+    laquo: '<',
+    raquo: '>',
+  },
   input: :ExMarkdown
 
 

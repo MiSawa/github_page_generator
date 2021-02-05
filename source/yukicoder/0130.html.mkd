@@ -13,7 +13,7 @@ source_code: ./src/0130.cc
 ### 概要
 
 非負整数数列 $a_1, \dots, a_n$ が与えられる.
-非負整数 $x$ に対し, $f(x) = \max\{ a_1 \oplus x, \dots, a_n \oplus x\}$ とする.
+非負整数 $x$ に対し, `$f(x) = \max\{ a_1 \oplus x, \dots, a_n \oplus x\}$` とする.
 $\min f(x)$ を求めよ.
 
 #### 制約
