@@ -84,8 +84,6 @@ set :markdown,
   auto_ids: false,
   typographic_symbols: {
     hellip: '...',
-    laquo: '<',
-    raquo: '>',
   },
   input: :ExMarkdown
 
