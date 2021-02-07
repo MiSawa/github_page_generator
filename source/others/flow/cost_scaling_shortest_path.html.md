@@ -118,7 +118,7 @@ $$`
 
 feasible なポテンシャルの定義は `$\forall e \in E, c^\pi(e) \ge 0$` であった.
 `$\epsilon > 0$` でこれを緩和した `$\forall e \in E,\ c^\pi(e) > -\epsilon$` を満たすポテンシャル `$\pi$` を **`$\epsilon$`-feasible (`$\epsilon$`-実行可能)** であるという. [^eps_feasibility_def]
-また, `$c^\pi(e) \le 0$` である辺を **admissible (使用可能, 又は許容)** であると言い, `$c^\pi(e) \le -\epsilon$` である辺を **`$\epsilon$`-improvable な頂点** であると言う. [^admissible_def] また, `$\epsilon$`-improvable な辺 `$(u, v)$` が存在するような頂点 `$v$` を **`$\epsilon$`-improvable な頂点** であると言う.
+また, `$c^\pi(e) \le 0$` である辺を **admissible (使用可能, 又は許容)** であると言い, `$c^\pi(e) \le -\epsilon$` である辺を **`$\epsilon$`-improvable な辺** であると言う. [^admissible_def] また, `$\epsilon$`-improvable な辺 `$(u, v)$` が存在するような頂点 `$v$` を **`$\epsilon$`-improvable な頂点** であると言う.
 
 入力の整数性と前節の feasible なポテンシャルの構成から, feasible なポテンシャルが存在することと feasible な整数ポテンシャルが存在することは同値であるから, 以下補足の節まで, ポテンシャルは整数ポテンシャルのみを考える.
 すると, `$\epsilon = 1$` のとき, `$\epsilon$`-feasible なポテンシャル `$\pi$` は `$c^\pi((u, v)) = c((u, v)) + \pi(u) - \pi(v) > -1$` を満たすが, 左辺は整数であるから `$c^\pi(e) \ge 0$`, つまり feasible である.
@@ -126,11 +126,11 @@ feasible なポテンシャルの定義は `$\forall e \in E, c^\pi(e) \ge 0$` �
 [^eps_feasibility_def]: `$c^\pi(e) \ge -\epsilon$` で定義する場合もあり, 後の議論が変わる. 詳細は補足の節で見る.
 [^admissible_def]: `$c^\pi(e) \ge -\epsilon$` で `$\epsilon$`-feasibility を定義した場合は, admissible edge は `$c^\pi(e) < 0$`, improvable edge は `$c^\pi(e) < -\epsilon$` で定める.
 
-さて, `$C = \max(2, \max_e(-c_e))$` とする. 従って, `$c_e \ge -C$` かつ `$\log C > 0$` である.
-`$\epsilon = 2^{\floor{\log C} + 1}$` とする[^log_base]と, `$c_e = c_e + 0 - 0 \ge -C > -\epsilon$` であるから, ゼロポテンシャル `$\pi(\cdot) = 0$` は `$\epsilon$`-feasible である.
+さて, `$C = \max(2, \max_e(-c_e))$` とする. 従って, `$c_e \ge -C$` かつ `$\log C > 0$` である[^log_base].
+`$\epsilon = 2^{\floor{\log C} + 1}$` とすると, `$c_e = c_e + 0 - 0 \ge -C > -\epsilon$` であるから, ゼロポテンシャル `$\pi(\cdot) = 0$` は `$\epsilon$`-feasible である.
 コストスケーリング法は, この `$\epsilon$` とゼロポテンシャルを初期値とし, より小さい `$\epsilon$` に対する `$\epsilon$`-feasibility を満たすよう `$\pi$` を変更していく, 次のようなアルゴリズムである.
 
-[^log_base]: `$\mathrm{log}$` の底は `$2$`.
+[^log_base]: `$\mathrm{log}$` の底は `$2$` とする.
 
 1. `$\epsilon = 2^{\floor{\log C} + 1}$`, `$\pi(\cdot) = 0$` とする.
 2. 不変条件: `$\pi$` は `$\epsilon$`-feasible で, `$\epsilon$` の整数倍のみを値に持つポテンシャルである.
@@ -145,7 +145,7 @@ Refine は `$O(\log C)$` 回呼び出されるから, Refine の時間計算量�
 ## Admissible graph と Decycle
 ポテンシャル `$\pi$` を一つ固定する. このポテンシャルについて Admissible な辺 `$E^\pi := \set{e \in E \setmid c^\pi(e) \le 0}$` のみを取り出したグラフ `$G^\pi = (V, E^\pi)$` を **admissible graph** と呼ぶ.
 この `$G^\pi$` の任意の閉路 `$C$` のコストは `$c(C) = c^\pi(C) = \sum_{e \in C} c^\pi(e) \le 0$` であり, `$C$` が負の被約費用を持つ辺を含むならば `$C$` は負閉路である.
-従って, `$G^\pi$` 両端点が同じ強連結成分に属する辺で負の被約費用を持つものが存在するかを判定し, 存在するならばアルゴリズムを終了してよい.
+従って, `$G^\pi$` に両端点が同じ強連結成分に属する辺で負の被約費用を持つものが存在するかを判定し, 存在するならばアルゴリズムを終了してよい.
 
 一方, そのような辺が存在しない場合を考える.
 両端点が同じ強連結成分に含まれる辺全体の集合を `$S$` とする.
@@ -163,23 +163,23 @@ Refine は `$O(\log C)$` 回呼び出されるから, Refine の時間計算量�
 `$S$` が閉集合であるとき, その要素に対応する `$\pi$` を `$\epsilon$` 減少させる操作を `$\operatorname{CUT\_RELABEL}(S)$` で表す.
 この操作により, `$c^\pi((u, v)) = c((u, v)) + \pi(u) - \pi(v)$` は `$u \not \in S$` かつ `$v \in S$` のとき `$\epsilon$` 増加し, `$u \in S$` かつ `$v \not \in S$` のときに `$\epsilon$` 減少する.
 しかし `$S$` の選び方から, `$u \in S$` かつ `$v \not \in S$` であるような辺 `$e = (u, v)$` は admissible でないから, この操作の後も `$c^\pi(e) > 0 - \epsilon = - \epsilon$` を満たす.
-従って, この操作は improvable な辺や頂点を増やさない.
+従って, この操作は `$\epsilon$`-improvable な辺や頂点を増やさない.
 また, 更新前の `$\pi$` が `$\epsilon$` の整数倍であるならば更新後も `$\epsilon$` の整数倍である.
 
-どの二頂点間にも最後に improvable な辺を通るパスが存在しないような頂点部分集合をひとつ取り, `$X$` とする.
-`$e = (u, v)$` が `$v \in X$` かつ improvable であるとすると, `$X$` と閉包の定義から `$u \not \in \overline{X}$` である.
-`$\pi$` が `$(2\epsilon)$`-feasible であったことを思い出すと, この辺は `$\operatorname{CUT\_RELABEL(\overline{X})}$` によって `$c^\pi(e) > -2\epsilon + \epsilon = - \epsilon$` となり, improvable でなくなることがわかる.
-よって, このような頂点集合 `$X$` に含まれる improvable な頂点は, `$\operatorname{CUT\_RELABEL}(\overline{X})$` によって improvable でなくなる.
+どの二頂点間にも最後に `$\epsilon$`-improvable な辺を通るパスが存在しないような頂点部分集合をひとつ取り, `$X$` とする.
+`$e = (u, v)$` が `$v \in X$` かつ `$\epsilon$`-improvable であるとすると, `$X$` と閉包の定義から `$u \not \in \overline{X}$` である.
+`$\pi$` が `$(2\epsilon)$`-feasible であったことを思い出すと, この辺は `$\operatorname{CUT\_RELABEL(\overline{X})}$` によって `$c^\pi(e) > -2\epsilon + \epsilon = - \epsilon$` となり, `$\epsilon$`-improvable でなくなることがわかる.
+よって, このような頂点集合 `$X$` に含まれる `$\epsilon$`-improvable な頂点は, `$\operatorname{CUT\_RELABEL}(\overline{X})$` によって `$\epsilon$`-improvable でなくなる.
 
 これにより, Refine の実現として, 次のアルゴリズムが考えられる.
 
 1. 必要ならば Decycle する.
-2. improvable な頂点が存在しない, つまり `$\pi$` が `$\epsilon$`-feasible であれば, 終了する. そうでないとき, improvable な頂点をひとつ取り `$x$` とする.
+2. `$\epsilon$`-improvable な頂点が存在しない, つまり `$\pi$` が `$\epsilon$`-feasible であれば, 終了する. そうでないとき, `$\epsilon$`-improvable な頂点をひとつ取り `$x$` とする.
 3. `$\operatorname{CUT\_RELABEL(\overline{\set{x}})}$` を実行する
 4. 1.へ戻る
 
-上のアルゴリズムで, 2. を実行する度に improvable な頂点は減っていくから, 2. は高々 `$n$` 回実行される.
-Improvable な頂点の発見や `$\operatorname{CUT\_RELABEL(\overline{\set{x}})}$` の実行は `$O(m)$` でできるから, 上の Refine は `$O(nm)$` であり, コストスケーリング法全体の時間計算量は `$O(nm \log C)$` となる.
+上のアルゴリズムで, 2. を実行する度に `$\epsilon$`-improvable な頂点は減っていくから, 2. は高々 `$n$` 回実行される.
+`$\epsilon$`-Improvable な頂点の発見や `$\operatorname{CUT\_RELABEL(\overline{\set{x}})}$` の実行は `$O(m)$` でできるから, 上の Refine は `$O(nm)$` であり, コストスケーリング法全体の時間計算量は `$O(nm \log C)$` となる.
 
 
 ## Eliminate-Chain
@@ -212,15 +212,15 @@ $$`
 更に, `$\pi'(v) = \pi(v) + d(v) - n \epsilon$` とする.
 この `$\pi'$` によって `$\pi$` を更新するのが Eliminate-Chain である.
 
-天下り的に定義したが, これは `$P$` に含まれる improvable な辺の終点について順に `$\operatorname{CUT\_RELABEL}(\overline{\set{x}})$` を行った結果を求めていると考えてよい.
-実際 `$c^\pi_\epsilon(P_v)$` は `$P$` の始点から順に improvable な辺を通るごとに `$-\epsilon$` され, `$c'((s,v))$` はこれを表している. また, `$u$` が `$\max\set{0, c^\pi_\epsilon((u,v)) / \epsilon}$` 回 relabel されると辺 `$(u, v)$` は admissible になり, それ以降 `$u$` を relabel する度に `$v$` も relabel されることを `$c'(u, v)$` は表している.
+天下り的に定義したが, これは `$P$` に含まれる `$\epsilon$`-improvable な辺の終点について順に `$\operatorname{CUT\_RELABEL}(\overline{\set{x}})$` を行った結果を求めていると考えてよい.
+実際 `$c^\pi_\epsilon(P_v)$` は `$P$` の始点から順に `$\epsilon$`-improvable な辺を通るごとに `$-\epsilon$` され, `$c'((s,v))$` はこれを表している. また, `$u$` が `$\max\set{0, c^\pi_\epsilon((u,v)) / \epsilon}$` 回 relabel されると辺 `$(u, v)$` は admissible になり, それ以降 `$u$` を relabel する度に `$v$` も relabel されることを `$c'(u, v)$` は表している.
 
 さて, `$c'$` は `$\epsilon$` の整数倍であり, 最短経路長は `$d(v) \le c'((s, v)) = \rho(v) + n \epsilon \le n \epsilon$` を満たすから, Dial の方法[^dials_impl]による Dijkstra 法を実行することにより `$O(m)$` で計算可能である.
 また, `$\pi$`, `$c'$` は `$\epsilon$` の整数倍であるから, `$d$`, 従って `$\pi'$` も `$\epsilon$` の整数倍である.
 
 [^dials_impl]: ヒープの代わりに, priority をキーとするバケットに突っ込む方法. `$0$`-`$1$` BFS を知っている人は `$0$`-`$\cdots$`-`$n$` BFS と思ってもよい.
 
-次に, `$\pi'$` は `$(2\epsilon)$`-feasible であり, 新たに improvable な辺が作られないことを示す.
+次に, `$\pi'$` は `$(2\epsilon)$`-feasible であり, 新たに `$\epsilon$`-improvable な辺が作られないことを示す.
 任意の辺 `$e = (u, v)$` を取る.
 `$d$` の最適性から `$c'(e) + d(u) - d(v) \ge 0$` であるから,
 `$$
@@ -234,11 +234,11 @@ c^{\pi'}(e)
 &= c^\pi(e) - \max\set{0, c^\pi_\epsilon(e)}
 \end{align*}
 $$`
-となる. `$e$` がもともと improvable であるとき
+となる. `$e$` がもともと `$\epsilon$`-improvable であるとき
 `$c^\pi(e) - \max\set{0, c^\pi_\epsilon(e)} = c^\pi(e) - 0 > - 2 \epsilon$`
-であり, `$e$` がもともと improvable でなければ
+であり, `$e$` がもともと `$\epsilon$`-improvable でなければ
 `$c^\pi(e) - \max\set{0, c^\pi_\epsilon(e)} = c^\pi(e) - \epsceil{c^\pi(e)} > - \epsilon$`
-であるから, いずれにせよ `$c^{\pi'}(e) > -2 \epsilon$` であり, `$\pi'$` は `$\pi$` から improvable な辺を増やさないことがわかった.
+であるから, いずれにせよ `$c^{\pi'}(e) > -2 \epsilon$` であり, `$\pi'$` は `$\pi$` から `$\epsilon$`-improvable な辺を増やさないことがわかった.
 
 **補題1**:
 
@@ -301,14 +301,14 @@ $$`
 
 :::indent
 `$G$` に負閉路が無いとする.
-`$P$` の始点でない頂点 `$v$` が `$\pi$` で improvable であり, `$P$` において `$v$` に入る辺が `$\pi$` で improvable であるならば, `$v$` は `$\pi'$` では improvable でない.
+`$P$` の始点でない頂点 `$v$` が `$\pi$` で `$\epsilon$`-improvable であり, `$P$` において `$v$` に入る辺が `$\pi$` で `$\epsilon$`-improvable であるならば, `$v$` は `$\pi'$` では `$\epsilon$`-improvable でない.
 :::
 
 :::details **証明**:
 
 :::indent
-`$v$` が `$\pi$` でも `$\pi'$` でも improvable であるとする.
-`$\pi'$` で新たに improvable になる辺は無いから, `$\pi'$` でも `$\pi$` でも improvable な `$v$` に入る辺が存在する.
+`$v$` が `$\pi$` でも `$\pi'$` でも `$\epsilon$`-improvable であるとする.
+`$\pi'$` で新たに `$\epsilon$`-improvable になる辺は無いから, `$\pi'$` でも `$\pi$` でも `$\epsilon$`-improvable な `$v$` に入る辺が存在する.
 このような辺を任意に取り, `$e = (u, v)$` とする.
 
 `$Q$` を `$s$` から `$u$` への `$c'$`-最短パスとし, `$Q$` で `$s$` の次の頂点を `$w$` とする.
@@ -316,7 +316,7 @@ $$`
 `$$
 \begin{align*}
 -\epsilon
-&\ge c^{\pi'}(e) &\qquad (\because e \text{は} \pi' \text{で improvable}) \\
+&\ge c^{\pi'}(e) &\qquad (\because e \text{は} \pi' \text{で} \epsilon\text{-improvable}) \\
 &= c(e) + \pi'(u) - \pi'(v) &\\
 &= c(e) + (\pi(u) + d(u) - n \epsilon) - (\pi(v) + d(v) - n \epsilon) &\\
 &= c^\pi(e) + d(u) - d(v) &
@@ -334,7 +334,7 @@ d(u) - d(v)
 $$`
 であり, `$d$` は `$\epsilon$` の整数倍であったから, `$d(u) \le d(v)$`.
 
-さて, `$P$` 上で `$v$` の一つ前の辺が improvable であった. この辺を `$(x, v)$` とすると,
+さて, `$P$` 上で `$v$` の一つ前の辺が `$\epsilon$`-improvable であった. この辺を `$(x, v)$` とすると,
 `$$
 \begin{align*}
 \rho(v) - \rho(x)
@@ -399,32 +399,32 @@ $$`
 **注意**:
 
 :::indent
-上の定理では, `$P$` の improvable な辺の指す先が improvable で無くなることは証明したが, 一般に improvable な頂点が improvable で無くなることは証明していない.
+上の定理では, `$P$` の `$\epsilon$`-improvable な辺の指す先が `$\epsilon$`-improvable で無くなることは証明したが, 一般に `$\epsilon$`-improvable な頂点が `$\epsilon$`-improvable で無くなることは証明していない.
 元の論文ではこれを証明している(と主張している).
 しかし, どうにも "`$w \in P$`" と "`$w$` は `$v$` 以降に出現する" の二つの部分で行間を埋められず,
 この記事ではこのような形にした.
 
-他にも, `$P$` が improvable な辺から始まり, improvable な辺を最も多く含む `$G^\pi$` のパスであることを仮定すると, `$P$` に含まれる全ての improvable な頂点が improvable でなくなることが示せるだろう.
+他にも, `$P$` が `$\epsilon$`-improvable な辺から始まり, `$\epsilon$`-improvable な辺を最も多く含む `$G^\pi$` のパスであることを仮定すると, `$P$` に含まれる全ての `$\epsilon$`-improvable な頂点が `$\epsilon$`-improvable でなくなることが示せるだろう.
 :::
 
 
-さて, 上の定理から, improvable な辺一つからなるパスを `$P$` として Eliminate-Chain を繰返すことにより, `$O(nm)$` で Refine を実現出来ることがわかる.
+さて, 上の定理から, `$\epsilon$`-improvable な辺一つからなるパスを `$P$` として Eliminate-Chain を繰返すことにより, `$O(nm)$` で Refine を実現出来ることがわかる.
 
 
 
 ## より高速な Refine の実現
 
-Decycle した後の `$G^\pi$` に対し, その improvable な頂点全体を `$U$` とし, `$k = |U|$` とする.
-頂点集合を `$U$` とし, `$u, v \in U$` に対し, `$u$` から `$v$` へのパスで最後に improvable な辺を通るものが存在するときに辺を張ったグラフを `$H$` とする.
+Decycle した後の `$G^\pi$` に対し, その `$\epsilon$`-improvable な頂点全体を `$U$` とし, `$k = |U|$` とする.
+頂点集合を `$U$` とし, `$u, v \in U$` に対し, `$u$` から `$v$` へのパスで最後に `$\epsilon$`-improvable な辺を通るものが存在するときに辺を張ったグラフを `$H$` とする.
 
 `$G^\pi$` が DAG であったから `$H$` も DAG であり, 定理1 から `$H$` の chain 又は antichain で要素数が `$\sqrt{k}$` 以上のものが存在する.
-`$H$` の chain `$S \subset U$` は, `$S$` を含む `$G$` のパス `$P$` で, `$S$` へ入る辺が improvable なものへ展開することができる.
-一方 `$H$` の anti chain `$T \subset V$` は, どの二頂点間にも最後に improvable な辺を通るパスが存在しない.
-従って, `$H$` の chain で要素数が `$\sqrt{k}$` 以上のものがあればそれに Eliminate-Chain, そうでなければ `$H$` の antichain で要素数が `$\sqrt{k}$` 以上のものに Cut-Relabel を適用することにより, `$O(m)$` で[^actually_linear]少なくとも `$\sqrt{k}$` 個の improvable な頂点を improvable でなくすことが出来る.
+`$H$` の chain `$S \subset U$` は, `$S$` を含む `$G$` のパス `$P$` で, `$S$` へ入る辺が `$\epsilon$`-improvable なものへ展開することができる.
+一方 `$H$` の anti chain `$T \subset V$` は, どの二頂点間にも最後に `$\epsilon$`-improvable な辺を通るパスが存在しない.
+従って, `$H$` の chain で要素数が `$\sqrt{k}$` 以上のものがあればそれに Eliminate-Chain, そうでなければ `$H$` の antichain で要素数が `$\sqrt{k}$` 以上のものに Cut-Relabel を適用することにより, `$O(m)$` で[^actually_linear]少なくとも `$\sqrt{k}$` 個の `$\epsilon$`-improvable な頂点を `$\epsilon$`-improvable でなくすことが出来る.
 
-[^actually_linear]: `$H$` の構築と chain/antichain の発見に時間がかかりそうに見えるが, 実は陽に構築しないでも, `$G$` に超始点を加えたグラフで, improvable な辺を通る回数の意味での最長経路長を計算し, 定理1と同様に最長のパスか最大のバケットを取ればよい.
+[^actually_linear]: `$H$` の構築と chain/antichain の発見に時間がかかりそうに見えるが, 実は陽に構築しないでも, `$G$` に超始点を加えたグラフで, `$\epsilon$`-improvable な辺を通る回数の意味での最長経路長を計算し, 定理1と同様に最長のパスか最大のバケットを取ればよい.
 
-これを `$i$` 回繰り返した後の improvable な頂点の数を `$k_i$` とする.
+これを `$i$` 回繰り返した後の `$\epsilon$`-improvable な頂点の数を `$k_i$` とする.
 `$k_i \ge k_0/2$` である間 `$k_i - k_{i+1} \ge \sqrt{k_0 / 2}$` であるから, このような `$i$` は高々 `$(k_0 / 2) / \sqrt{k_0 / 2} = \sqrt{k_0 / 2}$` 回しかない.
 同様にして `$i$` 回目から `$O(\sqrt{k_i/2})$` 回後には少なくとも半減するから, 合計の実行回数は高々
 `$$
@@ -439,7 +439,7 @@ $$`
 ## 補足1: feasibility, improvable, admissible などを別の定義にした場合
 
 `$\epsilon$`-feasibility を `$c^\pi(e) \ge -\epsilon$` で定義することも出来る.
-同時に, admissible edge は `$c^\pi(e) < 0$`, improvable edge は `$c^\pi(e) < -\epsilon$` で定める.
+同時に, admissible edge は `$c^\pi(e) < 0$`, `$\epsilon$`-improvable edge は `$c^\pi(e) < -\epsilon$` で定める.
 すると, admissible edge から `$=0$` が抜けたことにより, admissible graph は (decycle せずとも) DAG になる.
 
 一方で, `$1$`-feasible な整数ポテンシャルであっても feasible とは限らなくなる.
