@@ -7,7 +7,7 @@ Docker を入れる.
 `./shell.sh` で docker container の中で bash を開く.
 
 
-# fromtmatter に書くこと
+# front matter に書くこと
 
     problem:
         round: SRM650
