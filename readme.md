@@ -1,7 +1,11 @@
-# 重要
+# 起動とか
 
-``bundle exec middleman`` で起動.
-``bundle exec middleman build`` でビルド.
+Docker を入れる.
+`./docker-build.sh` で dockar image を作る.
+`./run.sh` で起動し, [localhost:4567](localhost:4567) でプレビュー.
+`./build.sh` で git submodule である `MiSawa.github.io/` にビルドされる.
+`./shell.sh` で docker container の中で bash を開く.
+
 
 # fromtmatter に書くこと
 
