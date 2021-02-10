@@ -21,6 +21,7 @@ gem 'middleman-blog'
 gem 'middleman-compass'
 gem 'middleman-sprockets'
 gem 'kramdown'
+gem 'kramdown-parser-gfm'
 gem 'redcarpet'
 
 # redcarpet より kramdown のがいいっぽい???
