@@ -33,17 +33,3 @@ int main(){
 }
 ~~~
 
-> ### hoge
->
-> foo
-
-<div class="fold" style="display: none;">
-fizz buzz
-
-~~~ cpp
-#include<bits/stdc++.h>
-using namespace std;
-int main(){ return 0; }
-~~~
-</div>
-
