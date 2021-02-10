@@ -116,11 +116,6 @@ class ::Kramdown::Parser::ExMarkdown < ::Kramdown::Parser::GFM
     true
   end
 
-  def update_elements(element)
-    # The super implementation splits lines and inserts </br>.
-    # I don't want this behavior.
-  end
-
   define_parser(:indentation, INDENTATION_START)
   define_parser(:details, DETAILS_START)
 end

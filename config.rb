@@ -85,7 +85,8 @@ set :markdown,
   typographic_symbols: {
     hellip: '...',
   },
-  input: :ExMarkdown
+  input: :ExMarkdown,
+  hard_wrap: false
 
 
 activate :syntax, :line_numbers => true
