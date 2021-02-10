@@ -7,7 +7,7 @@ secret: false
 
 ---
 <div style="display:none">$$
-\newcommand{\floor}[1]{\lfloor\,#1\,\rfloor}
+\gdef{\floor}#1{\lfloor\,#1\,\rfloor}
 $$</div>
 # 誤差と戦う小手先のテク
 
