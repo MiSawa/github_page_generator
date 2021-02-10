@@ -7,15 +7,15 @@ secret: false
 
 ---
 <div style="display:none">$$
-\newcommand{\vec}[1]{\mathbf{#1}}
-\def\vecb{\vec{b}}
-\def\veczero{\vec{0}}
-\def\vecf{\vec{f}}
-\def\exG{\overleftrightarrow{G}}
-\def\label{\operatorname{label}}
-\def\ce{\operatorname{current\_edge}}
-\def\fe{\operatorname{first\_edge}}
-\def\ne{\operatorname{next\_edge}}
+\gdef\vec#1{\mathbf{#1}}
+\gdef\vecb{\vec{b}}
+\gdef\veczero{\vec{0}}
+\gdef\vecf{\vec{f}}
+\gdef\exG{\overleftrightarrow{G}}
+\gdef\label{\operatorname{label}}
+\gdef\ce{\operatorname{current\_edge}}
+\gdef\fe{\operatorname{first\_edge}}
+\gdef\ne{\operatorname{next\_edge}}
 $$</div>
 
 # Dinic 法とその時間計算量

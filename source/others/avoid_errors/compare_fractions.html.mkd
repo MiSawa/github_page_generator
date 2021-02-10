@@ -7,8 +7,8 @@ secret: false
 
 ---
 <div style="display:none">$$
-\newcommand{\intpart}[1]{\lfloor\,#1\,\rfloor}
-\newcommand{\properpart}[1]{\left\{\,#1\,\right\}}
+\gdef{\intpart}#1{\lfloor\,#1\,\rfloor}
+\gdef{\properpart}#1{\left\{\,#1\,\right\}}
 $$</div>
 
 # 有理数同士の大小比較
