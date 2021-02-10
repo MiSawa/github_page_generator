@@ -95,11 +95,6 @@ activate :relative_assets
 set :relative_links, true
 set :strip_index_file, false
 
-# TODO config.rb から, ページ指定して書けるようにしたいね.
-
-# require 'lib/build_twice'
-# activate :build_twice
-
 require 'lib/fix_url'
 require 'lib/tags'
 require 'lib/secret'
