@@ -36,8 +36,8 @@ $$</div>
 - `void add_edge(from, to, lower bound, upper bound, cost)`**:** 流量上下限制約のついた辺を追加する.
 - `void add_supply(vertex, amount)`**:** 頂点に湧出しを追加する.
 - `void add_demand(vertex, amount)`**:** 頂点に吸込みを追加する.
-- `Result&lt;Cost&gt; solve()`**:** 最小費用 `$\vecb$`-フロー問題を解き, 最小費用を返すか, 問題が infeasible であることを報告する.
-- `Result&lt;(Flow, Cost)&gt; solve(source, sink)`**:** 最小費用最大流問題に対応する. `$f \ge 0$` を `add_supply(source, f)` と `add_demand(sink, f)` をした後の制約を満たすフローが存在するような最大の `$f$` とし, この `$f$` に加えてその時の最小費用を返す.
+- `Result<Cost> solve()`**:** 最小費用 `$\vecb$`-フロー問題を解き, 最小費用を返すか, 問題が infeasible であることを報告する.
+- `Result<(Flow, Cost)> solve(source, sink)`**:** 最小費用最大流問題に対応する. `$f \ge 0$` を `add_supply(source, f)` と `add_demand(sink, f)` をした後の制約を満たすフローが存在するような最大の `$f$` とし, この `$f$` に加えてその時の最小費用を返す.
 - 最適解の各辺の流量の復元が簡単にできる.
 
 一方で, 速いライブラリを書くことは, この記事の目標ではないことに注意されたい.
