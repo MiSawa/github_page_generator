@@ -1,0 +1,66 @@
+// Hamburger
+
+#nav-hamburger-checkbox {
+    display: none;
+}
+#nav-hamburger-checkbox:checked ~ nav ul {
+    display: block;
+    @include mq($from: tablet) {
+        display: flex;
+    }
+}
+#menu-toggle-icon .close {
+    display: none;
+}
+#nav-hamburger-checkbox:checked ~ * .hamburger {
+    display: none;
+}
+#nav-hamburger-checkbox:checked ~ * .close {
+    display: block;
+}
+#nav-hamburger-button {
+    display: flex;
+    padding-left: 8px;
+    padding-top: 8px;
+}
+#nav-hamburger-checkbox:checked ~ #nav-hamburger-button {
+    position: absolute;
+}
+
+@include mq($from: tablet) {
+    #nav-hamburger-button {
+        display: none;
+    }
+}
+
+// Nav bar
+nav ul {
+    display: none;
+    margin-top: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    @include mq($from: tablet) {
+        display: flex;
+        border: 1px solid;
+    }
+}
+nav li {
+    @include mq($from: tablet) {
+        flex: 1;
+    }
+}
+nav a:link, nav a:visited {
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    @include mq($from: tablet) {
+        border: 1px solid;
+    }
+}

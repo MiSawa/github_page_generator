@@ -1,37 +1,13 @@
 @import 'all_bck';
-// $mq-show-breakpoints: (mobile, tablet, desktop);
+$mq-show-breakpoints: (mobile, tablet, desktop);
 @import '_mq';
 @import 'katex';
+@import './menu.css.scss';
 
 body {
     margin: auto;
     max-width: 1500px;
     padding-bottom: 2em;
-}
-
-nav ul {
-    margin-left: 1em;
-    margin-right: 1em;
-    padding: 0;
-    list-style: none;
-    border: 1px solid;
-    @include mq($from: tablet) {
-        display: flex;
-    }
-}
-nav li {
-    @include mq($from: tablet) {
-        flex: 1;
-    }
-}
-nav a:link, nav a:visited {
-    border: 1px solid;
-    text-decoration: none;
-    display: block;
-    padding: 10px;
-    color: #333;
-    font-weight: bold;
-    text-align: center;
 }
 
 main {
