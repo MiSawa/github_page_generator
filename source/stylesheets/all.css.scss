@@ -1,5 +1,4 @@
 @import 'all_bck';
-$mq-show-breakpoints: (mobile, tablet, desktop);
 @import '_mq';
 @import 'katex';
 @import './menu.css.scss';
@@ -75,6 +74,11 @@ code>table {
         border-left: 1px solid #000;
     }
 }
+pre span {
+    word-wrap: normal;
+    white-space: pre;
+    overflow-x: auto;
+}
 
 div.indent {
     padding-left: 1em;
@@ -89,14 +93,14 @@ div.indent {
 }
 
 .social_button_box {
-    display: none;
     position: absolute;
-    top: 1em;
-    right: 2em;
+    top: 11px;
+    right: 1em;
     .social_button {
         vertical-align: middle;
         padding: 2px;
         .hatena-star-add-button {
+            transform: scale(1.2, 1.2) translate(0, -4px);
             background-color: #FAFAFA;
         }
     }
