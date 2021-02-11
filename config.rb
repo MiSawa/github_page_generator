@@ -56,7 +56,7 @@ set :images_dir, 'images'
 # Build-specific configuration
 configure :build do
   # For example, change the Compass output style for deployment
-  activate :minify_css # sass, 勝手にコメントで filepath 埋め込むの死んでくれ.
+  activate :minify_css
 
   # Minify Javascript on build
   # activate :minify_javascript
@@ -122,7 +122,7 @@ STYLE
 Hatena.Star.Token = 'bd3a38c3b5f80b3ffb7ac27a6d10b8a144d8a948';
 Hatena.Star.SiteConfig = {
   entryNodes: {
-    'div#main' : {
+    'main' : {
       uri: 'document.location',
       title: 'document.title',
       container: 'span.hatena_star'

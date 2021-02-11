@@ -1,25 +1,48 @@
-@import "all_bck";
+@import 'all_bck';
+// $mq-show-breakpoints: (mobile, tablet, desktop);
+@import '_mq';
+@import 'katex';
 
-html {
-    height: 100vh;
-}
 body {
-    #menu {
-        float: left;
-        position: absolute;
-        width: 130px;
-        min-height: calc(100% - 2em);
-        border-right: 2px ridge #AAA;
-        margin-top: 1em;
-    };
-    #main {
-        margin-left: 175px;
-        margin-right: 30px;
-        max-width: 95%;
-        padding-bottom: 2em;
-    };
-    margin: 0.25%;
-    height: 95%;
+    margin: auto;
+    max-width: 1500px;
+    padding-bottom: 2em;
+}
+
+nav ul {
+    margin-left: 1em;
+    margin-right: 1em;
+    padding: 0;
+    list-style: none;
+    border: 1px solid;
+    @include mq($from: tablet) {
+        display: flex;
+    }
+}
+nav li {
+    @include mq($from: tablet) {
+        flex: 1;
+    }
+}
+nav a:link, nav a:visited {
+    border: 1px solid;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+}
+
+main {
+    @include mq($until: tablet) {
+        margin-left: 2em;
+        margin-right: 1em;
+    }
+    @include mq($from: tablet) {
+        margin-left: 3em;
+        margin-right: 3em;
+    }
 }
 
 // Undo what normalize.css does
@@ -28,9 +51,15 @@ summary {
     display: revert;
 }
 
+h1 {
+    text-align: center;
+}
 h2 {
     margin-top: 1.5em;
-    margin-left: -0.7em;
+    margin-left: -1em;
+}
+ul {
+    padding-left: 1em;
 }
 
 div.tag {
@@ -84,6 +113,7 @@ div.indent {
 }
 
 .social_button_box {
+    display: none;
     position: absolute;
     top: 1em;
     right: 2em;
