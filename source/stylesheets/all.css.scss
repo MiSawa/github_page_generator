@@ -10,10 +10,8 @@ body {
 }
 
 main {
-    @include mq($until: tablet) {
-        margin-left: 2em;
-        margin-right: 1em;
-    }
+    margin-left: 2em;
+    margin-right: 1em;
     @include mq($from: tablet) {
         margin-left: 3em;
         margin-right: 3em;
@@ -96,6 +94,10 @@ div.indent {
     position: absolute;
     top: 11px;
     right: 1em;
+    @include mq($from: tablet) {
+        top: 3.5em;
+        right: 2em;
+    }
     .social_button {
         vertical-align: middle;
         padding: 2px;
