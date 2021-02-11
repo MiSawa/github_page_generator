@@ -268,10 +268,10 @@ $$`
 `$$
 \begin{aligned}
 c^\pi(R_{w,v})
-& \leq c'(R_{w,v}) &\qquad (\because c^\pi \leq c') \\
+& \leq c'(R_{w,v}) & (\because c^\pi \leq c') \\
 & = c'(R) - c'((s, w)) &\\
 &= c'(R) - (\rho(w) + n \epsilon) &\\
-&\leq (\rho(v) + n \epsilon - \epsilon) - (\rho(w) + n \epsilon) &\qquad (\because \text{上の不等式})\\
+&\leq (\rho(v) + n \epsilon - \epsilon) - (\rho(w) + n \epsilon) & (\because \text{上の不等式})\\
 &= \rho(v) - \rho(w) - \epsilon.&
 \end{aligned}
 $$`
@@ -321,7 +321,7 @@ $$`
 `$$
 \begin{aligned}
 -\epsilon
-&\ge c^{\pi'}(e) &\qquad (\because e \text{は} \pi' \text{で} \epsilon\text{-improvable}) \\
+&\ge c^{\pi'}(e) &(\because e \text{は} \pi' \text{で} \epsilon\text{-improvable}) \\
 &= c(e) + \pi'(u) - \pi'(v) &\\
 &= c(e) + (\pi(u) + d(u) - n \epsilon) - (\pi(v) + d(v) - n \epsilon) &\\
 &= c^\pi(e) + d(u) - d(v) &
@@ -352,15 +352,15 @@ $$`
 `$$
 \begin{aligned}
 \rho(w)
-&= c'((s, w)) - n \epsilon &\qquad (\because c' \text{の定義})\\
+&= c'((s, w)) - n \epsilon &(\because c' \text{の定義})\\
 &= c'(Q) - c'(Q_{w, u}) - n \epsilon &\\
-&\le d(u) - c'(Q_{w, u}) - n \epsilon &\qquad (\because Q \text{は最短路}) \\
-&\le d(u) - n \epsilon &\qquad (\because c' \text{: 非負}) \\
+&\le d(u) - c'(Q_{w, u}) - n \epsilon &(\because Q \text{は最短路}) \\
+&\le d(u) - n \epsilon & (\because c' \text{: 非負}) \\
 &\le d(v) - n \epsilon &\\
-&= (\pi'(v) - \pi(v) + n \epsilon) - n \epsilon &\qquad (\because \pi'\text{の定義}) \\
-&= \rho(v) &\qquad (\because \text{補題1}) \\
-&\le \rho(x) - \epsilon &\qquad (\because \text{上の不等式}) \\
-&\le - \epsilon &\qquad (\because \rho \text{は非正})
+&= (\pi'(v) - \pi(v) + n \epsilon) - n \epsilon & (\because \pi'\text{の定義}) \\
+&= \rho(v) & (\because \text{補題1}) \\
+&\le \rho(x) - \epsilon & (\because \text{上の不等式}) \\
+&\le - \epsilon & (\because \rho \text{は非正})
 \end{aligned}
 $$`
 であるから, `$\rho(w) \le \rho(v) < \rho(x) \le 0$` である.
@@ -383,9 +383,9 @@ $$`
 `$$
 \begin{aligned}
 c^{\pi'}(Q_{w,u})
-&= c^\pi(Q_{w,u}) + d(w) - d(u) &\qquad (\because \pi'\text{の定義}) \\
-&\le c'(Q_{w,u}) + d(w) - d(u) &\qquad (\because c^\pi \le c') \\
-&= 0 &\qquad (\because Q_{w,u} \text{は最短路, } d \text{は最短路長})
+&= c^\pi(Q_{w,u}) + d(w) - d(u) & (\because \pi'\text{の定義}) \\
+&\le c'(Q_{w,u}) + d(w) - d(u) & (\because c^\pi \le c') \\
+&= 0 & (\because Q_{w,u} \text{は最短路, } d \text{は最短路長})
 \end{aligned}
 $$`
 であり, これと `$c^{\pi'}(e) \le -\epsilon$` から, `$P_{v,w}$`, `$Q_{w,u}$`, `$e$` を繋げた閉路 `$C$` は
