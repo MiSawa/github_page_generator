@@ -60,15 +60,15 @@ ga('send', 'pageview');
     </header>
 
     <main>
-      <!--
-      <span class="social_button_box">
-        <% for button in social_buttons %>
-          <span class="social_button" style="<%= button.style %>">
-            <%= button.html %>
-          </span>
-        <% end %>
-      </span>
-      -->
+      <% unless social_buttons.empty? %>
+        <span class="social_button_box">
+          <% for button in social_buttons %>
+            <span class="social_button" style="<%= button.style %>">
+              <%= button.html %>
+            </span>
+          <% end %>
+        </span>
+      <% end %>
 
       <article>
         <%= yield %>

@@ -144,7 +144,8 @@ end
 
 helpers do
   def social_buttons
-    return [ SocialButton::hatena_star, SocialButton::tweet_button ]
+    #return [ SocialButton::hatena_star, SocialButton::tweet_button ]
+    return []
   end
 end
 
