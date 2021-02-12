@@ -31,7 +31,6 @@ $ n $ と $ n - 1 $ が両方素数である, $ 3 $ がコーナーケース.
 ### ソースコード
 
 ~~~ cpp
-
 // 245.71 pts
 
 long long MagicDiamonds::minimalTransfer( long long n ){

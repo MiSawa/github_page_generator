@@ -32,7 +32,6 @@ $ 0 \le h \le 10^6 $
 ### ソースコード
 
 ~~~ cpp
-
 // 231.16 pts
 
 constexpr int mod = 1000000007;

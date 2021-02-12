@@ -49,7 +49,6 @@ $ O(n^3) $ だけど, 適当に DP すると $ O(n^2) $ とかでも解ける.
 ### ソースコード
 
 ~~~ cpp
-
 // 211.43 pts
 
 int GUMIAndSongsDiv1::maxSongs( vector <int> duration, vector <int> tone, int T ){

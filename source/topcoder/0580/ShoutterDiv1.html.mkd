@@ -51,7 +51,6 @@ $ 1 \le N \le 2500 $.
 ### ソースコード
 
 ~~~ cpp
-
 // 180.00 pts
 
 int ShoutterDiv1::count( vector <string> s1000, vector <string> s100, vector <string> s10, vector <string> s1, vector <string> t1000, vector <string> t100, vector <string> t10, vector <string> t1 ){

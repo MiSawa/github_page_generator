@@ -45,7 +45,6 @@ $ 1 \le n \le 50,\ 1 \le \mathit{depth}_i \le 10^5 $.
 ### ソースコード
 
 ~~~ cpp
-
 // 187.12 pts
 
 long long Excavations::count( vector <int> kind, vector <int> depth, vector <int> found_, int K ){

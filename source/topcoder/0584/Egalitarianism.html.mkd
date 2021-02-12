@@ -33,7 +33,6 @@ $ 1 \le n \le 50 $.
 ### ソースコード
 
 ~~~ cpp
-
 // 230.81 pts
 
 int Egalitarianism::maxDifference( vector <string> g, int D ){

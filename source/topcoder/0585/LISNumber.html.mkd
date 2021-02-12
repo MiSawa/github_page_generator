@@ -43,7 +43,6 @@ $ \mathit{dp}_i[k] $ を, $ i $ まで入れて, 現在の LIS-number が $ k $ 
 ### ソースコード
 
 ~~~ cpp
-
 // 285.00 pts
 
 constexpr int mod = 1000000007;

@@ -30,7 +30,6 @@ BFS すればよい.
 ### ソースコード
 
 ~~~ cpp
-
 // 243.97 pts
 
 int TravelOnMars::minTimes( vector <int> range, int startCity, int endCity ){

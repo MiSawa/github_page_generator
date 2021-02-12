@@ -36,7 +36,6 @@ $ 1 \le N \le 50 $.
 ### ソースコード
 
 ~~~ cpp
-
 // 236.25 pts
 
 int EelAndRabbit::getmax( vector <int> l, vector <int> t ){

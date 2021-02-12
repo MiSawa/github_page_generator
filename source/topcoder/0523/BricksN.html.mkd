@@ -50,7 +50,6 @@ $ 1 \le w, h \le 50,\ 1 \le k \le w $.
 ### ソースコード
 
 ~~~ cpp
-
 // 192.24 pts
 
 constexpr int mod = 1000000007;

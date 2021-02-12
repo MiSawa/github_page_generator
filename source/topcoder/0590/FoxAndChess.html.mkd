@@ -38,7 +38,6 @@ $ 1 \le n \le 50 $
 ### ソースコード
 
 ~~~ cpp
-
 // 242.37 pts
 
 string FoxAndChess::ableToMove( string start, string goal ){

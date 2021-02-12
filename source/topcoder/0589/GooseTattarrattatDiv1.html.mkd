@@ -39,7 +39,6 @@ $ 1 \le n \le 50 $.
 ### ソースコード
 
 ~~~ cpp
-
 // 241.95 pts
 
 int GooseTattarrattatDiv1::getmin( string s ){
