@@ -11,7 +11,8 @@
     <title><%= get_title current_resource %> - みさわめも</title>
 
     <%= stylesheet_link_tag 'normalize', 'all', 'rouge' %>
-    <%= javascript_include_tag 'base' %>
+    <%= partial 'layouts/katex' %>
+
     <% if current_resource.data.header %>
         <%= current_resource.data.header %>
     <% end %>
