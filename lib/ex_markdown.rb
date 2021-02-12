@@ -90,7 +90,9 @@ class ::Kramdown::Parser::ExMarkdown < ::Kramdown::Parser::GFM
       el.children << summary_el
       env = save_env
       reset_env(:src => Kramdown::Utils::StringScanner.new(summary, start_line_number))
-      parse_spans(summary_el, /\n/)
+      parse_spans(summary_el)
+      p summary
+      p summary_el
       restore_env env
     end
 
