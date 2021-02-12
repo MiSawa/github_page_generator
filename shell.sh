@@ -13,5 +13,10 @@ function get_this_dir() {
 
 readonly this_dir="$(get_this_dir)"
 
-docker run -it --rm -v"${this_dir}":'/app' -w '/app' -p4567:4567 'ghgen' bash
-
+docker run -it --rm \
+  -u "$(id -u "$USER"):$(id -g "$USER")" \
+  -v "${this_dir}:/app" \
+  -w '/app' \
+  -p '4567:4567' \
+  'ghgen' \
+  bash
