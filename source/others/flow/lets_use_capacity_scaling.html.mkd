@@ -390,8 +390,7 @@ Z. Király and P. Kovács (2012) の Capacity Scaling (CAS) は恐らく上記�
 
 ## ソースコード
 
-<pre class='fold_button'>長いので折りたたみ</pre>
-<pre class='fold_begin'></pre>
+:::details 長いので折りたたみ
 ```cpp
 #include <algorithm>
 #include <cassert>
@@ -641,7 +640,7 @@ public:
 template <class Flow, class Cost>
 using MaxGainFlow = MinCostFlow<Flow, Cost, Objective::MAXIMIZE>;
 ```
-<pre class='fold_end'></pre>
+:::
 
 
 ## 使用例
@@ -649,8 +648,7 @@ using MaxGainFlow = MinCostFlow<Flow, Cost, Objective::MAXIMIZE>;
 ### Library-Checker: Minimum cost b-flow
 問題は[こちら](https://judge.yosupo.jp/problem/min_cost_b_flow)
 
-<pre class='fold_button'>長いので折りたたみ</pre>
-<pre class='fold_begin'></pre>
+:::details 長いので折りたたみ
 ```cpp
 namespace methods_to_add {
   // 以下の3つの関数を MinCostFlow クラスに追加する
@@ -771,4 +769,4 @@ int main(void) {
   }
 }
 ```
-<pre class='fold_end'></pre>
+:::

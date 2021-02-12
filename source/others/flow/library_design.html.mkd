@@ -398,8 +398,7 @@ dual step で計算した最短経路森に従い, フローを流すだけ.
 
 ## ソースコード
 
-<pre class='fold_button'>長いので折りたたみ</pre>
-<pre class='fold_begin'></pre>
+:::details 長いので折りたたみ
 
 ```cpp
 #include <algorithm>
@@ -655,7 +654,7 @@ public:
 template <class Flow, class Cost>
 using MaxGainFlow = MinCostFlow<Flow, Cost, Objective::MAXIMIZE>;
 ```
-<pre class='fold_end'></pre>
+:::
 
 ## 使用例
 

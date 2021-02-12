@@ -193,8 +193,8 @@ int sgn(const R& a, const R &b){ return sgn(a - b); }
 
 問題文は[こちら](http://jag2015autumn.contest.atcoder.jp/tasks/icpc2015autumn_i).
 
-<pre class='fold_button'>ネタバレを含むので折りたたみ</pre>
-<pre class='fold_begin'></pre>
+:::details ネタバレを含むので折りたたみ
+
 この問題は, 大雑把にいうと二つのパートにわかれる.
 
 0. 橋の長さが最も短くなるような橋の候補を列挙する.
@@ -216,8 +216,7 @@ int sgn(const R& a, const R &b){ return sgn(a - b); }
 今回の場合, "大小比較" が出来なければならず, 除算もあるから, 有理数で扱うとよい.
 
 少し計算すればわかるが, これは分母子を 64 bit の整数型で表した有理数型で扱える範囲の数になる.
-<pre class='fold_end'></pre>
-
+:::
 
 
 ## おわり
