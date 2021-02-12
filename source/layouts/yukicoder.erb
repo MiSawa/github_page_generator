@@ -5,9 +5,6 @@
 <% current_resource.add_metadata(
   title: "yukicoder " + ("%04d" % id) + " " + problem.name
 ) %>
-<% current_resource.add_metadata(
-  header: (javascript_include_tag 'foldh3')
-) %>
 
 <% wrap_layout :outer do %>
   <h2> <%= current_resource.metadata[:title] %> </h2>

@@ -3,9 +3,6 @@
 <% current_resource.add_metadata(
   title: problem.contest + " " + problem.id + " " + problem.name
 ) %>
-<% current_resource.add_metadata(
-  header: (javascript_include_tag 'foldh3')
-) %>
 
 <% wrap_layout :outer do %>
   <h2> <%= current_resource.metadata[:title] %> </h2>
