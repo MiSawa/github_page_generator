@@ -8,6 +8,7 @@ gem 'middleman-syntax'
 gem 'middleman-blog'
 gem 'middleman-compass'
 gem 'middleman-sprockets'
+gem 'middleman-meta-tags'
 gem 'kramdown'
 gem 'kramdown-parser-gfm'
 

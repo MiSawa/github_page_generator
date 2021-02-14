@@ -60,10 +60,6 @@ div.footnotes {
     }
 }
 
-.fold-plus {
-    font-weight: bold;
-}
-
 div.indent {
     padding-left: 1em;
 }
@@ -75,22 +71,4 @@ div.indent {
         border: 1px solid #000;
     }
 }
-
-// .social_button_box {
-//     position: absolute;
-//     top: 11px;
-//     right: 1em;
-//     @include mq($from: tablet) {
-//         top: 3.5em;
-//         right: 2em;
-//     }
-//     .social_button {
-//         vertical-align: middle;
-//         padding: 2px;
-//         .hatena-star-add-button {
-//             transform: scale(1.2, 1.2) translate(0, -4px);
-//             background-color: #FAFAFA;
-//         }
-//     }
-// }
 

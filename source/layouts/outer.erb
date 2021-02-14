@@ -12,12 +12,6 @@
     <%= stylesheet_link_tag 'normalize', 'all', 'rouge' %>
     <%= partial 'layouts/katex' %>
 
-    <% if current_resource.data.header %>
-        <%= current_resource.data.header %>
-    <% end %>
-    <% if current_resource.metadata[:header] %>
-        <%= current_resource.metadata[:header] %>
-    <% end %>
     <% for button in social_buttons %>
       <%= button.js %>
     <% end %>

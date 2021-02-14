@@ -104,6 +104,8 @@ GEM
       em-websocket (~> 0.5.1)
       middleman-core (>= 3.3)
       rack-livereload (~> 0.3.15)
+    middleman-meta-tags (0.6.0)
+      middleman-core (>= 3.0.0)
     middleman-sprockets (4.0.0)
       middleman-core (~> 4.0)
       sprockets (>= 3.0)
@@ -167,6 +169,7 @@ DEPENDENCIES
   middleman-compass
   middleman-deploy (~> 2.0.0.pre.alpha)
   middleman-livereload
+  middleman-meta-tags
   middleman-sprockets
   middleman-syntax
   pry
