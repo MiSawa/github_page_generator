@@ -95,6 +95,8 @@ activate :relative_assets
 set :relative_links, true
 set :strip_index_file, false
 
+activate :meta_tags;
+
 require 'lib/fix_url'
 require 'lib/tags'
 require 'lib/secret'
@@ -174,6 +176,17 @@ helpers do
       title ||= resource.url
     end
     title
+  end
+
+  def show_meta_tags(resource)
+    set_meta_tags(viewport: 'width=device-width,initial-scale=1')
+    resource.data[:title] ||= get_title(resource)
+    auto_set_meta_tags
+    set_meta_tags('twitter:title': resource.data[:title])
+    set_meta_tags('twitter:creator': '@Mi_Sawa')
+    set_meta_tags('twitter:site': '@Mi_Sawa')
+    set_meta_tags('twitter:card': 'summary')
+    display_meta_tags
   end
 end
 
