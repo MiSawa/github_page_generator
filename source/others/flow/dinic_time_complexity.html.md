@@ -4,6 +4,7 @@ title: Dinic 法とその時間計算量
 date: 2021/01/15
 tags: [フロー, 最大流]
 secret: false
+description: Dinic 法の実装手法の解説と時間計算量の解析、特殊なグラフ上での時間計算量の解析。
 
 ---
 <div style="display:none">$$

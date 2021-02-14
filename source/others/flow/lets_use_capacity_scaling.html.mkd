@@ -4,6 +4,7 @@ title: 容量スケーリング法のすゝめ
 date: 2020/09/30
 tags: [フロー, 最小費用流]
 secret: false
+description: 最小費用流問題に対する、単純な割に高速なアルゴリズムの一つである容量スケーリング法の実装と解説。
 
 ---
 <div style="display:none">$$

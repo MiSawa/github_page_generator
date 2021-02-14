@@ -4,6 +4,7 @@ title: 高速 Kitamasa 法
 date: 2015/04/24
 tags: [数列, 多項式, Kitamasa法]
 secret: false
+description: 線型漸化式のn項目を求める通称きたまさ法と、それを高速化した高速きたまさ法の解説。
 
 ---
 <div style="display:none">$$

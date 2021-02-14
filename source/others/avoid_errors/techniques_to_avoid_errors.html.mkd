@@ -4,6 +4,7 @@ title: 誤差と戦う小手先のテク
 date: 2015/12/16
 tags: [誤差]
 secret: false
+description: 競技プログラミングで、誤差による誤答を回避するためのテクニック集。
 
 ---
 <div style="display:none">$$

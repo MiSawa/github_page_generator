@@ -4,6 +4,7 @@ title: 有理数同士の大小比較
 date: 2015/11/26
 tags: [有理数]
 secret: false
+description: 有理数の大小比較をオーバーフローしないように実装する手法について。
 
 ---
 <div style="display:none">$$

@@ -4,6 +4,7 @@ title: ぼくの考えたさいきょうのフローライブラリ
 date: 2020/06/27
 tags: [フロー, 最大流, 最小費用流]
 secret: false
+description: 最小費用b-フロー (b-flow) の紹介と、それを用いた競技プログラミング用ライブラリの実装。
 
 ---
 <div style="display:none">$$

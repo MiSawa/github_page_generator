@@ -4,6 +4,7 @@ title: 最短経路問題に対するコストスケーリング法
 date: 2021/02/05
 tags: [フロー, 最短路]
 secret: false
+description: 負辺を許容する最短経路問題の O(sqrt(n) m log C) アルゴリズムである、コストスケーリング法の解説。
 
 ---
 <div style="display:none">$$
