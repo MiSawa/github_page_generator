@@ -179,7 +179,7 @@ helpers do
   end
 
   def show_meta_tags(resource)
-    set_meta_tags(viewport: 'width=device-width,initial-scale=1')
+    set_meta_tags(viewport: 'width=device-width, initial-scale=1')
     resource.data[:title] ||= get_title(resource)
     auto_set_meta_tags
     set_meta_tags('twitter:title': resource.data[:title])
