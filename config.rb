@@ -71,10 +71,11 @@ configure :build do
   # set :http_prefix, "/Content/images/"
 end
 
-
 activate :sprockets do |c|
   c.expose_middleman_helpers = true
 end
+
+activate :vcs_time
 
 require 'lib/ex_markdown'
 set :markdown_engine, :kramdown
@@ -95,7 +96,7 @@ activate :relative_assets
 set :relative_links, true
 set :strip_index_file, false
 
-activate :meta_tags;
+activate :meta_tags
 
 require 'lib/fix_url'
 require 'lib/tags'

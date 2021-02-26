@@ -11,6 +11,8 @@ gem 'middleman-sprockets'
 gem 'middleman-meta-tags'
 gem 'kramdown'
 gem 'kramdown-parser-gfm'
+gem 'builder'
+gem 'middleman-vcs-time'
 
 # gem 'middleman-navtree', '0.1.8'
 # tree_to_html の
