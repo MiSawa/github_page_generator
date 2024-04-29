@@ -19,4 +19,5 @@ build_twice: true
 - (競技プログラミングの文脈で)誤差と戦う
   - [誤差と戦う小手先のテク](./avoid_errors/techniques_to_avoid_errors.html)
   - [有理数同士の比較](./avoid_errors/compare_fractions.html)
+- [二分探索木の meld](./meld_binary_search_trees.html)
 
