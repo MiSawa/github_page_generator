@@ -109,4 +109,8 @@ fn meld(mut lhs: Tree, mut rhs: Tree) -> Tree {
 
 1. Codeforces の [TLE](https://codeforces.com/profile/TLE) によるブログ記事 [using merging segment tree to solve problems about sorted list][codeforces_blog]
 
+## 追記
+
+[先行研究](https://twitter.com/noshi91/status/1549076545154990080)を[教えてもらいました](https://twitter.com/noshi91/status/1784855285984866613). さすが熨斗袋さん.
+
 [codeforces_blog]: https://codeforces.com/blog/entry/49446 "using merging segment tree to solve problems about sorted list"
