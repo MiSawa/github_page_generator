@@ -19,3 +19,8 @@
 
 # Ignore binaries
 *.out
+
+
+# Added by cargo
+
+/target
