@@ -1,10 +1,10 @@
 [tasks.generate]
 command = "cargo"
-args = ["run", "--", "--source", "./new_source", "--target", "./build", "--global-values", "./values.yaml"]
+args = ["run", "--", "--source", "./source", "--target", "./build", "--global-values", "./values.yaml"]
 
 [tasks.watch]
 run_task = "generate"
-watch = { watch = ["./values.yaml", "./new_source"] }
+watch = { watch = ["./values.yaml", "./source"] }
 
 [tasks.serve]
 install_crate = "miniserve"
