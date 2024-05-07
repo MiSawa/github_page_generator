@@ -165,7 +165,7 @@ fn main() -> Result<()> {
         )
     });
     source_tree.route(
-        "{{index,contests,about,others/**/*}.html}.mkd",
+        "{{index,contests,about,others/**/*}.html}.md",
         |builder, matched| {
             register_markdown_page(
                 builder,
@@ -183,7 +183,7 @@ fn main() -> Result<()> {
             matched.get(1).unwrap(),
         )
     });
-    source_tree.route("{aoj/*.html}.mkd", |builder, matched| {
+    source_tree.route("{aoj/*.html}.md", |builder, matched| {
         register_markdown_page(
             builder,
             "problem",
@@ -192,7 +192,7 @@ fn main() -> Result<()> {
             Some("AOJ {{problem.id}} {{problem.name}}"),
         )
     });
-    source_tree.route("{atcoder/**/*.html}.mkd", |builder, matched| {
+    source_tree.route("{atcoder/**/*.html}.md", |builder, matched| {
         register_markdown_page(
             builder,
             "problem",
@@ -201,7 +201,7 @@ fn main() -> Result<()> {
             Some("{{problem.contest}} {{problem.id}} {{problem.name}}"),
         )
     });
-    source_tree.route("{topcoder/*/index.html}.mkd", |builder, matched| {
+    source_tree.route("{topcoder/*/index.html}.md", |builder, matched| {
         register_markdown_page(
             builder,
             "topcoder_contest",
@@ -210,7 +210,7 @@ fn main() -> Result<()> {
             Some("TopCoder {{contest.round}}"),
         )
     });
-    source_tree.route("{topcoder/*/[A-Z]*.html}.mkd", |builder, matched| {
+    source_tree.route("{topcoder/*/[A-Z]*.html}.md", |builder, matched| {
         register_markdown_page(
             builder,
             "problem",
@@ -219,7 +219,7 @@ fn main() -> Result<()> {
             Some("TopCoder {{problem.round}} {{join problem.level}} {{problem.name}}"),
         )
     });
-    source_tree.route("{yukicoder/*.html}.mkd", |builder, matched| {
+    source_tree.route("{yukicoder/*.html}.md", |builder, matched| {
         register_markdown_page(
             builder,
             "problem",
