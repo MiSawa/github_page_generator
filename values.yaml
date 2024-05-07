@@ -1,0 +1,12 @@
+menu_pages:
+  - title: 'Top'
+    url: '/index.html'
+  - title: 'Contests'
+    url: '/contests.html'
+  - title: 'Articles'
+    url: '/others/index.html'
+  - title: 'Tags'
+    url: '/tags/index.html'
+  - title: 'About'
+    url: '/about.html'
+

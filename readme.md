@@ -1,10 +1,11 @@
 # 起動とか
 
-Docker を入れる.
-`./docker-build.sh` で dockar image を作る.
-`./run.sh` で起動し, [localhost:4567](localhost:4567) でプレビュー.
-`./build.sh` で git submodule である `MiSawa.github.io/` にビルドされる.
-`./shell.sh` で docker container の中で bash を開く.
+`cargo-make` を入れる.
+- `cargo make generate`: `./build` に生成する
+- `cargo make serve`: localhost:8080 でサーブする
+- `cargo make watch`: 監視しつつ生成しなおす
+- `cargo make serve-watch`: 監視しつつ生成しなおしつつ serve も.
+- `cargo make generate-release`: `./MiSawa.github.io` に生成する
 
 
 # front matter に書くこと

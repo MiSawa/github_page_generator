@@ -1,0 +1,10 @@
+{{#> outer}}
+  {{#*inline 'content'~}}
+    <h1>Pages tagged with '{{tag}}'</h1>
+    <ul>
+      {{#each (pages_with_tag tag)}}
+      <li>{{link_to title url}}</li>
+      {{/each}}
+    </ul>
+  {{/inline}}
+{{/outer}}

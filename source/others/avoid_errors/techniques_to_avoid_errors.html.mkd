@@ -10,6 +10,7 @@ description: 競技プログラミングで、誤差による誤答を回避す�
 <div style="display:none">$$
 \gdef{\floor}#1{\lfloor\,#1\,\rfloor}
 $$</div>
+
 # 誤差と戦う小手先のテク
 
 この記事は, [Competitive Programming （その2） Advent Calendar 2015](http://www.adventar.org/calendars/1165) の 12/16 の記事として書かれました.

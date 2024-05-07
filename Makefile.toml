@@ -1,0 +1,30 @@
+[tasks.generate]
+command = "cargo"
+args = ["run", "--", "--source", "./new_source", "--target", "./build", "--global-values", "./values.yaml"]
+
+[tasks.watch]
+run_task = "generate"
+watch = { watch = ["./values.yaml", "./new_source"] }
+
+[tasks.serve]
+install_crate = "miniserve"
+command = "miniserve"
+args = ["./build"]
+
+[tasks.serve-watch]
+run_task = { name = ["watch-impl", "serve"], fork = true, parallel = true }
+
+[tasks.generate-release]
+dependencies = ["generate"]
+script_runner = "@duckscript"
+script = '''
+paths = glob_array ./MiSawa.github.io/*
+for path in ${paths}
+  if not starts_with ${path} "MiSawa.github.io/."
+      rm -r ${path}
+  end
+end
+cd ./build
+glob_cp ./**/* ../MiSawa.github.io
+cd ..
+'''

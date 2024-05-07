@@ -7,7 +7,6 @@ problem:
     url: http://arc038.contest.atcoder.jp/tasks/arc038_a
 date: 2015/05/03
 tags: [AtCoder]
-source_code: ./a.cc
 
 ---
 

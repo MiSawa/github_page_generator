@@ -1,0 +1,10 @@
+{{#> outer}}
+  {{#*inline 'content'~}}
+    <h2>{{title}}</h2>
+    <a href="{{{problem.url}}}">問題文</a>
+    {{{~content~}}}
+    {{#if source_code }}
+      {{link_to 'download source code' source_code}}
+    {{/if}}
+  {{/inline}}
+{{/outer}}

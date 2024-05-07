@@ -448,13 +448,10 @@ def calc_ic(c)
 
 二冊の本は, 高速多項式除算の部分を参考にした.
 
-0. R. Crandall, C. Pomerance, 和田秀男 監訳, "素数全書: 計算からのアプローチ", 朝倉書店, 2010, ISBN978-4-254-11128-6.
-
-0. J. von zur Gathen, J. Gerhard, 山本慎, 三好重明, 原正雄, 谷聖一, 衛藤和文 訳, "コンピュータ代数ハンドブック", 朝倉書店, 2006, ISBN978-4-254-11106-4.
-
-0. wata\_orz, "The First KMCMonthly Contest 解説", 2015/04/29 閲覧, [http://d.hatena.ne.jp/wata\_orz/20090922/1253615708](http://d.hatena.ne.jp/wata_orz/20090922/1253615708)
-
-0. Takanori MAEHARA, "コンパニオン行列のべき乗", 2015/04/29 閲覧, [https://dl.dropboxusercontent.com/u/109915284/companion20140318.pdf](https://dl.dropboxusercontent.com/u/109915284/companion20140318.pdf)
+1. R. Crandall, C. Pomerance, 和田秀男 監訳, "素数全書: 計算からのアプローチ", 朝倉書店, 2010, ISBN978-4-254-11128-6.
+1. J. von zur Gathen, J. Gerhard, 山本慎, 三好重明, 原正雄, 谷聖一, 衛藤和文 訳, "コンピュータ代数ハンドブック", 朝倉書店, 2006, ISBN978-4-254-11106-4.
+1. wata\_orz, "The First KMCMonthly Contest 解説", 2015/04/29 閲覧, [http://d.hatena.ne.jp/wata\_orz/20090922/1253615708](http://d.hatena.ne.jp/wata_orz/20090922/1253615708)
+1. Takanori MAEHARA, "コンパニオン行列のべき乗", 2015/04/29 閲覧, [https://dl.dropboxusercontent.com/u/109915284/companion20140318.pdf](https://dl.dropboxusercontent.com/u/109915284/companion20140318.pdf)
 
 
 ## 関連問題
@@ -462,9 +459,7 @@ def calc_ic(c)
 二つ目は `$O(k^2 \log n)$` でも通る.
 三つ目は `$O(k \log k \log n)$` が想定されているようである.
 
-0. [yukicoder No.187 中華風 (Hard)](http://yukicoder.me/problems/448)
-
-0. [Typical DP Contest T フィボナッチ](http://tdpc.contest.atcoder.jp/tasks/tdpc_fibonacci)
-
-0. [CODECHEF Random Number Generator](http://www.codechef.com/problems/RNG)
+1. [yukicoder No.187 中華風 (Hard)](http://yukicoder.me/problems/448)
+1. [Typical DP Contest T フィボナッチ](http://tdpc.contest.atcoder.jp/tasks/tdpc_fibonacci)
+1. [CODECHEF Random Number Generator](http://www.codechef.com/problems/RNG)
 
