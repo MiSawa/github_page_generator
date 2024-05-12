@@ -1,7 +1,8 @@
 # 起動とか
 
 `cargo-make` を入れる.
-- `cargo make generate`: `./build` に生成する
+- `cargo make generate-dev`: `./build` に dev 版を生成する
+- `cargo make generate`: `./build` に release 版を生成する
 - `cargo make serve`: localhost:8080 でサーブする
 - `cargo make watch`: 監視しつつ生成しなおす
 - `cargo make serve-watch`: 監視しつつ生成しなおしつつ serve も.

@@ -34,11 +34,17 @@ pub struct Context<'a> {
     pub hashed: Arc<Mutex<HashedResources>>,
 }
 impl<'a> Context<'a> {
-    fn new(base_url: &str, global_values: Value) -> Self {
+    fn new(base_url: &str, is_release: bool, global_values: Value) -> Self {
         let mut handlebars = Handlebars::new();
         let tag: Arc<Mutex<TagRepository>> = Default::default();
         let hashed: Arc<Mutex<HashedResources>> = Default::default();
-        helpers::register_helpers(&mut handlebars, base_url, tag.clone(), hashed.clone());
+        helpers::register_helpers(
+            is_release,
+            &mut handlebars,
+            base_url,
+            tag.clone(),
+            hashed.clone(),
+        );
         Self {
             handlebars,
             global_values,
@@ -53,9 +59,9 @@ pub struct SSBuilder<'a> {
     resources: Vec<Resource>,
 }
 impl<'a> SSBuilder<'a> {
-    pub fn new(base_url: &str, global_values: Value) -> Self {
+    pub fn new(base_url: &str, is_release: bool, global_values: Value) -> Self {
         Self {
-            context: Context::new(base_url, global_values),
+            context: Context::new(base_url, is_release, global_values),
             resources: Default::default(),
         }
     }

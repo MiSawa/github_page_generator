@@ -126,6 +126,9 @@ struct Args {
     /// File containing global values for template interpolation.
     #[arg(long)]
     global_values: Option<PathBuf>,
+
+    #[arg(long, default_value = "false")]
+    release: bool,
 }
 
 fn main() -> Result<()> {
@@ -140,7 +143,7 @@ fn main() -> Result<()> {
         value!({})
     };
 
-    let mut builder = SSBuilder::new(&args.url_base, global_values);
+    let mut builder = SSBuilder::new(&args.url_base, args.release, global_values);
     configure_handlebars(&mut builder.context().handlebars)?;
 
     source_tree.route("**/*.css", |builder, matched| {

@@ -8,6 +8,7 @@ use itertools::Itertools as _;
 use crate::{hashed::HashedResources, tags::TagRepository};
 
 pub fn register_helpers(
+    is_release: bool,
     handlebars: &mut Handlebars,
     top_page: &str,
     tag: Arc<Mutex<TagRepository>>,
@@ -17,6 +18,7 @@ pub fn register_helpers(
     if !top_page.ends_with('/') {
         top_page.push('/');
     }
+    handlebars.register_helper("hotreload_script_if_dev", Box::new(HotReload(is_release)));
     handlebars.register_helper("join", Box::new(Join));
     handlebars.register_helper("pages_with_tag", Box::new(PagesWithTag(tag.clone())));
     handlebars.register_helper("all_tags", Box::new(AllTags(tag.clone())));
@@ -35,6 +37,24 @@ fn resolve_link_and_encode(top_page: &str, url: &str) -> String {
         let url_no_slash = url.strip_prefix('/').unwrap_or(url);
         let url = top_page.to_owned() + url_no_slash;
         url_escape::encode_path(&url).to_string()
+    }
+}
+
+struct HotReload(bool);
+impl handlebars::HelperDef for HotReload {
+    fn call<'reg: 'rc, 'rc>(
+        &self,
+        _: &Helper<'rc>,
+        _: &'reg Handlebars<'reg>,
+        _: &'rc Context,
+        _: &mut RenderContext<'reg, 'rc>,
+        out: &mut dyn Output,
+    ) -> HelperResult {
+        if !self.0 {
+            let script = r##"<script>const g=()=>fetch(window.location.href,{cache:"no-store"}).then(r=>r.text());g().then(i=>setInterval(()=>g().then(c =>{if(c!==i)window.location.reload(true);}),1000));</script>"##;
+            write!(out, "{script}")?;
+        }
+        Ok(())
     }
 }
 

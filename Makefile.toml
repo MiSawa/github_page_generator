@@ -1,9 +1,13 @@
-[tasks.generate]
+[tasks.generate-dev]
 command = "cargo"
 args = ["run", "--", "--source", "./source", "--target", "./build", "--global-values", "./values.yaml"]
 
+[tasks.generate]
+command = "cargo"
+args = ["run", "--", "--source", "./source", "--target", "./build", "--global-values", "./values.yaml", "--release"]
+
 [tasks.watch]
-run_task = "generate"
+run_task = "generate-dev"
 watch = { watch = ["./values.yaml", "./source"] }
 
 [tasks.serve]
@@ -12,7 +16,7 @@ command = "miniserve"
 args = ["./build"]
 
 [tasks.serve-watch]
-run_task = { name = ["watch-impl", "serve"], fork = true, parallel = true }
+run_task = { name = ["watch", "serve"], fork = true, parallel = true }
 
 [tasks.generate-release]
 dependencies = ["generate"]
