@@ -1,0 +1,18 @@
+---
+
+title: yukicoder
+tags: [yukicoder]
+
+---
+
+{{#> outer}}
+  {{#*inline "content"~}}
+  <h1>{{title}}</h1>
+  <ul>
+    {{#each (pages_with_tag "yukicoder") as |page|}}
+    <li>{{ link_to page.title page.url }}</li>
+    {{/each}}
+  </ul>
+  {{/inline}}
+{{/outer}}
+
