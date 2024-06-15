@@ -78,3 +78,8 @@ div.indent {
     }
 }
 
+pre.highlight {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+}

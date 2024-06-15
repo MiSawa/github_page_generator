@@ -50,7 +50,7 @@ pub fn source_code_to_html(code: &str, lang: Option<&str>) -> Result<String> {
     let mut html = String::new();
     write!(
         &mut html,
-        r#"<pre style="margin:0.8em;background-color:#{:02x}{:02x}{:02x};"><code class="highlight"><table class="highlight"><tbody><tr>"#,
+        r#"<pre class="highlight" style="margin:0.8em;background-color:#{:02x}{:02x}{:02x};"><code class="highlight"><table class="highlight"><tbody><tr>"#,
         BG.r, BG.g, BG.b,
     )?;
     write!(
